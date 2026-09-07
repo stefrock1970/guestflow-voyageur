@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
+  <!-- VERSION GITHUB MICRO ROBUSTE 2026-09-07 -->
 
   <style>
     :root{
@@ -411,7 +412,7 @@
             id="btnMic"
             class="mic-btn"
             type="button"
-            onclick="basculerMicro()"
+            
             aria-label="Parler à Guestflow"
             title="Parler à Guestflow"
           >🎤</button>
@@ -715,17 +716,61 @@
       }
     }
 
-    function basculerMicro() {
-      const SpeechRecognitionClass = obtenirClasseReconnaissanceVocale();
+    async function basculerMicro() {
       const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
+      const aide = document.getElementById('micHelp');
+      const btn = document.getElementById('btnMic');
 
-      if (!SpeechRecognitionClass) {
-        document.getElementById('micHelp').textContent = t.micUnsupported;
+      if (microEnEcoute && reconnaissanceVocale) {
+        try {
+          reconnaissanceVocale.stop();
+        } catch (e) {}
         return;
       }
 
-      if (microEnEcoute && reconnaissanceVocale) {
-        reconnaissanceVocale.stop();
+      if (aide) {
+        aide.textContent =
+          langueSelectionnee === 'en' ? 'Activating microphone…' :
+          langueSelectionnee === 'es' ? 'Activando el micrófono…' :
+          langueSelectionnee === 'de' ? 'Mikrofon wird aktiviert…' :
+          'Activation du micro…';
+      }
+
+      if (btn) {
+        btn.classList.add('listening');
+        btn.textContent = '…';
+      }
+
+      // Demande d'abord explicitement l'autorisation micro au navigateur.
+      // Cela rend le comportement plus fiable sur Chrome / Edge en HTTPS.
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const flux = await navigator.mediaDevices.getUserMedia({ audio: true });
+          flux.getTracks().forEach(function(track) {
+            track.stop();
+          });
+        }
+      } catch (permissionError) {
+        mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent =
+            langueSelectionnee === 'en' ? 'Microphone access was refused by the browser.' :
+            langueSelectionnee === 'es' ? 'El navegador ha rechazado el acceso al micrófono.' :
+            langueSelectionnee === 'de' ? 'Der Browser hat den Mikrofonzugriff verweigert.' :
+            'L’accès au micro a été refusé par le navigateur.';
+        }
+        return;
+      }
+
+      const SpeechRecognitionClass = obtenirClasseReconnaissanceVocale();
+
+      if (!SpeechRecognitionClass) {
+        mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent = t.micUnsupported;
+        }
         return;
       }
 
@@ -739,13 +784,20 @@
         mettreEtatMicro(true);
       };
 
+      reconnaissanceVocale.onspeechstart = function() {
+        if (aide) {
+          aide.textContent = t.micListening;
+        }
+      };
+
       reconnaissanceVocale.onresult = function(event) {
-        const texte = event &&
-                      event.results &&
-                      event.results[0] &&
-                      event.results[0][0]
-          ? String(event.results[0][0].transcript || '').trim()
-          : '';
+        const texte =
+          event &&
+          event.results &&
+          event.results[0] &&
+          event.results[0][0]
+            ? String(event.results[0][0].transcript || '').trim()
+            : '';
 
         if (texte) {
           const champ = document.getElementById('question');
@@ -759,8 +811,27 @@
         }
       };
 
-      reconnaissanceVocale.onerror = function() {
+      reconnaissanceVocale.onerror = function(event) {
         mettreEtatMicro(false);
+
+        if (!aide) return;
+
+        const code = event && event.error ? String(event.error) : '';
+
+        aide.textContent =
+          code === 'not-allowed' || code === 'service-not-allowed'
+            ? (
+                langueSelectionnee === 'en' ? 'Microphone permission is blocked in the browser.' :
+                langueSelectionnee === 'es' ? 'El permiso del micrófono está bloqueado en el navegador.' :
+                langueSelectionnee === 'de' ? 'Die Mikrofonberechtigung ist im Browser blockiert.' :
+                'L’autorisation du micro est bloquée dans le navigateur.'
+              )
+            : (
+                langueSelectionnee === 'en' ? 'Voice recognition could not start. Please try again.' :
+                langueSelectionnee === 'es' ? 'No se pudo iniciar el reconocimiento de voz. Inténtalo de nuevo.' :
+                langueSelectionnee === 'de' ? 'Die Spracherkennung konnte nicht gestartet werden. Bitte versuchen Sie es erneut.' :
+                'La reconnaissance vocale n’a pas pu démarrer. Réessayez.'
+              );
       };
 
       reconnaissanceVocale.onend = function() {
@@ -772,9 +843,16 @@
         reconnaissanceVocale.start();
       } catch (e) {
         mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent =
+            langueSelectionnee === 'en' ? 'Unable to start the microphone. Please try again.' :
+            langueSelectionnee === 'es' ? 'No se puede iniciar el micrófono. Inténtalo de nuevo.' :
+            langueSelectionnee === 'de' ? 'Das Mikrofon konnte nicht gestartet werden. Bitte versuchen Sie es erneut.' :
+            'Impossible de démarrer le micro. Réessayez.';
+        }
       }
     }
-
 
     function envoyerQuestion() {
 
@@ -912,6 +990,14 @@
       ).trim();
 
       mettreAJourInterface(langueSelectionnee);
+    }
+
+    const boutonMicro = document.getElementById('btnMic');
+    if (boutonMicro) {
+      boutonMicro.addEventListener('click', function(e) {
+        e.preventDefault();
+        basculerMicro();
+      });
     }
 
     initialiserAccesVoyageur();
