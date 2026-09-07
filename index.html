@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB PREMIUM VOYAGEUR + MICRO + AUTO + VOIX 2026-09-07 -->
+  <!-- VERSION GITHUB V2 PREMIUM FINALE + MICRO + AUTO + VOIX 2026-09-07 -->
 
   <style>
     :root{
@@ -615,6 +615,185 @@
     @media(prefers-reduced-motion:reduce){
       *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
     }
+  
+    /* ===== V2 PREMIUM FINALE ===== */
+
+    .intro{
+      min-height:610px;
+      padding-top:52px;
+      padding-bottom:46px;
+    }
+
+    .concierge{
+      padding:26px 28px 24px;
+    }
+
+    .response-box{
+      min-height:128px;
+      transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        opacity .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease;
+    }
+
+    .response-box.response-ready{
+      animation:responseReveal .5s cubic-bezier(.2,.8,.2,1) both;
+      border-color:rgba(102,115,75,.18);
+      box-shadow:0 12px 28px rgba(63,73,51,.08);
+    }
+
+    @keyframes responseReveal{
+      from{opacity:.35;transform:translateY(8px) scale(.993)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    #status.thinking{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--olive-deep);
+      min-height:28px;
+    }
+
+    .thinking-label{
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .thinking-dots{
+      display:inline-flex;
+      gap:4px;
+      align-items:center;
+    }
+
+    .thinking-dots i{
+      display:block;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--olive);
+      animation:thinkingBounce 1.05s infinite ease-in-out;
+    }
+
+    .thinking-dots i:nth-child(2){animation-delay:.14s}
+    .thinking-dots i:nth-child(3){animation-delay:.28s}
+
+    @keyframes thinkingBounce{
+      0%,60%,100%{transform:translateY(0);opacity:.38}
+      30%{transform:translateY(-5px);opacity:1}
+    }
+
+    .voice-row.is-listening{
+      border-color:rgba(140,85,78,.32);
+      box-shadow:
+        0 0 0 4px rgba(140,85,78,.07),
+        0 14px 30px rgba(55,64,47,.08);
+    }
+
+    .voice-row.is-listening::after{
+      content:"";
+      position:absolute;
+      left:18px;
+      right:88px;
+      bottom:18px;
+      height:2px;
+      border-radius:999px;
+      background:
+        linear-gradient(90deg,
+          transparent 0%,
+          rgba(140,85,78,.2) 16%,
+          rgba(140,85,78,.75) 50%,
+          rgba(140,85,78,.2) 84%,
+          transparent 100%);
+      transform-origin:center;
+      animation:listeningLine 1.35s ease-in-out infinite;
+    }
+
+    @keyframes listeningLine{
+      0%,100%{transform:scaleX(.25);opacity:.25}
+      50%{transform:scaleX(1);opacity:1}
+    }
+
+    .mic-btn.listening{
+      transform:translateY(-1px) scale(1.035);
+    }
+
+    .mic-btn.listening::before,
+    .mic-btn.listening::after{
+      display:none;
+    }
+
+    .mic-btn.listening .mic-wave{
+      display:flex;
+    }
+
+    .mic-wave{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      gap:3px;
+      height:22px;
+    }
+
+    .mic-wave i{
+      width:3px;
+      border-radius:999px;
+      background:white;
+      animation:waveBar .85s ease-in-out infinite;
+    }
+
+    .mic-wave i:nth-child(1){height:8px}
+    .mic-wave i:nth-child(2){height:16px;animation-delay:.09s}
+    .mic-wave i:nth-child(3){height:22px;animation-delay:.18s}
+    .mic-wave i:nth-child(4){height:14px;animation-delay:.27s}
+    .mic-wave i:nth-child(5){height:7px;animation-delay:.36s}
+
+    @keyframes waveBar{
+      0%,100%{transform:scaleY(.45);opacity:.55}
+      50%{transform:scaleY(1);opacity:1}
+    }
+
+    .primary{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .primary::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      transform:translateX(-120%);
+      background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.22) 50%,transparent 80%);
+      transition:transform .55s ease;
+    }
+
+    .primary:hover::after{transform:translateX(120%)}
+
+    .online{
+      font-weight:600;
+    }
+
+    .concierge-head{
+      padding-bottom:4px;
+    }
+
+    @media(max-width:620px){
+      .intro{
+        min-height:330px;
+        padding-top:30px;
+        padding-bottom:30px;
+      }
+
+      .concierge{
+        padding:19px;
+      }
+
+      .response-box{
+        min-height:112px;
+      }
+    }
+
   </style>
 </head>
 
@@ -708,7 +887,9 @@
 
           <div class="voice-row">
             <textarea id="question" placeholder="Ex. Quel est le mot de passe Wi-Fi ?"></textarea>
-            <button id="btnMic" class="mic-btn" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">🎤</button>
+            <button id="btnMic" class="mic-btn" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">
+              <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+            </button>
           </div>
 
           <div class="mic-help" id="micHelp">
@@ -903,6 +1084,12 @@
 
     function afficherReponseGuestflow(texte) {
       const zone = document.getElementById('reponse');
+      const boiteReponse = zone ? zone.closest('.response-box') : null;
+
+      if (boiteReponse) {
+        boiteReponse.classList.remove('response-ready');
+      }
+
       zone.innerHTML = '';
 
       const contenu = String(texte || '');
@@ -971,6 +1158,11 @@
         zone.textContent =
           (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
       }
+
+      if (boiteReponse) {
+        void boiteReponse.offsetWidth;
+        boiteReponse.classList.add('response-ready');
+      }
     }
 
 
@@ -987,9 +1179,13 @@
 
       if (btn) {
         btn.classList.toggle('listening', microEnEcoute);
-        btn.textContent = microEnEcoute ? '⏹' : '🎤';
         btn.title = microEnEcoute ? t.micListening : t.micTitle;
         btn.setAttribute('aria-label', microEnEcoute ? t.micListening : t.micTitle);
+
+        const voiceRow = btn.closest('.voice-row');
+        if (voiceRow) {
+          voiceRow.classList.toggle('is-listening', microEnEcoute);
+        }
       }
 
       if (aide) {
@@ -1023,7 +1219,10 @@
 
       if (btn) {
         btn.classList.add('listening');
-        btn.textContent = '…';
+        const voiceRow = btn.closest('.voice-row');
+        if (voiceRow) {
+          voiceRow.classList.add('is-listening');
+        }
       }
 
       // Demande d'abord explicitement l'autorisation micro au navigateur.
@@ -1249,6 +1448,32 @@
 
 
 
+
+    function afficherEtatReflexion() {
+      const status = document.getElementById('status');
+      if (!status) return;
+
+      const labels = {
+        fr: 'Guestflow réfléchit',
+        en: 'Guestflow is thinking',
+        es: 'Guestflow está pensando',
+        de: 'Guestflow denkt nach'
+      };
+
+      status.classList.add('thinking');
+      status.innerHTML =
+        '<span class="thinking-label">' +
+        (labels[langueSelectionnee] || labels.fr) +
+        '</span><span class="thinking-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+    }
+
+    function effacerEtatReflexion() {
+      const status = document.getElementById('status');
+      if (!status) return;
+      status.classList.remove('thinking');
+      status.textContent = '';
+    }
+
     function envoyerQuestion() {
 
       const question =
@@ -1278,9 +1503,14 @@
         return;
       }
 
-      status.textContent =
-        (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).loading;
+      afficherEtatReflexion();
       reponse.textContent = '';
+
+      const boiteReponse = reponse.closest('.response-box');
+      if (boiteReponse) {
+        boiteReponse.classList.remove('response-ready');
+      }
+
       bouton.disabled = true;
 
       const callbackName =
@@ -1306,6 +1536,7 @@
       const timeout = setTimeout(function() {
         nettoyer();
         bouton.disabled = false;
+        status.classList.remove('thinking');
         status.textContent = 'Erreur';
         reponse.textContent =
           langueSelectionnee === 'en' ? 'Guestflow did not respond. Please try again.' :
@@ -1319,7 +1550,7 @@
         nettoyer();
 
         bouton.disabled = false;
-        status.textContent = '';
+        effacerEtatReflexion();
 
         if (!payload || payload.ok !== true) {
           reponse.textContent =
@@ -1342,6 +1573,7 @@
         clearTimeout(timeout);
         nettoyer();
         bouton.disabled = false;
+        status.classList.remove('thinking');
         status.textContent = 'Erreur';
         reponse.textContent =
           langueSelectionnee === 'en' ? 'Unable to reach Guestflow.' :
