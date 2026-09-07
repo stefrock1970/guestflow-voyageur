@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V4.2 QUESTION AUTO-EFFACEE APRES REPONSE 2026-09-07 -->
+  <!-- VERSION GITHUB V4.3 VOIX ESPAGNOLE AMELIOREE 2026-09-07 -->
 
   <style>
     :root{
@@ -2181,15 +2181,57 @@
       const voixDisponibles = window.speechSynthesis.getVoices();
       const langueRecherche = message.lang.toLowerCase();
 
-      const voixCompatible =
-        voixDisponibles.find(function(voix) {
-          return String(voix.lang || '').toLowerCase() === langueRecherche;
-        }) ||
-        voixDisponibles.find(function(voix) {
-          return String(voix.lang || '').toLowerCase().startsWith(
-            langueRecherche.split('-')[0]
-          );
-        });
+      let voixCompatible = null;
+
+      if (langueSelectionnee === 'es') {
+        // Priorité aux voix espagnoles généralement les plus naturelles
+        // lorsqu'elles sont présentes sur Chrome / Edge / Windows.
+        const prioritesEspagnol = [
+          'Microsoft Elvira',
+          'Microsoft Helena',
+          'Microsoft Dalia',
+          'Google español',
+          'Google español de España',
+          'Google español (España)'
+        ];
+
+        for (let i = 0; i < prioritesEspagnol.length && !voixCompatible; i++) {
+          const rechercheNom = prioritesEspagnol[i].toLowerCase();
+
+          voixCompatible = voixDisponibles.find(function(voix) {
+            return String(voix.name || '').toLowerCase().includes(rechercheNom) &&
+                   String(voix.lang || '').toLowerCase().startsWith('es');
+          });
+        }
+
+        // Sinon, on préfère une voix es-ES exacte.
+        if (!voixCompatible) {
+          voixCompatible = voixDisponibles.find(function(voix) {
+            return String(voix.lang || '').toLowerCase() === 'es-es';
+          });
+        }
+
+        // Dernier repli : n'importe quelle voix espagnole.
+        if (!voixCompatible) {
+          voixCompatible = voixDisponibles.find(function(voix) {
+            return String(voix.lang || '').toLowerCase().startsWith('es');
+          });
+        }
+
+        // Réglage légèrement plus posé et naturel pour l'espagnol.
+        message.rate = 0.94;
+        message.pitch = 0.98;
+      } else {
+        voixCompatible =
+          voixDisponibles.find(function(voix) {
+            return String(voix.lang || '').toLowerCase() === langueRecherche;
+          }) ||
+          voixDisponibles.find(function(voix) {
+            return String(voix.lang || '').toLowerCase().startsWith(
+              langueRecherche.split('-')[0]
+            );
+          });
+      }
 
       if (voixCompatible) {
         message.voice = voixCompatible;
