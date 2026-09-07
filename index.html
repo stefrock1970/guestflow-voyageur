@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V4 CONVERSATION PREMIUM + MICRO + AUTO + VOIX 2026-09-07 -->
+  <!-- VERSION GITHUB V4.1 FINITIONS CONVERSATION + EQUILIBRE 2026-09-07 -->
 
   <style>
     :root{
@@ -1408,6 +1408,112 @@
 
       #reponse{
         font-size:14.5px;
+      }
+    }
+
+  
+    /* ===== V4.1 FINITIONS ===== */
+
+    .concierge{
+      min-height:625px;
+    }
+
+    .field{
+      padding-top:18px;
+    }
+
+    .voice-row{
+      min-height:172px;
+    }
+
+    textarea{
+      min-height:172px;
+    }
+
+    .example{
+      margin-top:13px;
+    }
+
+    .buttons{
+      margin-top:14px;
+    }
+
+    .response-box{
+      margin-top:14px;
+    }
+
+    .hint{
+      padding-top:14px;
+      padding-bottom:18px;
+    }
+
+    .response-box.response-ready .response-conversation{
+      align-items:flex-start;
+    }
+
+    .response-box.response-ready .response-content{
+      position:relative;
+    }
+
+    .response-box.response-ready .response-meta{
+      margin-bottom:8px;
+    }
+
+    .response-box.response-ready .response-name{
+      font-size:16.5px;
+    }
+
+    .response-box.response-ready .response-bubble{
+      padding:20px 22px 19px;
+      border-radius:9px 23px 23px 23px;
+      background:
+        radial-gradient(circle at 92% 14%,rgba(195,207,171,.16),transparent 30%),
+        linear-gradient(180deg,#fbf8f1,#eee8dd);
+      box-shadow:
+        0 16px 34px rgba(55,64,47,.085),
+        inset 0 1px 0 rgba(255,255,255,.88);
+    }
+
+    .response-box.response-ready .response-bubble::before{
+      height:52px;
+      top:18px;
+      background:linear-gradient(180deg,#7c8d61,#596848);
+    }
+
+    .response-box.response-ready #reponse{
+      position:relative;
+      z-index:1;
+      font-size:15.7px;
+      line-height:1.76;
+    }
+
+    .response-box.response-ready .response-avatar{
+      box-shadow:
+        0 10px 24px rgba(58,66,49,.10),
+        inset 0 1px 0 rgba(255,255,255,.88);
+    }
+
+    @media(max-width:900px){
+      .concierge{
+        min-height:auto;
+      }
+    }
+
+    @media(max-width:620px){
+      .field{
+        padding-top:16px;
+      }
+
+      .voice-row{
+        min-height:150px;
+      }
+
+      textarea{
+        min-height:150px;
+      }
+
+      .response-box.response-ready .response-bubble{
+        padding:17px 17px 16px;
       }
     }
 
