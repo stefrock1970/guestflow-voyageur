@@ -810,18 +810,82 @@
       reponse.textContent = '';
       bouton.disabled = true;
 
-      bouton.disabled = false;
-      status.textContent = '';
+      const callbackName =
+        'guestflowCallback_' +
+        Date.now() +
+        '_' +
+        Math.floor(Math.random() * 1000000);
 
-      const messagesPont = {
-        fr: 'Le micro fonctionne sur cette page. La connexion au moteur Guestflow sera activée à l’étape suivante.',
-        en: 'The microphone works on this page. The connection to the Guestflow engine will be enabled in the next step.',
-        es: 'El micrófono funciona en esta página. La conexión con el motor Guestflow se activará en el siguiente paso.',
-        de: 'Das Mikrofon funktioniert auf dieser Seite. Die Verbindung zur Guestflow-Engine wird im nächsten Schritt aktiviert.'
+      const script = document.createElement('script');
+
+      const nettoyer = function() {
+        try {
+          delete window[callbackName];
+        } catch (e) {
+          window[callbackName] = undefined;
+        }
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
       };
 
-      reponse.textContent =
-        messagesPont[langueSelectionnee] || messagesPont.fr;
+      const timeout = setTimeout(function() {
+        nettoyer();
+        bouton.disabled = false;
+        status.textContent = 'Erreur';
+        reponse.textContent =
+          langueSelectionnee === 'en' ? 'Guestflow did not respond. Please try again.' :
+          langueSelectionnee === 'es' ? 'Guestflow no ha respondido. Inténtalo de nuevo.' :
+          langueSelectionnee === 'de' ? 'Guestflow hat nicht geantwortet. Bitte versuchen Sie es erneut.' :
+          'Guestflow n’a pas répondu. Merci de réessayer.';
+      }, 15000);
+
+      window[callbackName] = function(payload) {
+        clearTimeout(timeout);
+        nettoyer();
+
+        bouton.disabled = false;
+        status.textContent = '';
+
+        if (!payload || payload.ok !== true) {
+          reponse.textContent =
+            payload && payload.erreur
+              ? payload.erreur
+              : (
+                  langueSelectionnee === 'en' ? 'An error occurred.' :
+                  langueSelectionnee === 'es' ? 'Se ha producido un error.' :
+                  langueSelectionnee === 'de' ? 'Ein Fehler ist aufgetreten.' :
+                  'Une erreur est survenue.'
+                );
+          return;
+        }
+
+        afficherReponseGuestflow(payload.reponse);
+      };
+
+      script.onerror = function() {
+        clearTimeout(timeout);
+        nettoyer();
+        bouton.disabled = false;
+        status.textContent = 'Erreur';
+        reponse.textContent =
+          langueSelectionnee === 'en' ? 'Unable to reach Guestflow.' :
+          langueSelectionnee === 'es' ? 'No se puede contactar con Guestflow.' :
+          langueSelectionnee === 'de' ? 'Guestflow ist nicht erreichbar.' :
+          'Impossible de joindre Guestflow.';
+      };
+
+      script.src =
+        'https://script.google.com/macros/s/AKfycbz_f2OHl16dc9twLzfYDz6Pm0uKlrkUmDJHMA14aJE/exec' +
+        '?api=ask' +
+        '&id=' + encodeURIComponent(idGuestflow) +
+        '&q=' + encodeURIComponent(question) +
+        '&lang=' + encodeURIComponent(langueSelectionnee) +
+        '&callback=' + encodeURIComponent(callbackName) +
+        '&t=' + Date.now();
+
+      document.body.appendChild(script);
     }
 
 
