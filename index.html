@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V2 PREMIUM FINALE + MICRO + AUTO + VOIX 2026-09-07 -->
+  <!-- VERSION GITHUB V3 PREMIUM SIGNATURE + MICRO + AUTO + VOIX 2026-09-07 -->
 
   <style>
     :root{
@@ -794,6 +794,419 @@
       }
     }
 
+  
+    /* ===== V3 PREMIUM SIGNATURE ===== */
+
+    body{
+      background:
+        radial-gradient(circle at 14% 10%, rgba(173,188,143,.26), transparent 27%),
+        radial-gradient(circle at 86% 12%, rgba(225,202,166,.32), transparent 28%),
+        linear-gradient(180deg,#fbf9f4 0%,#f2ecdf 100%);
+    }
+
+    .page{
+      width:min(1180px,calc(100% - 34px));
+      padding-top:26px;
+    }
+
+    .topbar{
+      margin-bottom:18px;
+      padding:10px 12px 10px 10px;
+      border:1px solid rgba(63,73,51,.08);
+      border-radius:20px;
+      background:rgba(255,253,249,.62);
+      backdrop-filter:blur(18px);
+      box-shadow:0 10px 30px rgba(54,61,45,.05);
+    }
+
+    .brand-mark{
+      width:50px;
+      height:50px;
+      border-radius:17px;
+      box-shadow:0 14px 28px rgba(63,73,51,.24);
+    }
+
+    .brand{
+      font-size:32px;
+    }
+
+    .hero{
+      grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);
+      gap:24px;
+    }
+
+    .intro{
+      min-height:625px;
+      padding:56px 52px 48px;
+      border-radius:36px;
+      background:
+        linear-gradient(155deg,rgba(58,69,45,.995),rgba(83,96,63,.965)),
+        var(--olive-deep);
+      box-shadow:
+        0 34px 90px rgba(54,61,45,.17),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .intro::before{
+      width:430px;
+      height:430px;
+      right:-150px;
+      top:-135px;
+      box-shadow:
+        0 0 0 54px rgba(255,255,255,.035),
+        0 0 0 108px rgba(255,255,255,.02);
+    }
+
+    .intro::after{
+      width:320px;
+      height:320px;
+      left:-135px;
+      bottom:-150px;
+      background:rgba(236,221,195,.10);
+    }
+
+    .eyebrow{
+      padding:10px 15px;
+      border-radius:999px;
+      background:rgba(255,255,255,.09);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .intro-title{
+      max-width:710px;
+      font-size:clamp(54px,5.5vw,78px);
+      letter-spacing:-.052em;
+    }
+
+    .subtitle{
+      max-width:610px;
+      font-size:18.5px;
+    }
+
+    .promise-row{
+      gap:9px;
+    }
+
+    .promise{
+      padding:11px 13px;
+      border-radius:14px;
+      background:rgba(255,255,255,.09);
+    }
+
+    .concierge{
+      position:relative;
+      overflow:hidden;
+      border-radius:36px;
+      padding:0;
+      background:rgba(255,253,249,.96);
+      border:1px solid rgba(255,255,255,.88);
+      box-shadow:
+        0 34px 90px rgba(54,61,45,.13),
+        0 1px 0 rgba(255,255,255,.75) inset;
+    }
+
+    .concierge::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:150px;
+      background:
+        radial-gradient(circle at 12% 10%,rgba(102,115,75,.10),transparent 38%),
+        linear-gradient(180deg,rgba(245,241,232,.96),rgba(255,253,249,0));
+      pointer-events:none;
+    }
+
+    .concierge-head{
+      position:relative;
+      z-index:1;
+      padding:26px 28px 18px;
+      margin:0;
+      border-bottom:1px solid rgba(63,73,51,.07);
+    }
+
+    .concierge-title h2{
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+
+    .avatar{
+      width:50px;
+      height:50px;
+      border-radius:17px;
+      background:linear-gradient(145deg,#f4efe5,#dfd2bd);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 8px 18px rgba(70,77,59,.08);
+    }
+
+    .language-row{
+      gap:7px;
+    }
+
+    .lang-btn{
+      min-width:44px;
+      height:38px;
+      border-radius:12px;
+    }
+
+    #accessMessage{
+      margin:0;
+      padding:0 28px;
+    }
+
+    .field{
+      padding:22px 28px 0;
+    }
+
+    .question-label{
+      margin-bottom:11px;
+      font-size:14px;
+    }
+
+    .voice-row{
+      min-height:188px;
+      border-radius:26px;
+      background:
+        linear-gradient(180deg,#fff,#fdfbf7);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 16px 35px rgba(55,64,47,.075);
+    }
+
+    textarea{
+      min-height:188px;
+      padding:20px 94px 62px 20px;
+      font-size:16px;
+    }
+
+    .mic-btn{
+      right:16px;
+      bottom:16px;
+      width:68px;
+      height:68px;
+      border-radius:23px;
+      background:
+        radial-gradient(circle at 35% 28%,rgba(255,255,255,.22),transparent 26%),
+        linear-gradient(150deg,#718057,#455036);
+      box-shadow:
+        0 18px 34px rgba(63,73,51,.30),
+        inset 0 1px 0 rgba(255,255,255,.20);
+    }
+
+    .mic-btn::before{
+      width:20px;
+      height:27px;
+      border-width:2.3px;
+    }
+
+    .mic-btn::after{
+      width:28px;
+      height:16px;
+      bottom:17px;
+      border-width:2.3px;
+    }
+
+    .mic-btn:hover{
+      transform:translateY(-3px) scale(1.015);
+      box-shadow:
+        0 22px 40px rgba(63,73,51,.34),
+        inset 0 1px 0 rgba(255,255,255,.20);
+    }
+
+    .mic-help{
+      margin-top:11px;
+      padding-left:2px;
+    }
+
+    .example{
+      position:relative;
+      margin-top:16px;
+      padding:14px 16px 14px 40px;
+      border-radius:17px;
+      background:linear-gradient(180deg,#eef1e8,#e8eddf);
+      border:1px solid rgba(102,115,75,.08);
+      color:#58624b;
+    }
+
+    .example::before{
+      content:"✦";
+      position:absolute;
+      left:15px;
+      top:13px;
+      color:#7b8963;
+      font-size:15px;
+    }
+
+    .buttons{
+      padding:0 28px;
+      margin-top:17px;
+    }
+
+    .buttons button{
+      height:52px;
+      border-radius:16px;
+      font-size:14px;
+    }
+
+    .primary{
+      background:linear-gradient(145deg,#76865b,#5d6d45);
+      box-shadow:0 13px 24px rgba(102,115,75,.22);
+    }
+
+    .secondary{
+      min-width:92px;
+      background:#eee9df;
+    }
+
+    .status{
+      padding:0 28px;
+    }
+
+    .response-box{
+      margin:14px 28px 0;
+      min-height:156px;
+      border-radius:23px;
+      padding:22px 22px 22px 24px;
+      background:
+        linear-gradient(180deg,rgba(248,245,238,.97),rgba(242,237,226,.95));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 10px 26px rgba(55,64,47,.05);
+    }
+
+    .response-box::before{
+      width:4px;
+      top:20px;
+      bottom:20px;
+      border-radius:0 5px 5px 0;
+    }
+
+    .response-title{
+      font-size:11px;
+      letter-spacing:.14em;
+      margin-bottom:10px;
+    }
+
+    #reponse{
+      font-size:15.5px;
+      line-height:1.72;
+    }
+
+    .hint{
+      margin:0 28px;
+      padding:18px 0 22px;
+      border-top:1px solid rgba(63,73,51,.06);
+      margin-top:auto;
+    }
+
+    .footer{
+      margin-top:18px;
+      font-size:11px;
+    }
+
+    /* conversational answer bubble */
+    .response-box.response-ready{
+      background:
+        radial-gradient(circle at 100% 0%,rgba(219,225,203,.25),transparent 35%),
+        linear-gradient(180deg,#fbf8f2,#f2eee5);
+      transform-origin:top left;
+    }
+
+    /* subtle premium gleam */
+    .concierge::after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      right:-110px;
+      bottom:-120px;
+      background:radial-gradient(circle,rgba(179,193,148,.11),transparent 68%);
+      pointer-events:none;
+    }
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .intro{min-height:420px}
+      .concierge{min-height:auto}
+    }
+
+    @media(max-width:620px){
+      .page{
+        width:min(100% - 14px,1180px);
+        padding-top:8px;
+      }
+
+      .topbar{
+        padding:8px;
+        margin-bottom:10px;
+        border-radius:16px;
+      }
+
+      .brand{font-size:26px}
+      .brand-mark{width:42px;height:42px;border-radius:14px}
+
+      .hero{gap:10px}
+
+      .intro{
+        min-height:320px;
+        padding:30px 24px;
+        border-radius:26px;
+      }
+
+      .intro-title{
+        font-size:45px;
+      }
+
+      .concierge{
+        border-radius:26px;
+      }
+
+      .concierge-head{
+        padding:20px 18px 16px;
+      }
+
+      #accessMessage{
+        padding:0 18px;
+      }
+
+      .field{
+        padding:18px 18px 0;
+      }
+
+      .voice-row{
+        min-height:158px;
+        border-radius:21px;
+      }
+
+      textarea{
+        min-height:158px;
+        padding:16px 84px 58px 16px;
+      }
+
+      .mic-btn{
+        width:60px;
+        height:60px;
+        right:12px;
+        bottom:12px;
+        border-radius:20px;
+      }
+
+      .buttons{
+        padding:0 18px;
+        flex-direction:column;
+      }
+
+      .response-box{
+        margin:14px 18px 0;
+      }
+
+      .hint{
+        margin-left:18px;
+        margin-right:18px;
+      }
+    }
+
   </style>
 </head>
 
@@ -893,7 +1306,7 @@
           </div>
 
           <div class="mic-help" id="micHelp">
-            Touchez le micro, posez votre question : Guestflow l’envoie automatiquement et vous répond.
+            Touchez le micro et parlez naturellement. Guestflow vous répond automatiquement.
           </div>
 
           <div class="example" id="examplesBox">
@@ -909,7 +1322,10 @@
         <div id="status" class="status"></div>
 
         <div class="response-box">
-          <h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+            <span style="width:28px;height:28px;border-radius:10px;display:grid;place-items:center;background:#e7ebdf;color:#5f6c49;font-size:13px;">✦</span>
+            <h3 class="response-title" id="responseTitle" style="margin:0;">Réponse Guestflow</h3>
+          </div>
           <div id="reponse">La réponse du concierge apparaîtra ici.</div>
         </div>
 
