@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB MICRO + ENVOI AUTO + REPONSE VOCALE 2026-09-07 -->
+  <!-- VERSION GITHUB MICRO FIN-DE-DICTEE + ENVOI AUTO + REPONSE VOCALE 2026-09-07 -->
 
   <style>
     :root{
@@ -472,6 +472,7 @@
 
     let reconnaissanceVocale = null;
     let microEnEcoute = false;
+    let questionVocaleAEnvoyer = false;
 
     const languesReconnaissance = {
       fr: 'fr-FR',
@@ -494,7 +495,7 @@
         loading: 'Guestflow prépare votre réponse…',
         footer: 'Guestflow vous répond à partir des informations fournies par votre hébergement.',
         badLink: 'Ce lien Guestflow est incomplet. Contactez votre hébergeur pour obtenir le lien correct.',
-        micHelp: 'Vous pouvez écrire votre question ou toucher le micro pour parler.',
+        micHelp: 'Touchez le micro, posez votre question : Guestflow l’envoie automatiquement et vous répond.',
         micTitle: 'Parler à Guestflow',
         micListening: 'Je vous écoute…',
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.'
@@ -785,6 +786,7 @@
       reconnaissanceVocale.maxAlternatives = 1;
 
       reconnaissanceVocale.onstart = function() {
+        questionVocaleAEnvoyer = false;
         mettreEtatMicro(true);
       };
 
@@ -813,17 +815,15 @@
 
           champ.focus();
 
-          // Vocale = envoi automatique immédiat à Guestflow.
-          // Le bouton "Poser ma question" reste disponible pour les questions tapées au clavier.
-          setTimeout(function() {
-            if (champ.value.trim()) {
-              envoyerQuestion();
-            }
-          }, 150);
+          // On mémorise qu'une vraie question vocale a été reconnue.
+          // L'envoi sera déclenché dans onend, c'est-à-dire une fois
+          // la reconnaissance vocale réellement terminée.
+          questionVocaleAEnvoyer = true;
         }
       };
 
       reconnaissanceVocale.onerror = function(event) {
+        questionVocaleAEnvoyer = false;
         mettreEtatMicro(false);
 
         if (!aide) return;
@@ -849,6 +849,19 @@
       reconnaissanceVocale.onend = function() {
         mettreEtatMicro(false);
         reconnaissanceVocale = null;
+
+        if (questionVocaleAEnvoyer) {
+          questionVocaleAEnvoyer = false;
+
+          const champ = document.getElementById('question');
+          if (champ && champ.value.trim()) {
+            // Léger délai uniquement pour laisser le navigateur finaliser
+            // la mise à jour du champ avant l'appel au moteur Guestflow.
+            setTimeout(function() {
+              envoyerQuestion();
+            }, 80);
+          }
+        }
       };
 
       try {
