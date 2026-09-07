@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB MICRO ROBUSTE 2026-09-07 -->
+  <!-- VERSION GITHUB MICRO + ENVOI AUTO + REPONSE VOCALE 2026-09-07 -->
 
   <style>
     :root{
@@ -419,7 +419,7 @@
         </div>
 
         <div class="mic-help" id="micHelp">
-          Vous pouvez écrire votre question ou toucher le micro pour parler.
+          Vous pouvez écrire votre question ou toucher le micro : la question vocale sera envoyée automatiquement.
         </div>
 
         <div class="example" id="examplesBox">
@@ -512,7 +512,7 @@
         loading: 'Guestflow is preparing your answer…',
         footer: 'Guestflow answers using information provided by your accommodation.',
         badLink: 'This Guestflow link is incomplete. Please contact your host for the correct link.',
-        micHelp: 'You can type your question or tap the microphone to speak.',
+        micHelp: 'You can type your question or tap the microphone: voice questions are sent automatically.',
         micTitle: 'Speak to Guestflow',
         micListening: 'Listening…',
         micUnsupported: 'Voice dictation is not available in this browser.'
@@ -530,7 +530,7 @@
         loading: 'Guestflow está preparando tu respuesta…',
         footer: 'Guestflow responde con la información proporcionada por tu alojamiento.',
         badLink: 'Este enlace de Guestflow está incompleto. Contacta con tu anfitrión para obtener el enlace correcto.',
-        micHelp: 'Puedes escribir tu pregunta o tocar el micrófono para hablar.',
+        micHelp: 'Puedes escribir tu pregunta o tocar el micrófono: las preguntas por voz se envían automáticamente.',
         micTitle: 'Hablar con Guestflow',
         micListening: 'Te escucho…',
         micUnsupported: 'El dictado por voz no está disponible en este navegador.'
@@ -548,7 +548,7 @@
         loading: 'Guestflow bereitet Ihre Antwort vor…',
         footer: 'Guestflow antwortet auf Grundlage der Informationen Ihrer Unterkunft.',
         badLink: 'Dieser Guestflow-Link ist unvollständig. Bitte wenden Sie sich an Ihren Gastgeber, um den richtigen Link zu erhalten.',
-        micHelp: 'Sie können Ihre Frage schreiben oder auf das Mikrofon tippen und sprechen.',
+        micHelp: 'Sie können Ihre Frage schreiben oder auf das Mikrofon tippen: Sprachfragen werden automatisch gesendet.',
         micTitle: 'Mit Guestflow sprechen',
         micListening: 'Ich höre zu…',
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.'
@@ -717,6 +717,10 @@
     }
 
     async function basculerMicro() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
       const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
       const aide = document.getElementById('micHelp');
       const btn = document.getElementById('btnMic');
@@ -808,6 +812,14 @@
             : texte;
 
           champ.focus();
+
+          // Vocale = envoi automatique immédiat à Guestflow.
+          // Le bouton "Poser ma question" reste disponible pour les questions tapées au clavier.
+          setTimeout(function() {
+            if (champ.value.trim()) {
+              envoyerQuestion();
+            }
+          }, 150);
         }
       };
 
@@ -853,6 +865,61 @@
         }
       }
     }
+
+    function nettoyerTextePourLecture(texte) {
+      return String(texte || '')
+        .replace(/https:\/\/\S+/gi, '')
+        .replace(/Ouvrir dans Google Maps\s*:/gi, '')
+        .replace(/Open in Google Maps\s*:/gi, '')
+        .replace(/Abrir en Google Maps\s*:/gi, '')
+        .replace(/In Google Maps öffnen\s*:/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function parlerReponseGuestflow(texte) {
+      if (!('speechSynthesis' in window)) return;
+
+      const contenu = nettoyerTextePourLecture(texte);
+      if (!contenu) return;
+
+      window.speechSynthesis.cancel();
+
+      const message = new SpeechSynthesisUtterance(contenu);
+
+      const languesVoix = {
+        fr: 'fr-FR',
+        en: 'en-GB',
+        es: 'es-ES',
+        de: 'de-DE'
+      };
+
+      message.lang = languesVoix[langueSelectionnee] || 'fr-FR';
+      message.rate = 1;
+      message.pitch = 1;
+      message.volume = 1;
+
+      const voixDisponibles = window.speechSynthesis.getVoices();
+      const langueRecherche = message.lang.toLowerCase();
+
+      const voixCompatible =
+        voixDisponibles.find(function(voix) {
+          return String(voix.lang || '').toLowerCase() === langueRecherche;
+        }) ||
+        voixDisponibles.find(function(voix) {
+          return String(voix.lang || '').toLowerCase().startsWith(
+            langueRecherche.split('-')[0]
+          );
+        });
+
+      if (voixCompatible) {
+        message.voice = voixCompatible;
+      }
+
+      window.speechSynthesis.speak(message);
+    }
+
+
 
     function envoyerQuestion() {
 
@@ -940,6 +1007,7 @@
         }
 
         afficherReponseGuestflow(payload.reponse);
+        parlerReponseGuestflow(payload.reponse);
       };
 
       script.onerror = function() {
@@ -968,6 +1036,10 @@
 
 
     function vider() {
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
 
       document.getElementById('question').value = '';
 
@@ -998,6 +1070,13 @@
         e.preventDefault();
         basculerMicro();
       });
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
     }
 
     initialiserAccesVoyageur();
