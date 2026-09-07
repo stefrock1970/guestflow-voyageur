@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V4.1 FINITIONS CONVERSATION + EQUILIBRE 2026-09-07 -->
+  <!-- VERSION GITHUB V4.2 QUESTION AUTO-EFFACEE APRES REPONSE 2026-09-07 -->
 
   <style>
     :root{
@@ -2136,6 +2136,14 @@
       mettreAJourBoutonVoix();
     }
 
+
+    function viderQuestionApresReponse() {
+      const champ = document.getElementById('question');
+      if (champ) {
+        champ.value = '';
+      }
+    }
+
     function nettoyerTextePourLecture(texte) {
       return String(texte || '')
         .replace(/https:\/\/\S+/gi, '')
@@ -2186,6 +2194,14 @@
       if (voixCompatible) {
         message.voice = voixCompatible;
       }
+
+      message.onend = function() {
+        viderQuestionApresReponse();
+      };
+
+      message.onerror = function() {
+        viderQuestionApresReponse();
+      };
 
       window.speechSynthesis.speak(message);
     }
@@ -2342,7 +2358,12 @@
         }
 
         afficherReponseGuestflow(payload.reponse);
-        parlerReponseGuestflow(payload.reponse);
+
+        if (voixActive) {
+          parlerReponseGuestflow(payload.reponse);
+        } else {
+          viderQuestionApresReponse();
+        }
       };
 
       script.onerror = function() {
