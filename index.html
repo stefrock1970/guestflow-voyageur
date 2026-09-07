@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Guestflow — Votre concierge numérique</title>
+
+  <style>
+    :root{
+      --olive:#5f6846;
+      --olive-dark:#3f472f;
+      --cream:#f6f1e7;
+      --beige:#ece2cc;
+      --white:#ffffff;
+      --line:#ddd6c8;
+      --text:#2f3328;
+      --muted:#777363;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:Arial,Helvetica,sans-serif;
+      background:var(--cream);
+      color:var(--text);
+    }
+
+    .page{
+      max-width:920px;
+      margin:0 auto;
+      padding:42px 20px 70px;
+    }
+
+    .header{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .brand{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:48px;
+      color:var(--olive-dark);
+      line-height:1;
+    }
+
+    .subtitle{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+    }
+
+    .card{
+      background:var(--white);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:28px;
+      box-shadow:0 10px 30px rgba(63,71,47,.08);
+    }
+
+    .field{
+      margin-bottom:22px;
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      margin-bottom:8px;
+      color:var(--olive-dark);
+    }
+
+    input,
+    textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:14px 15px;
+      font:inherit;
+      background:#fffdfa;
+      color:var(--text);
+    }
+
+    input:focus,
+    textarea:focus{
+      outline:2px solid #b8c195;
+      border-color:var(--olive);
+    }
+
+    textarea{
+      min-height:130px;
+      resize:vertical;
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    button{
+      border:0;
+      border-radius:999px;
+      padding:14px 24px;
+      font-size:16px;
+      font-weight:700;
+      cursor:pointer;
+    }
+
+    .primary{
+      background:var(--olive);
+      color:#fff;
+    }
+
+    .primary:hover{
+      background:var(--olive-dark);
+    }
+
+    .secondary{
+      background:#ece8dc;
+      color:var(--olive-dark);
+    }
+
+    .status{
+      min-height:24px;
+      margin-top:20px;
+      font-weight:700;
+      color:var(--olive-dark);
+    }
+
+    .response-box{
+      margin-top:24px;
+      background:#f7f4ec;
+      border:1px solid var(--line);
+      border-left:5px solid var(--olive);
+      border-radius:16px;
+      padding:22px;
+    }
+
+    .response-title{
+      margin:0 0 12px;
+      font-family:Georgia,"Times New Roman",serif;
+      color:var(--olive-dark);
+      font-size:25px;
+    }
+
+    #reponse{
+      white-space:pre-wrap;
+      line-height:1.65;
+      min-height:70px;
+    }
+
+    .maps-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:12px;
+      padding:10px 15px;
+      border-radius:999px;
+      background:var(--olive);
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      line-height:1.2;
+      box-shadow:0 4px 12px rgba(67,77,43,.16);
+      transition:transform .15s ease, background .15s ease;
+      white-space:normal;
+    }
+
+    .maps-link:hover{
+      background:var(--olive-dark);
+      transform:translateY(-1px);
+    }
+
+    .maps-link::before{
+      content:"📍";
+      font-size:16px;
+    }
+
+    .hint{
+      margin-top:22px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .example{
+      margin-top:12px;
+      padding:14px 16px;
+      border-radius:12px;
+      background:#eef1e6;
+      color:var(--olive-dark);
+      line-height:1.5;
+    }
+
+    .language-row{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:22px;
+    }
+
+    .language-label{
+      font-weight:700;
+      color:var(--olive-dark);
+      margin-right:4px;
+    }
+
+    .lang-btn{
+      --accent: var(--olive);
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border:1px solid var(--line);
+      background:#f7f4ec;
+      color:var(--olive-dark);
+      padding:9px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:all .18s ease;
+      box-shadow:0 1px 2px rgba(0,0,0,.04);
+    }
+
+    .lang-btn:hover{
+      transform:translateY(-1px);
+      border-color:var(--olive);
+      box-shadow:0 4px 10px rgba(63,71,47,.10);
+      background:#fbf8f1;
+    }
+
+    .lang-btn.active{
+      background:var(--olive);
+      color:#fff;
+      border-color:var(--olive);
+      box-shadow:0 6px 14px rgba(63,71,47,.18);
+    }
+
+    .lang-code{
+      letter-spacing:.02em;
+    }
+
+    .flag{
+      width:22px;
+      height:15px;
+      border-radius:4px;
+      display:inline-block;
+      flex:0 0 auto;
+      border:1px solid rgba(0,0,0,.12);
+      box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);
+    }
+
+    .flag-fr{
+      background:linear-gradient(90deg,#1f5eff 0 33.33%,#ffffff 33.33% 66.66%,#e11d48 66.66% 100%);
+    }
+
+    .flag-es{
+      background:linear-gradient(180deg,#b91c1c 0 25%,#facc15 25% 75%,#b91c1c 75% 100%);
+    }
+
+    .flag-de{
+      background:linear-gradient(180deg,#111827 0 33.33%,#b91c1c 33.33% 66.66%,#facc15 66.66% 100%);
+    }
+
+    .flag-gb{
+      background:
+        linear-gradient(90deg, transparent 39%, #fff 39% 61%, transparent 61%),
+        linear-gradient(transparent 39%, #fff 39% 61%, transparent 61%),
+        linear-gradient(90deg, transparent 45%, #c8102e 45% 55%, transparent 55%),
+        linear-gradient(transparent 45%, #c8102e 45% 55%, transparent 55%),
+        linear-gradient(45deg, transparent 43%, #fff 43% 48%, #c8102e 48% 52%, #fff 52% 57%, transparent 57%),
+        linear-gradient(-45deg, transparent 43%, #fff 43% 48%, #c8102e 48% 52%, #fff 52% 57%, transparent 57%),
+        #012169;
+    }
+
+
+    .voice-row{
+      display:flex;
+      align-items:stretch;
+      gap:10px;
+    }
+
+    .voice-row textarea{
+      flex:1 1 auto;
+    }
+
+    .mic-btn{
+      width:54px;
+      min-width:54px;
+      height:54px;
+      align-self:flex-start;
+      border-radius:50%;
+      padding:0;
+      background:#ece8dc;
+      color:var(--olive-dark);
+      border:1px solid var(--line);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:23px;
+      box-shadow:0 4px 12px rgba(63,71,47,.08);
+      transition:transform .15s ease, background .15s ease, box-shadow .15s ease;
+    }
+
+    .mic-btn:hover{
+      background:#e2ddcf;
+      transform:translateY(-1px);
+    }
+
+    .mic-btn.listening{
+      background:var(--olive);
+      color:#fff;
+      box-shadow:0 0 0 6px rgba(95,104,70,.12);
+    }
+
+    .mic-help{
+      margin-top:8px;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.4;
+    }
+
+    @media(max-width:650px){
+      .page{
+        padding:28px 14px 50px;
+      }
+
+      .card{
+        padding:20px;
+      }
+
+      .brand{
+        font-size:40px;
+      }
+
+      .buttons{
+        flex-direction:column;
+      }
+
+      button{
+        width:100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="page">
+
+    <div class="header">
+      <h1 class="brand">Guestflow</h1>
+      <div class="subtitle" id="pageSubtitle">
+        Votre concierge numérique pendant votre séjour
+      </div>
+    </div>
+
+    <div class="card">
+
+      <div class="language-row" aria-label="Choix de la langue">
+        <span class="language-label" id="labelLangue">Langue :</span>
+
+        <button
+          type="button"
+          class="lang-btn active"
+          data-lang="fr"
+          onclick="choisirLangue('fr')"
+        ><span class="flag flag-fr" aria-hidden="true"></span><span class="lang-code">FR</span></button>
+
+        <button
+          type="button"
+          class="lang-btn"
+          data-lang="en"
+          onclick="choisirLangue('en')"
+        ><span class="flag flag-gb" aria-hidden="true"></span><span class="lang-code">EN</span></button>
+
+        <button
+          type="button"
+          class="lang-btn"
+          data-lang="es"
+          onclick="choisirLangue('es')"
+        ><span class="flag flag-es" aria-hidden="true"></span><span class="lang-code">ES</span></button>
+
+        <button
+          type="button"
+          class="lang-btn"
+          data-lang="de"
+          onclick="choisirLangue('de')"
+        ><span class="flag flag-de" aria-hidden="true"></span><span class="lang-code">DE</span></button>
+      </div>
+<div id="accessMessage" class="status"></div>
+
+      <div class="field">
+        <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
+        <div class="voice-row">
+          <textarea
+            id="question"
+            placeholder="Ex. À quelle heure dois-je quitter le gîte ?"
+          ></textarea>
+
+          <button
+            id="btnMic"
+            class="mic-btn"
+            type="button"
+            onclick="basculerMicro()"
+            aria-label="Parler à Guestflow"
+            title="Parler à Guestflow"
+          >🎤</button>
+        </div>
+
+        <div class="mic-help" id="micHelp">
+          Vous pouvez écrire votre question ou toucher le micro pour parler.
+        </div>
+
+        <div class="example" id="examplesBox">
+          Exemples : « Les animaux sont-ils acceptés ? » —
+          « Quel est le mot de passe Wi-Fi ? » —
+          « À quelle heure puis-je arriver ? »
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button
+          id="btnAsk"
+          class="primary"
+          type="button"
+          onclick="envoyerQuestion()"
+        >
+          Poser la question à Guestflow
+        </button>
+
+        <button
+          id="btnClear"
+          class="secondary"
+          type="button"
+          onclick="vider()"
+        >
+          Effacer
+        </button>
+      </div>
+
+      <div id="status" class="status"></div>
+
+      <div class="response-box">
+        <h2 class="response-title" id="responseTitle">Réponse Guestflow</h2>
+        <div id="reponse">
+          La réponse du concierge apparaîtra ici.
+        </div>
+      </div>
+
+      <div class="hint" id="footerText">
+        Guestflow vous répond à partir des informations fournies par votre hébergement.
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    let langueSelectionnee = 'fr';
+    // ID du gîte invisible pour le voyageur : récupéré uniquement depuis l'URL.
+    let idGuestflow = '';
+
+    let reconnaissanceVocale = null;
+    let microEnEcoute = false;
+
+    const languesReconnaissance = {
+      fr: 'fr-FR',
+      en: 'en-GB',
+      es: 'es-ES',
+      de: 'de-DE'
+    };
+
+    const traductionsInterface = {
+      fr: {
+        langue: 'Langue :',
+        subtitle: 'Votre concierge numérique pendant votre séjour',
+        question: 'Comment puis-je vous aider ?',
+        placeholder: 'Ex. À quelle heure dois-je quitter le gîte ?',
+        examples: 'Exemples : « Les animaux sont-ils acceptés ? » — « Quel est le mot de passe Wi-Fi ? » — « Où est la pharmacie la plus proche ? »',
+        ask: 'Poser ma question',
+        clear: 'Effacer',
+        responseTitle: 'Réponse Guestflow',
+        empty: 'Votre réponse apparaîtra ici.',
+        loading: 'Guestflow prépare votre réponse…',
+        footer: 'Guestflow vous répond à partir des informations fournies par votre hébergement.',
+        badLink: 'Ce lien Guestflow est incomplet. Contactez votre hébergeur pour obtenir le lien correct.',
+        micHelp: 'Vous pouvez écrire votre question ou toucher le micro pour parler.',
+        micTitle: 'Parler à Guestflow',
+        micListening: 'Je vous écoute…',
+        micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.'
+      },
+      en: {
+        langue: 'Language:',
+        subtitle: 'Your digital concierge during your stay',
+        question: 'How can I help you?',
+        placeholder: 'E.g. What time do I need to check out?',
+        examples: 'Examples: “Are pets allowed?” — “What is the Wi-Fi password?” — “Where is the nearest pharmacy?”',
+        ask: 'Ask my question',
+        clear: 'Clear',
+        responseTitle: 'Guestflow answer',
+        empty: 'Your answer will appear here.',
+        loading: 'Guestflow is preparing your answer…',
+        footer: 'Guestflow answers using information provided by your accommodation.',
+        badLink: 'This Guestflow link is incomplete. Please contact your host for the correct link.',
+        micHelp: 'You can type your question or tap the microphone to speak.',
+        micTitle: 'Speak to Guestflow',
+        micListening: 'Listening…',
+        micUnsupported: 'Voice dictation is not available in this browser.'
+      },
+      es: {
+        langue: 'Idioma:',
+        subtitle: 'Tu conserje digital durante tu estancia',
+        question: '¿En qué puedo ayudarte?',
+        placeholder: 'Ej. ¿A qué hora tengo que salir del alojamiento?',
+        examples: 'Ejemplos: « ¿Se admiten mascotas? » — « ¿Cuál es la contraseña del Wi-Fi? » — « ¿Dónde está la farmacia más cercana? »',
+        ask: 'Hacer mi pregunta',
+        clear: 'Borrar',
+        responseTitle: 'Respuesta Guestflow',
+        empty: 'Tu respuesta aparecerá aquí.',
+        loading: 'Guestflow está preparando tu respuesta…',
+        footer: 'Guestflow responde con la información proporcionada por tu alojamiento.',
+        badLink: 'Este enlace de Guestflow está incompleto. Contacta con tu anfitrión para obtener el enlace correcto.',
+        micHelp: 'Puedes escribir tu pregunta o tocar el micrófono para hablar.',
+        micTitle: 'Hablar con Guestflow',
+        micListening: 'Te escucho…',
+        micUnsupported: 'El dictado por voz no está disponible en este navegador.'
+      },
+      de: {
+        langue: 'Sprache:',
+        subtitle: 'Ihr digitaler Concierge während Ihres Aufenthalts',
+        question: 'Wie kann ich Ihnen helfen?',
+        placeholder: 'Z. B. Um wie viel Uhr muss ich auschecken?',
+        examples: 'Beispiele: „Sind Haustiere erlaubt?“ — „Wie lautet das WLAN-Passwort?“ — „Wo ist die nächste Apotheke?“',
+        ask: 'Meine Frage stellen',
+        clear: 'Löschen',
+        responseTitle: 'Guestflow-Antwort',
+        empty: 'Ihre Antwort erscheint hier.',
+        loading: 'Guestflow bereitet Ihre Antwort vor…',
+        footer: 'Guestflow antwortet auf Grundlage der Informationen Ihrer Unterkunft.',
+        badLink: 'Dieser Guestflow-Link ist unvollständig. Bitte wenden Sie sich an Ihren Gastgeber, um den richtigen Link zu erhalten.',
+        micHelp: 'Sie können Ihre Frage schreiben oder auf das Mikrofon tippen und sprechen.',
+        micTitle: 'Mit Guestflow sprechen',
+        micListening: 'Ich höre zu…',
+        micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.'
+      }
+    };
+
+    function mettreAJourInterface(langue) {
+      const t = traductionsInterface[langue] || traductionsInterface.fr;
+
+      document.documentElement.lang = langue;
+
+      document.getElementById('labelLangue').textContent = t.langue;
+      document.getElementById('pageSubtitle').textContent = t.subtitle;
+      document.getElementById('labelQuestion').textContent = t.question;
+      document.getElementById('question').placeholder = t.placeholder;
+      document.getElementById('examplesBox').textContent = t.examples;
+
+      const btnAsk = document.getElementById('btnAsk');
+      if (btnAsk) btnAsk.textContent = t.ask;
+
+      const btnClear = document.getElementById('btnClear');
+      if (btnClear) btnClear.textContent = t.clear;
+
+      const responseTitle = document.getElementById('responseTitle');
+      if (responseTitle) responseTitle.textContent = t.responseTitle;
+
+      const footer = document.getElementById('footerText');
+      if (footer) footer.textContent = t.footer;
+
+      const micHelp = document.getElementById('micHelp');
+      if (micHelp && !microEnEcoute) micHelp.textContent = t.micHelp;
+
+      const btnMic = document.getElementById('btnMic');
+      if (btnMic) {
+        btnMic.title = t.micTitle;
+        btnMic.setAttribute('aria-label', t.micTitle);
+      }
+
+      const accessMessage = document.getElementById('accessMessage');
+      if (accessMessage && !idGuestflow) accessMessage.textContent = t.badLink;
+
+      const reponse = document.getElementById('reponse');
+      if (
+        reponse.textContent.trim() === traductionsInterface.fr.empty ||
+        reponse.textContent.trim() === traductionsInterface.en.empty ||
+        reponse.textContent.trim() === traductionsInterface.es.empty ||
+        reponse.textContent.trim() === traductionsInterface.de.empty
+      ) {
+        reponse.textContent = t.empty;
+      }
+    }
+
+    function choisirLangue(langue) {
+      if (microEnEcoute && reconnaissanceVocale) {
+        reconnaissanceVocale.stop();
+      }
+
+      langueSelectionnee = langue;
+
+      document
+        .querySelectorAll('.lang-btn')
+        .forEach(function(bouton) {
+          bouton.classList.toggle(
+            'active',
+            bouton.dataset.lang === langue
+          );
+        });
+
+      mettreAJourInterface(langue);
+    }
+
+    function afficherReponseGuestflow(texte) {
+      const zone = document.getElementById('reponse');
+      zone.innerHTML = '';
+
+      const contenu = String(texte || '');
+
+      // Détecte le lien Google Maps généré par le moteur et masque l'URL brute.
+      const regexMaps = /(Ouvrir dans Google Maps\s*:|Open in Google Maps\s*:|Abrir en Google Maps\s*:|In Google Maps öffnen\s*:)?\s*(https:\/\/(?:www\.)?google\.com\/maps\/[^\s]+)/gi;
+
+      let position = 0;
+      let match;
+      let lienTrouve = false;
+
+      while ((match = regexMaps.exec(contenu)) !== null) {
+        lienTrouve = true;
+
+        const avant = contenu.slice(position, match.index).replace(/\s+$/, '');
+        if (avant) {
+          zone.appendChild(document.createTextNode(avant));
+        }
+
+        let url = match[2];
+        let ponctuationFinale = '';
+
+        // Le moteur termine parfois la réponse par un point : ne pas l'inclure dans l'URL.
+        while (/[.,;!?)]$/.test(url)) {
+          ponctuationFinale = url.slice(-1) + ponctuationFinale;
+          url = url.slice(0, -1);
+        }
+
+        if (zone.childNodes.length) {
+          zone.appendChild(document.createElement('br'));
+        }
+
+        const lien = document.createElement('a');
+        lien.className = 'maps-link';
+        lien.href = url;
+        lien.target = '_blank';
+        lien.rel = 'noopener noreferrer';
+
+        const libelles = {
+          fr: 'Ouvrir dans Google Maps',
+          en: 'Open in Google Maps',
+          es: 'Abrir en Google Maps',
+          de: 'In Google Maps öffnen'
+        };
+
+        lien.textContent = libelles[langueSelectionnee] || libelles.fr;
+        zone.appendChild(lien);
+
+        if (ponctuationFinale && ponctuationFinale !== '.') {
+          zone.appendChild(document.createTextNode(ponctuationFinale));
+        }
+
+        position = regexMaps.lastIndex;
+      }
+
+      const apres = contenu.slice(position).replace(/^\s+/, '');
+
+      if (apres) {
+        if (lienTrouve && zone.childNodes.length) {
+          zone.appendChild(document.createElement('br'));
+        }
+        zone.appendChild(document.createTextNode(apres));
+      }
+
+      if (!contenu) {
+        zone.textContent =
+          (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
+      }
+    }
+
+
+    function obtenirClasseReconnaissanceVocale() {
+      return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    }
+
+    function mettreEtatMicro(enEcoute) {
+      microEnEcoute = !!enEcoute;
+
+      const btn = document.getElementById('btnMic');
+      const aide = document.getElementById('micHelp');
+      const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
+
+      if (btn) {
+        btn.classList.toggle('listening', microEnEcoute);
+        btn.textContent = microEnEcoute ? '⏹' : '🎤';
+        btn.title = microEnEcoute ? t.micListening : t.micTitle;
+        btn.setAttribute('aria-label', microEnEcoute ? t.micListening : t.micTitle);
+      }
+
+      if (aide) {
+        aide.textContent = microEnEcoute ? t.micListening : t.micHelp;
+      }
+    }
+
+    function basculerMicro() {
+      const SpeechRecognitionClass = obtenirClasseReconnaissanceVocale();
+      const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
+
+      if (!SpeechRecognitionClass) {
+        document.getElementById('micHelp').textContent = t.micUnsupported;
+        return;
+      }
+
+      if (microEnEcoute && reconnaissanceVocale) {
+        reconnaissanceVocale.stop();
+        return;
+      }
+
+      reconnaissanceVocale = new SpeechRecognitionClass();
+      reconnaissanceVocale.lang = languesReconnaissance[langueSelectionnee] || 'fr-FR';
+      reconnaissanceVocale.interimResults = false;
+      reconnaissanceVocale.continuous = false;
+      reconnaissanceVocale.maxAlternatives = 1;
+
+      reconnaissanceVocale.onstart = function() {
+        mettreEtatMicro(true);
+      };
+
+      reconnaissanceVocale.onresult = function(event) {
+        const texte = event &&
+                      event.results &&
+                      event.results[0] &&
+                      event.results[0][0]
+          ? String(event.results[0][0].transcript || '').trim()
+          : '';
+
+        if (texte) {
+          const champ = document.getElementById('question');
+          const existant = champ.value.trim();
+
+          champ.value = existant
+            ? existant + (/[.!?]$/.test(existant) ? ' ' : '. ') + texte
+            : texte;
+
+          champ.focus();
+        }
+      };
+
+      reconnaissanceVocale.onerror = function() {
+        mettreEtatMicro(false);
+      };
+
+      reconnaissanceVocale.onend = function() {
+        mettreEtatMicro(false);
+        reconnaissanceVocale = null;
+      };
+
+      try {
+        reconnaissanceVocale.start();
+      } catch (e) {
+        mettreEtatMicro(false);
+      }
+    }
+
+
+    function envoyerQuestion() {
+
+      const question =
+        document.getElementById('question').value.trim();
+
+      const status =
+        document.getElementById('status');
+
+      const reponse =
+        document.getElementById('reponse');
+
+      const bouton =
+        document.getElementById('btnAsk');
+
+      if (!idGuestflow) {
+        status.textContent =
+          (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).badLink;
+        return;
+      }
+
+      if (!question) {
+        status.textContent =
+          langueSelectionnee === 'en' ? 'Please write a question.' :
+          langueSelectionnee === 'es' ? 'Escribe una pregunta.' :
+          langueSelectionnee === 'de' ? 'Bitte schreiben Sie eine Frage.' :
+          'Écrivez une question.';
+        return;
+      }
+
+      status.textContent =
+        (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).loading;
+      reponse.textContent = '';
+      bouton.disabled = true;
+
+      bouton.disabled = false;
+      status.textContent = '';
+
+      const messagesPont = {
+        fr: 'Le micro fonctionne sur cette page. La connexion au moteur Guestflow sera activée à l’étape suivante.',
+        en: 'The microphone works on this page. The connection to the Guestflow engine will be enabled in the next step.',
+        es: 'El micrófono funciona en esta página. La conexión con el motor Guestflow se activará en el siguiente paso.',
+        de: 'Das Mikrofon funktioniert auf dieser Seite. Die Verbindung zur Guestflow-Engine wird im nächsten Schritt aktiviert.'
+      };
+
+      reponse.textContent =
+        messagesPont[langueSelectionnee] || messagesPont.fr;
+    }
+
+
+    function vider() {
+
+      document.getElementById('question').value = '';
+
+      document.getElementById('status').textContent = '';
+
+      document.getElementById('reponse').textContent =
+        (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
+    }
+
+
+
+    // Récupère automatiquement l'ID du gîte depuis le lien envoyé au locataire.
+    // Formats acceptés : ?page=voyageur&id=GF-XXXXX-001
+    //                    ?page=voyageur&idGuestflow=GF-XXXXX-001
+    function initialiserAccesVoyageur() {
+      const p = new URLSearchParams(window.location.search);
+
+      idGuestflow = String(
+        p.get('idGuestflow') || p.get('id') || p.get('gite') || ''
+      ).trim();
+
+      mettreAJourInterface(langueSelectionnee);
+    }
+
+    initialiserAccesVoyageur();
+
+    document
+      .getElementById('question')
+      .addEventListener('keydown', function(e) {
+
+        if (e.ctrlKey && e.key === 'Enter') {
+          envoyerQuestion();
+        }
+      });
+  </script>
+
+</body>
+</html>
