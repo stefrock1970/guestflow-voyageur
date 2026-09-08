@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+<!-- Guestflow V23.12 — voix multilingue plus fluide -->
 <html lang="fr">
 <head>
   <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
+  <!-- Guestflow V23.13 — Mobile plein écran Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1540,6 +1542,339 @@
       }
     }
 
+  
+    /* =========================================================
+       GUESTFLOW V23.13 — MOBILE PLEIN ÉCRAN ANDROID + IPHONE
+       Objectif : aucun défilement de la page pour l'usage normal.
+       Une réponse exceptionnellement longue défile uniquement
+       à l'intérieur de sa bulle.
+       ========================================================= */
+    @media (max-width: 900px) {
+      html, body {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+
+      body {
+        min-height: 100svh;
+        min-height: 100dvh;
+      }
+
+      .page {
+        width: 100%;
+        height: 100svh;
+        height: 100dvh;
+        margin: 0;
+        padding:
+          max(8px, env(safe-area-inset-top))
+          max(10px, env(safe-area-inset-right))
+          max(8px, env(safe-area-inset-bottom))
+          max(10px, env(safe-area-inset-left));
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .topbar {
+        flex: 0 0 auto;
+        min-height: 44px;
+        margin: 0 2px 7px;
+        gap: 8px;
+      }
+
+      .brand-wrap { gap: 9px; }
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+      .brand-mark svg { width: 20px; height: 20px; }
+      .brand { font-size: 25px; }
+      .gite-name {
+        margin-top: 0;
+        font-size: 11px;
+        max-width: 220px;
+      }
+      .sound-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .hero {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: block;
+      }
+
+      /* La grande présentation desktop disparaît sur téléphone :
+         le voyageur arrive directement sur le concierge. */
+      .intro { display: none !important; }
+
+      .concierge {
+        height: 100%;
+        min-height: 0 !important;
+        border-radius: 20px;
+        padding: 10px 11px 9px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .concierge-head {
+        flex: 0 0 auto;
+        padding-bottom: 7px;
+        margin-bottom: 0;
+        gap: 7px;
+      }
+
+      .concierge-title {
+        min-height: 36px;
+      }
+
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+      }
+      .avatar svg { width: 18px; height: 18px; }
+      .concierge-title h2 { font-size: 17px; }
+      .online { font-size: 10px; }
+
+      .language-row {
+        gap: 5px;
+        flex-wrap: nowrap;
+        overflow: visible;
+      }
+      .language-label { display: none; }
+      .lang-btn {
+        min-width: 46px;
+        height: 34px;
+        padding: 0 8px;
+        border-radius: 10px;
+        font-size: 12px;
+      }
+
+      #accessMessage:empty,
+      #status:empty { display: none; }
+
+      .field {
+        flex: 0 0 auto;
+        padding-top: 7px !important;
+      }
+
+      .question-label {
+        margin-bottom: 5px;
+      }
+      .question-label label {
+        font-size: 13px;
+      }
+
+      .voice-row {
+        min-height: 76px !important;
+      }
+
+      textarea {
+        min-height: 76px !important;
+        height: 76px;
+        max-height: 76px;
+        padding: 11px 57px 10px 12px !important;
+        border-radius: 15px;
+        font-size: 16px; /* évite le zoom automatique iOS */
+        line-height: 1.28;
+        resize: none;
+      }
+
+      .mic-btn {
+        width: 43px;
+        height: 43px;
+        right: 8px;
+        bottom: 8px;
+      }
+
+      /* Ces textes sont utiles sur desktop mais consomment trop
+         de hauteur sur un téléphone. */
+      .mic-help,
+      .example,
+      #examplesBox {
+        display: none !important;
+      }
+
+      .buttons {
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 7px;
+        margin-top: 7px;
+      }
+
+      .buttons button {
+        min-height: 40px;
+        height: 40px;
+        padding: 0 13px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      #status {
+        flex: 0 0 auto;
+        min-height: 0;
+        margin: 4px 0 0;
+        font-size: 11px;
+        line-height: 1.2;
+      }
+
+      .response-box {
+        flex: 1 1 auto;
+        min-height: 92px;
+        margin-top: 7px;
+        padding: 9px 9px 9px 11px !important;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .response-conversation {
+        height: 100%;
+        min-height: 0;
+        gap: 7px !important;
+      }
+
+      .response-avatar {
+        width: 29px !important;
+        height: 29px !important;
+        min-width: 29px;
+        border-radius: 9px !important;
+      }
+
+      .response-content {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .response-meta {
+        flex: 0 0 auto;
+        margin-bottom: 3px;
+      }
+
+      .response-name { font-size: 11px !important; }
+      .response-time { font-size: 9px !important; }
+
+      .response-bubble,
+      .response-box.response-ready .response-bubble {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 10px 11px !important;
+        border-radius: 14px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+
+      .response-title { display: none !important; }
+
+      #reponse {
+        font-size: 14px !important;
+        line-height: 1.38 !important;
+      }
+
+      .hint,
+      .footer {
+        display: none !important;
+      }
+    }
+
+    /* Très petits téléphones / faible hauteur utile */
+    @media (max-width: 430px) and (max-height: 700px) {
+      .topbar { min-height: 38px; margin-bottom: 5px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .brand { font-size: 23px; }
+      .sound-btn { width: 34px; height: 34px; }
+
+      .concierge { padding: 8px 9px 7px; }
+      .concierge-head { padding-bottom: 5px; }
+      .concierge-title h2 { font-size: 15px; }
+      .avatar { width: 31px; height: 31px; }
+
+      .lang-btn {
+        min-width: 42px;
+        height: 31px;
+        padding: 0 6px;
+      }
+
+      .field { padding-top: 5px !important; }
+      .voice-row,
+      textarea {
+        min-height: 66px !important;
+        height: 66px;
+        max-height: 66px;
+      }
+
+      .mic-btn {
+        width: 39px;
+        height: 39px;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .buttons { margin-top: 5px; }
+      .buttons button {
+        height: 37px;
+        min-height: 37px;
+      }
+
+      .response-box {
+        margin-top: 5px;
+        min-height: 78px;
+      }
+
+      #reponse {
+        font-size: 13px !important;
+        line-height: 1.32 !important;
+      }
+    }
+
+    /* Paysage Android / iPhone : garde tout utilisable sans
+       transformer la page entière en zone de défilement. */
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 520px) {
+      .page {
+        padding-top: max(4px, env(safe-area-inset-top));
+        padding-bottom: max(4px, env(safe-area-inset-bottom));
+      }
+      .topbar { display: none; }
+      .concierge {
+        display: grid;
+        grid-template-columns: minmax(230px, .9fr) minmax(280px, 1.1fr);
+        grid-template-rows: auto auto 1fr;
+        column-gap: 10px;
+        row-gap: 4px;
+      }
+      .concierge-head {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .field { grid-column: 1; grid-row: 2 / 4; }
+      .buttons { grid-column: 1; align-self: end; }
+      #status { display: none; }
+      .response-box {
+        grid-column: 2;
+        grid-row: 2 / 4;
+        margin-top: 0;
+      }
+      .voice-row,
+      textarea {
+        min-height: 72px !important;
+        height: 72px;
+        max-height: 72px;
+      }
+    }
+
   </style>
 </head>
 
@@ -2173,15 +2508,106 @@
       }
     }
 
+    // =========================================================
+    // GUESTFLOW V23.12 — VOIX PLUS FLUIDE FR / EN / ES / DE
+    // =========================================================
+
     function nettoyerTextePourLecture(texte) {
       return String(texte || '')
-        .replace(/https:\/\/\S+/gi, '')
-        .replace(/Ouvrir dans Google Maps\s*:/gi, '')
-        .replace(/Open in Google Maps\s*:/gi, '')
-        .replace(/Abrir en Google Maps\s*:/gi, '')
-        .replace(/In Google Maps öffnen\s*:/gi, '')
+        // Les URL et libellés de carte ne doivent pas être épelés par la voix.
+        .replace(/https?:\/\/\S+/gi, '')
+        .replace(/Ouvrir dans Google Maps\s*:?/gi, '')
+        .replace(/Open in Google Maps\s*:?/gi, '')
+        .replace(/Abrir en Google Maps\s*:?/gi, '')
+        .replace(/In Google Maps öffnen\s*:?/gi, '')
+        // Rend les séparateurs plus naturels à l'oral.
+        .replace(/\s*[•·|]\s*/g, '. ')
+        .replace(/\s*[-–—]\s*/g, ', ')
+        .replace(/\s*:\s*/g, ': ')
+        .replace(/\.{2,}/g, '.')
+        .replace(/,{2,}/g, ',')
+        .replace(/\s+([,.!?;:])/g, '$1')
+        .replace(/([,.!?;:])([^\s])/g, '$1 $2')
         .replace(/\s+/g, ' ')
         .trim();
+    }
+
+    function scoreVoixGuestflow_(voix, langue) {
+      const nom = String(voix && voix.name || '').toLowerCase();
+      const code = String(voix && voix.lang || '').toLowerCase();
+      const cible = {
+        fr: 'fr-fr',
+        en: 'en-gb',
+        es: 'es-es',
+        de: 'de-de'
+      }[langue] || 'fr-fr';
+      const racine = cible.split('-')[0];
+
+      if (!code.startsWith(racine)) return -10000;
+
+      let score = 0;
+
+      // Une voix correspondant exactement à la variante linguistique voulue est prioritaire.
+      if (code === cible) score += 200;
+      else score += 100;
+
+      // Sur Windows / Chrome / Edge, ces libellés correspondent souvent aux voix
+      // les plus naturelles disponibles localement ou en ligne.
+      if (nom.includes('natural')) score += 180;
+      if (nom.includes('online')) score += 140;
+      if (nom.includes('neural')) score += 140;
+      if (nom.includes('google')) score += 120;
+      if (nom.includes('microsoft')) score += 90;
+
+      // Préférences connues par langue, seulement lorsqu'elles existent sur l'appareil.
+      const priorites = {
+        fr: ['denise', 'henri', 'hortense', 'julie', 'paul'],
+        en: ['sonia', 'ryan', 'libby', 'george', 'hazel'],
+        es: ['elvira', 'alvaro', 'helena', 'dalia', 'pablo'],
+        de: ['katja', 'conrad', 'hedda', 'stefan']
+      };
+
+      (priorites[langue] || []).forEach(function(nomPrefere, index) {
+        if (nom.includes(nomPrefere)) {
+          score += 80 - (index * 8);
+        }
+      });
+
+      if (voix && voix.default) score += 10;
+      if (voix && voix.localService === false) score += 20;
+
+      return score;
+    }
+
+    function choisirMeilleureVoixGuestflow_(langue) {
+      const voix = window.speechSynthesis.getVoices() || [];
+      if (!voix.length) return null;
+
+      let meilleure = null;
+      let meilleurScore = -10000;
+
+      voix.forEach(function(v) {
+        const score = scoreVoixGuestflow_(v, langue);
+        if (score > meilleurScore) {
+          meilleurScore = score;
+          meilleure = v;
+        }
+      });
+
+      return meilleurScore > -10000 ? meilleure : null;
+    }
+
+    function reglagesVoixGuestflow_(langue) {
+      // Vitesse volontairement légèrement inférieure à 1 : la diction est plus liée
+      // et moins mécanique sur les voix système Windows.
+      const reglages = {
+        fr: { lang: 'fr-FR', rate: 0.96, pitch: 1.02 },
+        en: { lang: 'en-GB', rate: 0.97, pitch: 1.00 },
+        es: { lang: 'es-ES', rate: 0.95, pitch: 1.00 },
+        de: { lang: 'de-DE', rate: 0.94, pitch: 0.99 }
+      };
+
+      return reglages[langue] || reglages.fr;
     }
 
     function parlerReponseGuestflow(texte) {
@@ -2189,81 +2615,28 @@
       if (!('speechSynthesis' in window)) return;
 
       const contenu = nettoyerTextePourLecture(texte);
-      if (!contenu) return;
+      if (!contenu) {
+        viderQuestionApresReponse();
+        return;
+      }
 
       window.speechSynthesis.cancel();
 
+      const reglages = reglagesVoixGuestflow_(langueSelectionnee);
       const message = new SpeechSynthesisUtterance(contenu);
 
-      const languesVoix = {
-        fr: 'fr-FR',
-        en: 'en-GB',
-        es: 'es-ES',
-        de: 'de-DE'
-      };
-
-      message.lang = languesVoix[langueSelectionnee] || 'fr-FR';
-      message.rate = 1;
-      message.pitch = 1;
+      message.lang = reglages.lang;
+      message.rate = reglages.rate;
+      message.pitch = reglages.pitch;
       message.volume = 1;
 
-      const voixDisponibles = window.speechSynthesis.getVoices();
-      const langueRecherche = message.lang.toLowerCase();
-
-      let voixCompatible = null;
-
-      if (langueSelectionnee === 'es') {
-        // Priorité aux voix espagnoles généralement les plus naturelles
-        // lorsqu'elles sont présentes sur Chrome / Edge / Windows.
-        const prioritesEspagnol = [
-          'Microsoft Elvira',
-          'Microsoft Helena',
-          'Microsoft Dalia',
-          'Google español',
-          'Google español de España',
-          'Google español (España)'
-        ];
-
-        for (let i = 0; i < prioritesEspagnol.length && !voixCompatible; i++) {
-          const rechercheNom = prioritesEspagnol[i].toLowerCase();
-
-          voixCompatible = voixDisponibles.find(function(voix) {
-            return String(voix.name || '').toLowerCase().includes(rechercheNom) &&
-                   String(voix.lang || '').toLowerCase().startsWith('es');
-          });
+      const voixChoisie = choisirMeilleureVoixGuestflow_(langueSelectionnee);
+      if (voixChoisie) {
+        message.voice = voixChoisie;
+        // La langue réelle de la voix choisie évite certains changements de prosodie.
+        if (voixChoisie.lang) {
+          message.lang = voixChoisie.lang;
         }
-
-        // Sinon, on préfère une voix es-ES exacte.
-        if (!voixCompatible) {
-          voixCompatible = voixDisponibles.find(function(voix) {
-            return String(voix.lang || '').toLowerCase() === 'es-es';
-          });
-        }
-
-        // Dernier repli : n'importe quelle voix espagnole.
-        if (!voixCompatible) {
-          voixCompatible = voixDisponibles.find(function(voix) {
-            return String(voix.lang || '').toLowerCase().startsWith('es');
-          });
-        }
-
-        // Réglage légèrement plus posé et naturel pour l'espagnol.
-        message.rate = 0.94;
-        message.pitch = 0.98;
-      } else {
-        voixCompatible =
-          voixDisponibles.find(function(voix) {
-            return String(voix.lang || '').toLowerCase() === langueRecherche;
-          }) ||
-          voixDisponibles.find(function(voix) {
-            return String(voix.lang || '').toLowerCase().startsWith(
-              langueRecherche.split('-')[0]
-            );
-          });
-      }
-
-      if (voixCompatible) {
-        message.voice = voixCompatible;
       }
 
       message.onend = function() {
@@ -2274,9 +2647,14 @@
         viderQuestionApresReponse();
       };
 
-      window.speechSynthesis.speak(message);
+      // Petit délai après cancel() : évite sur certains Chrome/Windows le démarrage
+      // brutal de la première syllabe et rend l'enchaînement plus propre.
+      setTimeout(function() {
+        if (voixActive) {
+          window.speechSynthesis.speak(message);
+        }
+      }, 90);
     }
-
 
 
 
@@ -2364,6 +2742,13 @@
           langueSelectionnee === 'de' ? 'Bitte schreiben Sie eine Frage.' :
           'Écrivez une question.';
         return;
+      }
+
+      // V23.13 mobile : ferme le clavier virtuel après l'envoi pour
+      // rendre immédiatement la réponse visible sur Android et iPhone.
+      const champQuestionMobile = document.getElementById('question');
+      if (champQuestionMobile && typeof champQuestionMobile.blur === 'function') {
+        champQuestionMobile.blur();
       }
 
       afficherEtatReflexion();
