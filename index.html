@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.1 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.2 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.1 — installation PWA */
+    /* V23.15.2 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1999,10 +1999,10 @@
 
           <div class="language-row" aria-label="Choix de la langue">
             <span class="language-label" id="labelLangue">Langue :</span>
-            <button type="button" class="lang-btn active" data-lang="fr" onclick="choisirLangue('fr')"><span class="flag flag-fr" aria-hidden="true"></span><span class="lang-code">FR</span></button>
-            <button type="button" class="lang-btn" data-lang="en" onclick="choisirLangue('en')"><span class="flag flag-gb" aria-hidden="true"></span><span class="lang-code">EN</span></button>
-            <button type="button" class="lang-btn" data-lang="es" onclick="choisirLangue('es')"><span class="flag flag-es" aria-hidden="true"></span><span class="lang-code">ES</span></button>
-            <button type="button" class="lang-btn" data-lang="de" onclick="choisirLangue('de')"><span class="flag flag-de" aria-hidden="true"></span><span class="lang-code">DE</span></button>
+            <button type="button" class="lang-btn active" data-lang="fr"><span class="flag flag-fr" aria-hidden="true"></span><span class="lang-code">FR</span></button>
+            <button type="button" class="lang-btn" data-lang="en"><span class="flag flag-gb" aria-hidden="true"></span><span class="lang-code">EN</span></button>
+            <button type="button" class="lang-btn" data-lang="es"><span class="flag flag-es" aria-hidden="true"></span><span class="lang-code">ES</span></button>
+            <button type="button" class="lang-btn" data-lang="de"><span class="flag flag-de" aria-hidden="true"></span><span class="lang-code">DE</span></button>
           </div>
         </div>
 
@@ -2214,19 +2214,25 @@
     }
 
     function choisirLangue(langue) {
+      langue = String(langue || '').toLowerCase();
+      if (!['fr','en','es','de'].includes(langue)) langue = 'fr';
+
       if (microEnEcoute && reconnaissanceVocale) {
-        reconnaissanceVocale.stop();
+        try { reconnaissanceVocale.stop(); } catch (e) {}
       }
 
       langueSelectionnee = langue;
 
+      try {
+        localStorage.setItem('guestflow_langue', langue);
+      } catch (e) {}
+
       document
         .querySelectorAll('.lang-btn')
         .forEach(function(bouton) {
-          bouton.classList.toggle(
-            'active',
-            bouton.dataset.lang === langue
-          );
+          const active = bouton.dataset.lang === langue;
+          bouton.classList.toggle('active', active);
+          bouton.setAttribute('aria-pressed', active ? 'true' : 'false');
         });
 
       mettreAJourInterface(langue);
@@ -3037,7 +3043,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.1 — PWA Android / iPhone
+    // GUESTFLOW V23.15.2 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3103,22 +3109,42 @@
       });
     }
 
-    // Mémorise la langue choisie pour les prochaines ouvertures.
-    try {
-      const langueSauvee = localStorage.getItem('guestflow_langue');
-      if (langueSauvee && ['fr','en','es','de'].includes(langueSauvee)) {
-        langueSelectionnee = langueSauvee;
-      }
-    } catch (e) {}
+    // V23.15.2 — langue fiable + mémorisée dans la PWA.
+    function initialiserLanguesGuestflow_() {
+      let langueInitiale = 'fr';
 
-    document.querySelectorAll('[data-lang]').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const l = String(btn.getAttribute('data-lang') || '').toLowerCase();
-        if (['fr','en','es','de'].includes(l)) {
-          try { localStorage.setItem('guestflow_langue', l); } catch (e) {}
+      try {
+        const langueSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase();
+        if (['fr','en','es','de'].includes(langueSauvee)) {
+          langueInitiale = langueSauvee;
+        } else {
+          const langueTelephone = String(
+            (navigator.languages && navigator.languages[0]) ||
+            navigator.language ||
+            ''
+          ).toLowerCase().slice(0, 2);
+
+          if (['fr','en','es','de'].includes(langueTelephone)) {
+            langueInitiale = langueTelephone;
+          }
         }
+      } catch (e) {}
+
+      document.querySelectorAll('.lang-btn[data-lang]').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+          event.preventDefault();
+          choisirLangue(btn.dataset.lang);
+        });
       });
-    });
+
+      choisirLangue(langueInitiale);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialiserLanguesGuestflow_);
+    } else {
+      initialiserLanguesGuestflow_();
+    }
 
     // Enregistre le service worker.
     if ('serviceWorker' in navigator) {
