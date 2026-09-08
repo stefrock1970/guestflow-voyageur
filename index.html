@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V4.3 VOIX ESPAGNOLE AMELIOREE 2026-09-07 -->
+  <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
   <style>
     :root{
@@ -100,6 +100,29 @@
       font-weight:600;
       letter-spacing:-.035em;
       color:var(--olive-deep);
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    .gite-name{
+      margin-top:2px;
+      color:var(--ink-soft);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:340px;
+    }
+
+    .gite-name::before{
+      content:"· ";
+      color:var(--olive);
     }
 
     .top-actions{
@@ -1531,7 +1554,10 @@
             <path d="M11.1 16c1.6-4.2 4-6.6 7.6-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
         </div>
-        <h1 class="brand">Guestflow</h1>
+        <div class="brand-copy">
+          <h1 class="brand">Guestflow</h1>
+          <div id="giteName" class="gite-name" hidden></div>
+        </div>
       </div>
 
       <div class="top-actions">
@@ -1668,8 +1694,11 @@
   <script>
     let langueSelectionnee = 'fr';
     let voixActive = true;
-    // ID du gîte invisible pour le voyageur : récupéré uniquement depuis l'URL.
+    // V23.9 : le nom du gîte est visible, l'ID technique reste masqué.
+    // idGuestflow ne sert plus que pour la compatibilité avec les anciens liens.
     let idGuestflow = '';
+    let nomGiteVoyageur = '';
+    let tokenVoyageur = '';
 
     let reconnaissanceVocale = null;
     let microEnEcoute = false;
@@ -1792,7 +1821,7 @@
       mettreAJourBoutonVoix();
 
       const accessMessage = document.getElementById('accessMessage');
-      if (accessMessage && !idGuestflow) accessMessage.textContent = t.badLink;
+      if (accessMessage && (!tokenVoyageur || (!nomGiteVoyageur && !idGuestflow))) accessMessage.textContent = t.badLink;
 
       const reponse = document.getElementById('reponse');
       if (
@@ -2322,7 +2351,7 @@
       const bouton =
         document.getElementById('btnAsk');
 
-      if (!idGuestflow) {
+      if (!tokenVoyageur || (!nomGiteVoyageur && !idGuestflow)) {
         status.textContent =
           (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).badLink;
         return;
@@ -2421,10 +2450,15 @@
           'Impossible de joindre Guestflow.';
       };
 
+      const paramIdLegacy = idGuestflow
+        ? '&id=' + encodeURIComponent(idGuestflow)
+        : '';
+
       script.src =
         'https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec' +
         '?api=ask' +
-        '&id=' + encodeURIComponent(idGuestflow) +
+        paramIdLegacy +
+        '&token=' + encodeURIComponent(tokenVoyageur) +
         '&q=' + encodeURIComponent(question) +
         '&lang=' + encodeURIComponent(langueSelectionnee) +
         '&callback=' + encodeURIComponent(callbackName) +
@@ -2450,15 +2484,37 @@
 
 
 
-    // Récupère automatiquement l'ID du gîte depuis le lien envoyé au locataire.
-    // Formats acceptés : ?page=voyageur&id=GF-XXXXX-001
-    //                    ?page=voyageur&idGuestflow=GF-XXXXX-001
+    // V23.9 — Nouveau format sécurisé :
+    // ?gite=Les-Oliviers&token=TOKEN_OPAQUE
+    // L'ID GF-XXXXX-001 n'apparaît plus dans l'URL.
     function initialiserAccesVoyageur() {
       const p = new URLSearchParams(window.location.search);
 
+      // Compatibilité avec les anciens liens seulement.
       idGuestflow = String(
-        p.get('idGuestflow') || p.get('id') || p.get('gite') || ''
+        p.get('idGuestflow') || p.get('id') || ''
       ).trim();
+
+      nomGiteVoyageur = String(
+        p.get('gite') || ''
+      ).trim();
+
+      tokenVoyageur = String(
+        p.get('token') || ''
+      ).trim();
+
+      const giteName = document.getElementById('giteName');
+
+      if (giteName && nomGiteVoyageur) {
+        const nomAffiche = nomGiteVoyageur
+          .replace(/-+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        giteName.textContent = nomAffiche;
+        giteName.hidden = false;
+        document.title = nomAffiche + ' — Guestflow';
+      }
 
       mettreAJourInterface(langueSelectionnee);
     }
