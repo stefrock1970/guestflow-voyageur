@@ -1,9 +1,9 @@
-const CACHE_NAME = 'guestflow-v23-15-shell-v1';
+const CACHE_NAME = 'guestflow-v23-15-1-shell-v1';
 const STATIC_ASSETS = [
   './',
   './manifest.json',
-  './icône-192.png',
-  './icône-512.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {
