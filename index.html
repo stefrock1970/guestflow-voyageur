@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.13 — Mobile plein écran Android + iPhone -->
+  <!-- Guestflow V23.14 — Android voix native + latence optimisée -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -2610,6 +2610,57 @@
       return reglages[langue] || reglages.fr;
     }
 
+
+    function estAndroidGuestflow_() {
+      return /Android/i.test(navigator.userAgent || '');
+    }
+
+    function choisirVoixGuestflowV23_14_(langue) {
+      // Sur Android, ne pas forcer une voix précise :
+      // laisser le moteur système/Chrome choisir sa meilleure voix native.
+      if (estAndroidGuestflow_()) {
+        return null;
+      }
+
+      const voices = window.speechSynthesis
+        ? window.speechSynthesis.getVoices()
+        : [];
+
+      if (!voices || !voices.length) {
+        return null;
+      }
+
+      const langueCible =
+        langue === 'en' ? 'en' :
+        langue === 'es' ? 'es' :
+        langue === 'de' ? 'de' :
+        'fr';
+
+      const compatibles = voices.filter(function(v) {
+        return String(v.lang || '').toLowerCase().startsWith(langueCible);
+      });
+
+      if (!compatibles.length) {
+        return null;
+      }
+
+      const score = function(v) {
+        const nom = String(v.name || '').toLowerCase();
+        let s = 0;
+        if (/natural|neural|online/.test(nom)) s += 50;
+        if (/google|microsoft|apple/.test(nom)) s += 25;
+        if (v.localService) s += 10;
+        if (String(v.lang || '').toLowerCase().startsWith(langueCible)) s += 20;
+        return s;
+      };
+
+      compatibles.sort(function(a, b) {
+        return score(b) - score(a);
+      });
+
+      return compatibles[0] || null;
+    }
+
     function parlerReponseGuestflow(texte) {
       if (!voixActive) return;
       if (!('speechSynthesis' in window)) return;
@@ -2752,6 +2803,12 @@
       }
 
       afficherEtatReflexion();
+
+      // V23.14 : retour visuel immédiat, sans délai artificiel côté interface.
+      const zoneReponseV2314 = document.getElementById('reponse');
+      if (zoneReponseV2314) {
+        zoneReponseV2314.setAttribute('aria-busy', 'true');
+      }
       reponse.textContent = '';
 
       const boiteReponse = reponse.closest('.response-box');
@@ -2812,6 +2869,9 @@
                 );
           return;
         }
+
+        const zoneReponseV2314 = document.getElementById('reponse');
+        if (zoneReponseV2314) zoneReponseV2314.setAttribute('aria-busy', 'false');
 
         afficherReponseGuestflow(payload.reponse);
 
