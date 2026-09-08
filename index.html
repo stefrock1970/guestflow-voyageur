@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.14 — Android voix native + latence optimisée -->
+  <!-- Guestflow V23.15 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1875,7 +1875,43 @@
       }
     }
 
-  </style>
+  
+    /* V23.15 — installation PWA */
+    .pwa-install-wrap {
+      display: none;
+      margin: 8px 0 0;
+    }
+    .pwa-install-btn {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid rgba(89,107,80,.28);
+      border-radius: 12px;
+      background: #eef1e9;
+      color: #344236;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pwa-install-hint {
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #687268;
+      text-align: center;
+    }
+    @media (display-mode: standalone) {
+      .pwa-install-wrap { display: none !important; }
+    }
+
+</style>
+
+  <meta name="theme-color" content="#596b50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Guestflow">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
 </head>
 
 <body>
@@ -1951,6 +1987,14 @@
               <h2>Votre concierge</h2>
               <div class="online">En ligne maintenant</div>
             </div>
+
+        <div id="pwaInstallWrap" class="pwa-install-wrap">
+          <button id="pwaInstallBtn" class="pwa-install-btn" type="button">
+            Ajouter Guestflow à mon téléphone
+          </button>
+          <div id="pwaInstallHint" class="pwa-install-hint"></div>
+        </div>
+
           </div>
 
           <div class="language-row" aria-label="Choix de la langue">
@@ -2990,7 +3034,104 @@
           envoyerQuestion();
         }
       });
-  </script>
+  
+
+    // =========================================================
+    // GUESTFLOW V23.15 — PWA Android / iPhone
+    // =========================================================
+    let guestflowDeferredInstallPrompt = null;
+
+    function estIOSGuestflow_() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+    }
+
+    function estStandaloneGuestflow_() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true;
+    }
+
+    function majInstallationGuestflow_() {
+      const wrap = document.getElementById('pwaInstallWrap');
+      const btn = document.getElementById('pwaInstallBtn');
+      const hint = document.getElementById('pwaInstallHint');
+      if (!wrap || !btn || !hint) return;
+
+      if (estStandaloneGuestflow_()) {
+        wrap.style.display = 'none';
+        return;
+      }
+
+      if (guestflowDeferredInstallPrompt) {
+        wrap.style.display = 'block';
+        btn.style.display = 'block';
+        hint.textContent = '';
+        return;
+      }
+
+      if (estIOSGuestflow_()) {
+        wrap.style.display = 'block';
+        btn.style.display = 'none';
+        hint.textContent =
+          'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».';
+        return;
+      }
+
+      wrap.style.display = 'none';
+    }
+
+    window.addEventListener('beforeinstallprompt', function(event) {
+      event.preventDefault();
+      guestflowDeferredInstallPrompt = event;
+      majInstallationGuestflow_();
+    });
+
+    window.addEventListener('appinstalled', function() {
+      guestflowDeferredInstallPrompt = null;
+      majInstallationGuestflow_();
+    });
+
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+    if (pwaInstallBtn) {
+      pwaInstallBtn.addEventListener('click', async function() {
+        if (!guestflowDeferredInstallPrompt) return;
+        guestflowDeferredInstallPrompt.prompt();
+        try {
+          await guestflowDeferredInstallPrompt.userChoice;
+        } catch (e) {}
+        guestflowDeferredInstallPrompt = null;
+        majInstallationGuestflow_();
+      });
+    }
+
+    // Mémorise la langue choisie pour les prochaines ouvertures.
+    try {
+      const langueSauvee = localStorage.getItem('guestflow_langue');
+      if (langueSauvee && ['fr','en','es','de'].includes(langueSauvee)) {
+        langueSelectionnee = langueSauvee;
+      }
+    } catch (e) {}
+
+    document.querySelectorAll('[data-lang]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const l = String(btn.getAttribute('data-lang') || '').toLowerCase();
+        if (['fr','en','es','de'].includes(l)) {
+          try { localStorage.setItem('guestflow_langue', l); } catch (e) {}
+        }
+      });
+    });
+
+    // Enregistre le service worker.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
+          console.warn('Service worker Guestflow non enregistré :', err);
+        });
+      });
+    }
+
+    majInstallationGuestflow_();
+
+</script>
 
 </body>
 </html>
