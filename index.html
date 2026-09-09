@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.3 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.4 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.3 — installation PWA */
+    /* V23.15.4 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -2109,7 +2109,10 @@
         micListening: 'Je vous écoute…',
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
         installApp: 'Ajouter Guestflow à mon téléphone',
-        iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».'
+        iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
+        conciergeTitle: 'Votre concierge',
+        onlineNow: 'En ligne maintenant',
+        answerPlaceholder: 'La réponse du concierge apparaîtra ici.'
 
       },
       en: {
@@ -2130,7 +2133,10 @@
         micListening: 'Listening…',
         micUnsupported: 'Voice dictation is not available in this browser.',
         installApp: 'Add Guestflow to my phone',
-        iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.'
+        iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
+        conciergeTitle: 'Your concierge',
+        onlineNow: 'Online now',
+        answerPlaceholder: 'The concierge’s answer will appear here.'
 
       },
       es: {
@@ -2151,7 +2157,10 @@
         micListening: 'Te escucho…',
         micUnsupported: 'El dictado por voz no está disponible en este navegador.',
         installApp: 'Añadir Guestflow a mi teléfono',
-        iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».'
+        iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
+        conciergeTitle: 'Tu conserje',
+        onlineNow: 'En línea ahora',
+        answerPlaceholder: 'La respuesta del conserje aparecerá aquí.'
 
       },
       de: {
@@ -2172,7 +2181,10 @@
         micListening: 'Ich höre zu…',
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
         installApp: 'Guestflow zu meinem Telefon hinzufügen',
-        iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.'
+        iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
+        conciergeTitle: 'Ihr Concierge',
+        onlineNow: 'Jetzt online',
+        answerPlaceholder: 'Die Antwort des Concierges erscheint hier.'
 
       }
     };
@@ -2202,6 +2214,17 @@
 
       const micHelp = document.getElementById('micHelp');
       if (micHelp && !microEnEcoute) micHelp.textContent = t.micHelp;
+
+      const conciergeTitle = document.getElementById('conciergeTitle');
+      if (conciergeTitle) conciergeTitle.textContent = t.conciergeTitle;
+
+      const onlineNow = document.getElementById('onlineNow');
+      if (onlineNow) onlineNow.textContent = t.onlineNow;
+
+      const answerText = document.getElementById('answerText');
+      if (answerText && !answerText.dataset.hasRealAnswer) {
+        answerText.textContent = t.answerPlaceholder;
+      }
 
       const pwaInstallBtn = document.getElementById('pwaInstallBtn');
       if (pwaInstallBtn) pwaInstallBtn.textContent = t.installApp;
@@ -3063,7 +3086,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.3 — PWA Android / iPhone
+    // GUESTFLOW V23.15.4 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3133,7 +3156,7 @@
       });
     }
 
-    // V23.15.3 — langue fiable + mémorisée dans la PWA.
+    // V23.15.4 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
