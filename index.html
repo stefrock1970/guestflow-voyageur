@@ -2300,7 +2300,7 @@
       border:0;
       outline:0;
       resize:none;
-      padding:1.1% 1.4%;
+      padding:1.1% 1.4%; text-indent:0;
       background:rgba(255,255,255,.72);
       color:#34443d;
       font:500 clamp(14px,3.2vw,22px)/1.25 Inter,Arial,sans-serif;
@@ -2440,7 +2440,7 @@
               aria-label="Parler à Guestflow"></button>
 
       <textarea class="gf-ref-input" id="gfRefQuestion"
-                placeholder="Posez votre question ici..."
+                placeholder=""
                 aria-label="Posez votre question"></textarea>
 
       <button class="gf-ref-hit gf-ref-send" id="gfRefSend" type="button"
@@ -2556,7 +2556,7 @@
             <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
           </div>
           <div class="voice-row gf-input-row">
-            <textarea id="question" placeholder="Posez votre question ici..."></textarea>
+            <textarea id="question" placeholder=""></textarea>
             <button id="btnAsk" class="primary gf-send-btn" type="button" onclick="envoyerQuestion()" aria-label="Envoyer ma question" title="Envoyer ma question">
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12 20 4l-5 16-3-6-8-2Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="m12 14 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
             </button>
