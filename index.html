@@ -1927,6 +1927,45 @@
       user-select:none;
       -webkit-user-drag:none;
     }
+    /* Sélecteur de langue visible : masque la sélection FR intégrée à l'image
+       et affiche réellement la langue choisie. */
+    .guestflow-language-switch{
+      position:absolute;
+      z-index:40;
+      left:3.45%;
+      top:12.45%;
+      width:60.7%;
+      height:4.75%;
+      display:flex;
+      align-items:center;
+      gap:.5%;
+      padding:.35%;
+      border-radius:999px;
+      background:#eeeae2;
+      line-height:1;
+    }
+    .guestflow-language-switch button{
+      flex:1 1 0;
+      height:100%;
+      border:0;
+      border-radius:999px;
+      background:transparent;
+      color:#30382e;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      font:600 clamp(10px,1.8vw,14px)/1 Inter,Arial,sans-serif;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .guestflow-language-switch button.active{
+      background:#66734b;
+      color:#fff;
+      box-shadow:0 2px 8px rgba(63,73,51,.18);
+    }
+    .guestflow-language-switch .landing-flag{font-size:clamp(14px,2.2vw,18px)}
+
     .guestflow-hotspot{
       position:absolute;
       z-index:5;
@@ -2417,10 +2456,12 @@
     <div class="guestflow-landing-inner">
       <img class="guestflow-landing-image" src="./accueil-guestflow-fr.png" alt="Guestflow Les Oliviers — installer votre concierge de séjour">
 
-      <button class="guestflow-hotspot hot-fr" type="button" data-landing-lang="fr" aria-label="Français">FR</button>
-      <button class="guestflow-hotspot hot-en" type="button" data-landing-lang="en" aria-label="English">EN</button>
-      <button class="guestflow-hotspot hot-es" type="button" data-landing-lang="es" aria-label="Español">ES</button>
-      <button class="guestflow-hotspot hot-de" type="button" data-landing-lang="de" aria-label="Deutsch">DE</button>
+      <div class="guestflow-language-switch" aria-label="Choix de la langue">
+        <button type="button" class="active" data-landing-lang="fr" aria-label="Français" aria-pressed="true"><span class="landing-flag" aria-hidden="true">🇫🇷</span><span>FR</span></button>
+        <button type="button" data-landing-lang="en" aria-label="English" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇬🇧</span><span>EN</span></button>
+        <button type="button" data-landing-lang="es" aria-label="Español" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇪🇸</span><span>ES</span></button>
+        <button type="button" data-landing-lang="de" aria-label="Deutsch" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇩🇪</span><span>DE</span></button>
+      </div>
       <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
     </div>
   </section>
@@ -4173,6 +4214,13 @@
       const choisie = supportees.includes(lang) ? lang : 'fr';
       langueSelectionnee = choisie;
       try { localStorage.setItem('guestflow_langue', choisie); } catch (e) {}
+
+      // Synchronise immédiatement l'indicateur visuel de langue sur l'écran d'installation.
+      document.querySelectorAll('[data-landing-lang]').forEach(function(bouton){
+        const actif = String(bouton.dataset.landingLang || '').toLowerCase() === choisie;
+        bouton.classList.toggle('active', actif);
+        bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+      });
 
       const manifest = document.getElementById('guestflowManifest');
       if (manifest) {
