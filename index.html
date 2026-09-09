@@ -2021,9 +2021,9 @@
     body:not(.guestflow-standalone) > .page{display:none !important}
     body.guestflow-standalone > .guestflow-landing{display:none !important}
 
-    @media (display-mode: standalone){
-      .guestflow-landing{display:none !important}
-    }
+    /* IMPORTANT : ne pas masquer l’accueil via CSS selon display-mode.
+       Le choix accueil/concierge est géré uniquement par le script ci-dessous,
+       afin qu’un navigateur/QR qui se déclare standalone n’affiche jamais une page vide. */
   </style>
 
   <meta name="theme-color" content="#596b50">
