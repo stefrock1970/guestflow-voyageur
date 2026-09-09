@@ -2,12 +2,48 @@
 <!-- Guestflow V23.12 — voix multilingue plus fluide -->
 <html lang="fr">
 <head>
+
+<script>
+(function guestflowBootstrapLienSecurise_() {
+  try {
+    const KEY = 'guestflow_secure_link_v2';
+    const u = new URL(window.location.href);
+
+    const gite = u.searchParams.get('gite') || u.searchParams.get('id') || '';
+    const token = u.searchParams.get('token') || '';
+
+    if (gite && token) {
+      localStorage.setItem(KEY, JSON.stringify({
+        gite: gite,
+        token: token
+      }));
+      return;
+    }
+
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.gite || !saved.token) return;
+    if (u.searchParams.get('_gf_restored') === '1') return;
+
+    u.searchParams.set('gite', saved.gite);
+    u.searchParams.set('token', saved.token);
+    u.searchParams.set('_gf_restored', '1');
+
+    window.location.replace(u.toString());
+  } catch (e) {
+    console.warn('Bootstrap lien sécurisé Guestflow impossible :', e);
+  }
+})();
+</script>
+
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
-  <title>Guestflow — Votre concierge numérique — GF-D</title>
+  <title>Guestflow — Votre concierge numérique — GF-E</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
   <style>
@@ -1909,55 +1945,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-<link rel="apple-touch-icon" href="./icon-192.png">
-
-
-  <script>
-  // Manifest PWA personnalisé à partir du QR courant.
-  // Le start_url installé conserve directement gîte + token.
-  (function creerManifestGuestflow_() {
-    try {
-      const current = new URL(window.location.href);
-      const gite = current.searchParams.get('gite') || current.searchParams.get('id') || '';
-      const token = current.searchParams.get('token') || '';
-
-      const start = new URL(current.href);
-      start.searchParams.delete('build');
-      start.searchParams.delete('_ts');
-      start.searchParams.delete('_restored');
-
-      const scopePath = current.pathname.substring(0, current.pathname.lastIndexOf('/') + 1) || '/';
-
-      const manifest = {
-        id: gite ? (scopePath + '?gite=' + encodeURIComponent(gite)) : scopePath,
-        name: gite ? ('Guestflow — ' + gite) : 'Guestflow',
-        short_name: 'Guestflow',
-        description: 'Votre concierge numérique',
-        start_url: (gite && token) ? (start.pathname + start.search) : scopePath,
-        scope: scopePath,
-        display: 'standalone',
-        background_color: '#f5f1e8',
-        theme_color: '#6f7f4e',
-        icons: [
-          { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
-          { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
-        ]
-      };
-
-      const blob = new Blob(
-        [JSON.stringify(manifest)],
-        { type: 'application/manifest+json' }
-      );
-
-      const link = document.createElement('link');
-      link.rel = 'manifest';
-      link.href = URL.createObjectURL(blob);
-      document.head.appendChild(link);
-    } catch (e) {
-      console.warn('Manifest Guestflow dynamique impossible :', e);
-    }
-  })();
-  </script>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icon-192.png">
 
 </head>
 
@@ -2118,51 +2107,9 @@
   </main>
 
   <script>
-  const GUESTFLOW_BUILD = "GF-D";
+  const GUESTFLOW_BUILD = "GF-E";
 
-  // =========================================================
-  // GUESTFLOW — MÉMORISATION DU LIEN SÉCURISÉ POUR LA PWA
-  // Quand le voyageur arrive par QR, on mémorise gîte + token.
-  // Si l'application installée redémarre sur la racine, on restaure
-  // automatiquement ces paramètres avant d'afficher une erreur.
-  // =========================================================
-  (function restaurerLienSecuriseGuestflow_() {
-    try {
-      const STORAGE_KEY = 'guestflow_secure_link_v1';
-      const url = new URL(window.location.href);
 
-      const gite = url.searchParams.get('gite') || url.searchParams.get('id') || '';
-      const token = url.searchParams.get('token') || '';
-
-      // Arrivée via QR complet : mémoriser le lien sécurisé courant.
-      if (gite && token) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify({
-          gite: gite,
-          token: token,
-          savedAt: Date.now()
-        }));
-        return;
-      }
-
-      // Ouverture PWA sans paramètres : restaurer le dernier lien sécurisé.
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-
-      const saved = JSON.parse(raw);
-      if (!saved || !saved.gite || !saved.token) return;
-
-      // Évite les boucles si une restauration vient déjà d'être tentée.
-      if (url.searchParams.get('_restored') === '1') return;
-
-      url.searchParams.set('gite', saved.gite);
-      url.searchParams.set('token', saved.token);
-      url.searchParams.set('_restored', '1');
-
-      window.location.replace(url.toString());
-    } catch (e) {
-      console.warn('Restauration du lien Guestflow impossible :', e);
-    }
-  })();
 
     let langueSelectionnee = 'fr';
     let voixActive = true;
