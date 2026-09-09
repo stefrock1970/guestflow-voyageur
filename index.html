@@ -1947,7 +1947,7 @@
     .hot-en{left:19.2%;top:12.7%;width:14.8%;height:4.2%}
     .hot-es{left:34.3%;top:12.7%;width:14.8%;height:4.2%}
     .hot-de{left:49.3%;top:12.7%;width:14.8%;height:4.2%}
-    .hot-install{left:5.0%;top:70.4%;width:90.0%;height:5.2%}
+    .hot-install{left:4.5%;top:69.8%;width:91.0%;height:6.8%}
 
     .guestflow-toast{
       position:fixed;
@@ -2031,7 +2031,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <link rel="manifest" href="./manifest.json">
+  <link rel="manifest" href="./manifest-cacouech.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
 
 </head>
@@ -3360,20 +3360,30 @@
       help.setAttribute('aria-hidden', 'true');
     }
 
-    function ouvrirAideInstallationGuestflow_() {
+    function ouvrirAideInstallationGuestflow_(messageSupplementaire) {
       const help = document.getElementById('guestflowInstallHelp');
       const zone = document.getElementById('guestflowInstallInstructions');
       if (!help || !zone) return;
 
+      let html = '';
+
+      if (messageSupplementaire) {
+        html += '<p><strong>' + messageSupplementaire + '</strong></p>';
+      }
+
       if (estIOSGuestflow_()) {
-        zone.innerHTML = '<p>Sur iPhone, Apple ne permet pas un bouton d’installation automatique.</p>' +
-          '<ol><li>Touchez le bouton <strong>Partager</strong> de Safari.</li>' +
+        html += '<p>Pour installer Guestflow sur iPhone :</p>' +
+          '<ol><li>Touchez <strong>Partager</strong>.</li>' +
           '<li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>' +
           '<li>Touchez <strong>Ajouter</strong>.</li></ol>';
       } else {
-        zone.innerHTML = '<p>Si la fenêtre d’installation ne s’affiche pas, ouvrez le menu du navigateur puis choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</p>';
+        html += '<p>Pour installer Guestflow sur Android :</p>' +
+          '<ol><li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>' +
+          '<li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>' +
+          '<li>Confirmez l’installation.</li></ol>';
       }
 
+      zone.innerHTML = html;
       help.classList.add('show');
       help.setAttribute('aria-hidden', 'false');
     }
@@ -3393,21 +3403,35 @@
 
     const landingInstallBtn = document.getElementById('landingInstallBtn');
     if (landingInstallBtn) {
-      landingInstallBtn.addEventListener('click', async function(){
+      landingInstallBtn.addEventListener('click', async function(event){
+        event.preventDefault();
+
         langueSelectionnee = 'fr';
         try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
 
-        if (guestflowDeferredInstallPrompt) {
-          guestflowDeferredInstallPrompt.prompt();
-          try {
-            await guestflowDeferredInstallPrompt.userChoice;
-          } catch (e) {}
-          guestflowDeferredInstallPrompt = null;
-          majInstallationGuestflow_();
-          return;
-        }
+        // Réaction visible immédiate : le clic ne peut plus sembler "ne rien faire".
+        ouvrirAideInstallationGuestflow_('Installation de Guestflow');
 
-        ouvrirAideInstallationGuestflow_();
+        // Si Chrome/Android a fourni le vrai prompt PWA, on le déclenche.
+        if (guestflowDeferredInstallPrompt) {
+          const promptEvent = guestflowDeferredInstallPrompt;
+          guestflowDeferredInstallPrompt = null;
+
+          try {
+            await promptEvent.prompt();
+            const choix = await promptEvent.userChoice;
+
+            if (choix && choix.outcome === 'accepted') {
+              fermerAideInstallationGuestflow_();
+            } else {
+              ouvrirAideInstallationGuestflow_('Installation non confirmée');
+            }
+          } catch (e) {
+            ouvrirAideInstallationGuestflow_('Installation automatique indisponible');
+          }
+
+          majInstallationGuestflow_();
+        }
       });
     }
 
