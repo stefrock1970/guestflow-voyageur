@@ -2882,6 +2882,10 @@
       mettreAJourInterface(langue);
     }
 
+    // V13 — Correctif ciblé à partir de la V12 universelle.
+    // - phrases naturelles pour arrivée/départ au lieu de libellés « étiquette : valeur » ;
+    // - protection des demandes balade/parc/jardin/promenade contre les règles hors sujet (ex. tabac extérieur) ;
+    // - conservation du comportement validé pour les activités avec enfants.
     // V12 — Français premium universel : aucun lieu touristique précis codé en dur.
     // Objectifs :
     // - transformer les réponses « étiquette + donnée » en vraies phrases ;
@@ -2949,6 +2953,10 @@
 
       // Réécritures ciblées : supprimer le ton « fiche technique ».
       const reformulations = [
+        [/\bArriv[eé]e\s*:\s*/gi, 'L’arrivée est prévue à '],
+        [/\bHeure d[’']arriv[eé]e\s*:\s*/gi, 'L’arrivée est prévue à '],
+        [/\bD[eé]part\s*:\s*/gi, 'Le départ est prévu à '],
+        [/\bHeure de d[eé]part\s*:\s*/gi, 'Le départ est prévu à '],
         [/\bLe départ doit être effectué avant\s+/gi, 'Le départ est prévu avant '],
         [/\bLe départ doit avoir lieu avant\s+/gi, 'Le départ est prévu avant '],
         [/\bL[’']arrivée est possible à partir de\s+/gi, 'L’arrivée est prévue à partir de '],
@@ -2963,6 +2971,21 @@
         [/\bLe réseau Wi-?Fi est\s+/gi, 'Le réseau Wi-Fi s’appelle ']
       ];
       reformulations.forEach(function(regle) { source = source.replace(regle[0], regle[1]); });
+
+      // V13 — Garde-fou de pertinence locale.
+      // Si une demande de balade/parc/jardin/randonnée n'a aucune donnée locale,
+      // on retire les règles de logement sans rapport qui peuvent avoir été remontées
+      // par proximité lexicale (ex. « tabac autorisé en extérieur »).
+      const demandeSortieNature = jardin || rando || eauPromenade || panoramaNature || visiteVille;
+      const absenceInfoLocale = /aucune information locale n[’']a encore [eé]t[eé] renseign[eé]e pour cette demande/i.test(source);
+      if (demandeSortieNature && absenceInfoLocale) {
+        source = source
+          .replace(/(?:^|\s)(?:oui[, ]*)?(?:le )?tabac[^.!?]*(?:[.!?]|$)/gi, ' ')
+          .replace(/(?:^|\s)(?:il )?reste interdit[^.!?]*(?:[.!?]|$)/gi, ' ')
+          .replace(/(?:^|\s)(?:fumer|cigarette|cigarettes|vapoter|vapotage)[^.!?]*(?:[.!?]|$)/gi, ' ')
+          .replace(/\s{2,}/g, ' ')
+          .trim();
+      }
 
       // Cas propriétaire : remplacer les libellés secs par une phrase réellement parlée.
       if (contactProprietaire && !urgence) {
