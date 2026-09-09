@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
-  <title>Guestflow — Votre concierge numérique — GF-C</title>
+  <title>Guestflow — Votre concierge numérique — GF-D</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
   <style>
@@ -1909,8 +1909,55 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <link rel="manifest" href="./manifest.json">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+
+  <script>
+  // Manifest PWA personnalisé à partir du QR courant.
+  // Le start_url installé conserve directement gîte + token.
+  (function creerManifestGuestflow_() {
+    try {
+      const current = new URL(window.location.href);
+      const gite = current.searchParams.get('gite') || current.searchParams.get('id') || '';
+      const token = current.searchParams.get('token') || '';
+
+      const start = new URL(current.href);
+      start.searchParams.delete('build');
+      start.searchParams.delete('_ts');
+      start.searchParams.delete('_restored');
+
+      const scopePath = current.pathname.substring(0, current.pathname.lastIndexOf('/') + 1) || '/';
+
+      const manifest = {
+        id: gite ? (scopePath + '?gite=' + encodeURIComponent(gite)) : scopePath,
+        name: gite ? ('Guestflow — ' + gite) : 'Guestflow',
+        short_name: 'Guestflow',
+        description: 'Votre concierge numérique',
+        start_url: (gite && token) ? (start.pathname + start.search) : scopePath,
+        scope: scopePath,
+        display: 'standalone',
+        background_color: '#f5f1e8',
+        theme_color: '#6f7f4e',
+        icons: [
+          { src: './icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any maskable' },
+          { src: './icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+        ]
+      };
+
+      const blob = new Blob(
+        [JSON.stringify(manifest)],
+        { type: 'application/manifest+json' }
+      );
+
+      const link = document.createElement('link');
+      link.rel = 'manifest';
+      link.href = URL.createObjectURL(blob);
+      document.head.appendChild(link);
+    } catch (e) {
+      console.warn('Manifest Guestflow dynamique impossible :', e);
+    }
+  })();
+  </script>
 
 </head>
 
@@ -2071,7 +2118,7 @@
   </main>
 
   <script>
-  const GUESTFLOW_BUILD = "GF-C";
+  const GUESTFLOW_BUILD = "GF-D";
 
   // =========================================================
   // GUESTFLOW — MÉMORISATION DU LIEN SÉCURISÉ POUR LA PWA
