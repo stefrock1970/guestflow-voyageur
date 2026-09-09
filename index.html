@@ -2882,10 +2882,6 @@
       mettreAJourInterface(langue);
     }
 
-    // V13 — Correctif ciblé à partir de la V12 universelle.
-    // - phrases naturelles pour arrivée/départ au lieu de libellés « étiquette : valeur » ;
-    // - protection des demandes balade/parc/jardin/promenade contre les règles hors sujet (ex. tabac extérieur) ;
-    // - conservation du comportement validé pour les activités avec enfants.
     // V12 — Français premium universel : aucun lieu touristique précis codé en dur.
     // Objectifs :
     // - transformer les réponses « étiquette + donnée » en vraies phrases ;
@@ -2953,10 +2949,6 @@
 
       // Réécritures ciblées : supprimer le ton « fiche technique ».
       const reformulations = [
-        [/\bArriv[eé]e\s*:\s*/gi, 'L’arrivée est prévue à '],
-        [/\bHeure d[’']arriv[eé]e\s*:\s*/gi, 'L’arrivée est prévue à '],
-        [/\bD[eé]part\s*:\s*/gi, 'Le départ est prévu à '],
-        [/\bHeure de d[eé]part\s*:\s*/gi, 'Le départ est prévu à '],
         [/\bLe départ doit être effectué avant\s+/gi, 'Le départ est prévu avant '],
         [/\bLe départ doit avoir lieu avant\s+/gi, 'Le départ est prévu avant '],
         [/\bL[’']arrivée est possible à partir de\s+/gi, 'L’arrivée est prévue à partir de '],
@@ -2972,17 +2964,24 @@
       ];
       reformulations.forEach(function(regle) { source = source.replace(regle[0], regle[1]); });
 
-      // V13 — Garde-fou de pertinence locale.
-      // Si une demande de balade/parc/jardin/randonnée n'a aucune donnée locale,
-      // on retire les règles de logement sans rapport qui peuvent avoir été remontées
-      // par proximité lexicale (ex. « tabac autorisé en extérieur »).
+      // Correctif ciblé V12 : convertir les libellés horaires bruts en phrases naturelles,
+      // quel que soit le chemin par lequel le moteur les a produits.
+      source = source
+        .replace(/\bArriv[eé]e\s*:\s*([^.!?\n]+)/gi, function(_, valeur) {
+          return 'L’arrivée est prévue à ' + String(valeur).trim();
+        })
+        .replace(/\bD[eé]part\s*:\s*([^.!?\n]+)/gi, function(_, valeur) {
+          return 'Le départ est prévu à ' + String(valeur).trim();
+        });
+
+      // Correctif ciblé V12 : pour une demande de balade/parc/jardin/randonnée,
+      // supprimer uniquement les phrases manifestement hors sujet sur le tabac en extérieur.
+      // On ne touche pas aux formulations premium ni aux réponses pluie/enfants déjà validées.
       const demandeSortieNature = jardin || rando || eauPromenade || panoramaNature || visiteVille;
-      const absenceInfoLocale = /aucune information locale n[’']a encore [eé]t[eé] renseign[eé]e pour cette demande/i.test(source);
-      if (demandeSortieNature && absenceInfoLocale) {
+      if (demandeSortieNature) {
         source = source
-          .replace(/(?:^|\s)(?:oui[, ]*)?(?:le )?tabac[^.!?]*(?:[.!?]|$)/gi, ' ')
-          .replace(/(?:^|\s)(?:il )?reste interdit[^.!?]*(?:[.!?]|$)/gi, ' ')
-          .replace(/(?:^|\s)(?:fumer|cigarette|cigarettes|vapoter|vapotage)[^.!?]*(?:[.!?]|$)/gi, ' ')
+          .replace(/(?:^|\s)(?:Oui,?\s*)?(?:le\s+)?tabac\s+est\s+autoris[eé][^.?!]*(?:[.?!]|$)/gi, ' ')
+          .replace(/(?:^|\s)(?:Il\s+reste\s+)?interdit\s+à\s+l[’']int[eé]rieur\s+du\s+logement[^.?!]*(?:[.?!]|$)/gi, ' ')
           .replace(/\s{2,}/g, ' ')
           .trim();
       }
