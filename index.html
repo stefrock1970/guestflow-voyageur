@@ -1945,8 +1945,45 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <link rel="manifest" href="./manifest-cacouech.json">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+
+  <link id="guestflow-manifest-link" rel="manifest">
+
+  <script>
+  // =========================================================
+  // GUESTFLOW — MANIFEST AUTOMATIQUE PAR GÎTE — GF-G
+  // Le QR fournit gîte + token.
+  // Le manifest est généré par Apps Script et reçoit une URL
+  // différente pour chaque gîte afin d'éviter les mélanges/cache.
+  // =========================================================
+  (function chargerManifestGuestflow_() {
+    try {
+      const u = new URL(window.location.href);
+      const gite = u.searchParams.get('gite') || u.searchParams.get('id') || '';
+      const token = u.searchParams.get('token') || '';
+      const link = document.getElementById('guestflow-manifest-link');
+
+      if (!link) return;
+
+      if (gite && token) {
+        const manifestUrl = new URL('https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec');
+        manifestUrl.searchParams.set('api', 'manifest');
+        manifestUrl.searchParams.set('gite', gite);
+        manifestUrl.searchParams.set('token', token);
+
+        // Version du mécanisme de manifest.
+        // Si un jour on doit forcer Chrome à oublier un ancien manifest,
+        // il suffira d'incrémenter cette valeur.
+        manifestUrl.searchParams.set('mv', '1');
+
+        link.href = manifestUrl.toString();
+      }
+    } catch (e) {
+      console.warn('Manifest automatique Guestflow impossible :', e);
+    }
+  })();
+  </script>
 
 </head>
 
@@ -1954,7 +1991,7 @@
 
 <div id="gf-diagnostic"
      style="margin:10px auto 12px;max-width:760px;padding:10px 14px;border:1px solid #b9b9a8;border-radius:12px;background:#fffdf6;font:600 14px/1.45 Arial,sans-serif;color:#39422e;">
-  <div>DIAGNOSTIC PWA — <span id="gf-diag-build">GF-F</span></div>
+  <div>DIAGNOSTIC PWA — <span id="gf-diag-build">GF-G</span></div>
   <div>Gîte détecté : <span id="gf-diag-gite">...</span></div>
   <div>Token détecté : <span id="gf-diag-token">...</span></div>
 </div>
@@ -2136,7 +2173,7 @@
   </main>
 
   <script>
-  const GUESTFLOW_BUILD = "GF-F";
+  const GUESTFLOW_BUILD = "GF-G";
 
 
 
