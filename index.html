@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.5 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.6 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.5 — installation PWA */
+    /* V23.15.6 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -3099,7 +3099,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.5 — PWA Android / iPhone
+    // GUESTFLOW V23.15.6 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3169,7 +3169,7 @@
       });
     }
 
-    // V23.15.5 — langue fiable + mémorisée dans la PWA.
+    // V23.15.6 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3206,12 +3206,53 @@
       initialiserLanguesGuestflow_();
     }
 
-    // Enregistre le service worker.
+    // =========================================================
+    // V23.15.6 — MISE À JOUR AUTOMATIQUE DE LA PWA
+    // =========================================================
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
+      let rechargementApresMaj = false;
+
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (rechargementApresMaj) return;
+        rechargementApresMaj = true;
+        window.location.reload();
+      });
+
+      window.addEventListener('load', async function() {
+        try {
+          const registration = await navigator.serviceWorker.register(
+            './service-worker.js',
+            { updateViaCache: 'none' }
+          );
+
+          // Force une vérification immédiate à chaque ouverture.
+          try {
+            await registration.update();
+          } catch (e) {}
+
+          // Si une nouvelle version attend déjà, on l'active tout de suite.
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+
+          // Si une mise à jour est trouvée pendant l'ouverture, on l'active
+          // dès qu'elle est prête.
+          registration.addEventListener('updatefound', function() {
+            const nouveauWorker = registration.installing;
+            if (!nouveauWorker) return;
+
+            nouveauWorker.addEventListener('statechange', function() {
+              if (
+                nouveauWorker.state === 'installed' &&
+                navigator.serviceWorker.controller
+              ) {
+                nouveauWorker.postMessage({ type: 'SKIP_WAITING' });
+              }
+            });
+          });
+        } catch (err) {
           console.warn('Service worker Guestflow non enregistré :', err);
-        });
+        }
       });
     }
 
