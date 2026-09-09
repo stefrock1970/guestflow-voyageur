@@ -6,72 +6,108 @@
   <meta name="theme-color" content="#596b50">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
-  <title>Guestflow PWA Lab C corrigée</title>
+  <title>Guestflow PWA Lab — A</title>
   <style>
     html,body{margin:0;min-height:100%;font-family:Arial,sans-serif;background:#f5f1e7;color:#2f382f}
     main{min-height:100vh;display:grid;place-items:center;padding:24px;box-sizing:border-box}
-    .card{max-width:560px;width:100%;background:#fff;border-radius:22px;padding:28px;box-sizing:border-box;
-          box-shadow:0 12px 36px rgba(0,0,0,.12);text-align:center}
+    .card{max-width:540px;width:100%;background:#fff;border-radius:22px;padding:28px;box-sizing:border-box;
+      box-shadow:0 12px 36px rgba(0,0,0,.12);text-align:center}
     h1{margin:0 0 14px;font-size:28px}
-    .marker{font-size:34px;font-weight:800;margin:20px 0;color:#596b50}
+    .marker{font-size:36px;font-weight:800;margin:20px 0;color:#596b50}
     .status{font-size:14px;line-height:1.55;color:#667066;white-space:pre-line}
+    button{margin-top:18px;padding:12px 18px;border:0;border-radius:12px;background:#596b50;color:#fff;
+      font-weight:700;font-size:16px}
   </style>
 </head>
 <body>
 <main>
   <section class="card">
     <h1>Guestflow — PWA Lab</h1>
-    <div class="marker">VERSION C — CORRIGÉE</div>
+    <div class="marker">VERSION A — BASE STABLE</div>
     <div class="status" id="status">Initialisation…</div>
+    <button id="installBtn" hidden>Installer le test</button>
   </section>
 </main>
-
 <script>
-const PAGE_BUILD = "C-CORRIGEE";
+const APP_BUILD = "A";
 const statusEl = document.getElementById("status");
+const installBtn = document.getElementById("installBtn");
+let deferredPrompt = null;
 
-function afficherEtat(extra) {
-  const ctrl = navigator.serviceWorker && navigator.serviceWorker.controller;
-  statusEl.textContent =
-    "Page : " + PAGE_BUILD +
-    "\nContrôleur : " + (ctrl ? ctrl.scriptURL : "aucun") +
-    (extra ? "\n" + extra : "");
+window.addEventListener("beforeinstallprompt", e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.hidden = false;
+});
+
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  try { await deferredPrompt.userChoice; } catch(e) {}
+  deferredPrompt = null;
+  installBtn.hidden = true;
+});
+
+async function fetchNoCache(url) {
+  const sep = url.includes("?") ? "&" : "?";
+  return fetch(url + sep + "_ts=" + Date.now(), {
+    cache: "no-store",
+    headers: { "Cache-Control": "no-cache" }
+  });
+}
+
+async function verifierMiseAJour() {
+  try {
+    const rBuild = await fetchNoCache("./build.txt");
+    if (!rBuild.ok) throw new Error("build.txt " + rBuild.status);
+    const distant = (await rBuild.text()).trim();
+
+    if (!distant || distant === APP_BUILD) {
+      statusEl.textContent = "Build " + APP_BUILD + " — à jour";
+      return;
+    }
+
+    statusEl.textContent = "Nouvelle version " + distant + " détectée…";
+
+    // Vérifie que le nouveau index est réellement disponible AVANT de naviguer.
+    const rIndex = await fetchNoCache("./index.html?candidate=" + encodeURIComponent(distant));
+    if (!rIndex.ok) throw new Error("index.html " + rIndex.status);
+    const candidate = await rIndex.text();
+
+    if (!candidate.includes('const APP_BUILD = "' + distant + '"')) {
+      statusEl.textContent = "Mise à jour " + distant + " en cours de publication…";
+      setTimeout(verifierMiseAJour, 3000);
+      return;
+    }
+
+    const u = new URL("./", location.href);
+    u.searchParams.set("build", distant);
+    u.searchParams.set("_ts", Date.now().toString());
+    location.replace(u.toString());
+  } catch (e) {
+    statusEl.textContent = "Build " + APP_BUILD + " — contrôle réseau indisponible";
+  }
 }
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
     try {
-      // URL FIXE : surtout pas de timestamp/probe ici.
-      const reg = await navigator.serviceWorker.register("./sw.js", {
+      await navigator.serviceWorker.register("./sw.js", {
         scope: "./",
         updateViaCache: "none"
       });
-
-      // Vérifie une mise à jour, mais NE recharge PAS automatiquement la page.
-      try { await reg.update(); } catch (e) {}
-
-      if (reg.waiting) {
-        reg.waiting.postMessage({ type: "SKIP_WAITING" });
-      }
-
-      reg.addEventListener("updatefound", () => {
-        const worker = reg.installing;
-        if (!worker) return;
-        worker.addEventListener("statechange", () => {
-          if (worker.state === "installed" && navigator.serviceWorker.controller) {
-            worker.postMessage({ type: "SKIP_WAITING" });
-          }
-        });
-      });
-
-      afficherEtat("Stable — aucun rechargement automatique");
+      await verifierMiseAJour();
     } catch (e) {
-      afficherEtat("Erreur : " + e);
+      statusEl.textContent = "Erreur PWA : " + e;
     }
   });
 } else {
   statusEl.textContent = "Service worker non supporté";
 }
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") verifierMiseAJour();
+});
 </script>
 </body>
 </html>
