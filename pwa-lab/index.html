@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
-  <title>Guestflow — Votre concierge numérique — GF-B</title>
+  <title>Guestflow — Votre concierge numérique — GF-C</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
   <style>
@@ -2071,7 +2071,51 @@
   </main>
 
   <script>
-  const GUESTFLOW_BUILD = "GF-B";
+  const GUESTFLOW_BUILD = "GF-C";
+
+  // =========================================================
+  // GUESTFLOW — MÉMORISATION DU LIEN SÉCURISÉ POUR LA PWA
+  // Quand le voyageur arrive par QR, on mémorise gîte + token.
+  // Si l'application installée redémarre sur la racine, on restaure
+  // automatiquement ces paramètres avant d'afficher une erreur.
+  // =========================================================
+  (function restaurerLienSecuriseGuestflow_() {
+    try {
+      const STORAGE_KEY = 'guestflow_secure_link_v1';
+      const url = new URL(window.location.href);
+
+      const gite = url.searchParams.get('gite') || url.searchParams.get('id') || '';
+      const token = url.searchParams.get('token') || '';
+
+      // Arrivée via QR complet : mémoriser le lien sécurisé courant.
+      if (gite && token) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+          gite: gite,
+          token: token,
+          savedAt: Date.now()
+        }));
+        return;
+      }
+
+      // Ouverture PWA sans paramètres : restaurer le dernier lien sécurisé.
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+
+      const saved = JSON.parse(raw);
+      if (!saved || !saved.gite || !saved.token) return;
+
+      // Évite les boucles si une restauration vient déjà d'être tentée.
+      if (url.searchParams.get('_restored') === '1') return;
+
+      url.searchParams.set('gite', saved.gite);
+      url.searchParams.set('token', saved.token);
+      url.searchParams.set('_restored', '1');
+
+      window.location.replace(url.toString());
+    } catch (e) {
+      console.warn('Restauration du lien Guestflow impossible :', e);
+    }
+  })();
 
     let langueSelectionnee = 'fr';
     let voixActive = true;
