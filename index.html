@@ -2040,8 +2040,19 @@
     (function(){
       var standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
       if (window.navigator.standalone === true) standalone = true;
-      if (new URLSearchParams(window.location.search).get('mode') === 'app') standalone = true;
-      if (standalone) document.body.classList.add('guestflow-standalone');
+
+      var forceApp = new URLSearchParams(window.location.search).get('mode') === 'app';
+      var installationConfirmee = false;
+      try {
+        installationConfirmee = localStorage.getItem('guestflow_installed') === '1';
+      } catch (e) {}
+
+      // Le QR code doit toujours afficher l'accueil dans le navigateur.
+      // Le concierge direct n'est autorisé que si l'installation a réellement été confirmée
+      // ou si l'URL demande explicitement le mode application.
+      if (forceApp || (standalone && installationConfirmee)) {
+        document.body.classList.add('guestflow-standalone');
+      }
     })();
   </script>
 
@@ -3322,6 +3333,7 @@
 
     window.addEventListener('appinstalled', function() {
       guestflowDeferredInstallPrompt = null;
+      try { localStorage.setItem('guestflow_installed', '1'); } catch (e) {}
       majInstallationGuestflow_();
     });
 
