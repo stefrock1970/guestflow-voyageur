@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Guestflow — V4 FIX QUESTIONS + STOP VOIX | INDEX 408000 | installation native prioritaire Android/Chrome | 2026-09-09 -->
+<!-- Guestflow — V9 FRANÇAIS NATUREL + POLITESSE ÉQUILIBRÉE + VOIX PLUS FLUIDE | base V8 validée | 2026-09-09 -->
 <html lang="fr">
 <head>
   <base target="_top">
@@ -2882,6 +2882,78 @@
       mettreAJourInterface(langue);
     }
 
+    // V7 — Français plus naturel et plus agréable à l'oral.
+    // Cette couche reste volontairement légère : elle ne modifie ni les données,
+    // ni les liens, ni le moteur. Elle adoucit seulement quelques tournures
+    // robotiques et ajoute ponctuellement une formule de politesse.
+    let gfCompteurPolitesseFr = 0;
+
+    function embellirFrancaisGuestflow_(texte, question) {
+      let source = String(texte || '').trim();
+      if (!source || langueSelectionnee !== 'fr') return source;
+
+      // Protéger les URL : aucune réécriture ne doit casser un lien Google Maps.
+      const urls = [];
+      source = source.replace(/https?:\/\/[^\s]+/gi, function(url) {
+        const cle = '___GFURL' + urls.length + '___';
+        urls.push(url);
+        return cle;
+      });
+
+      // Nettoyage typographique léger.
+      source = source
+        .replace(/[ \t]{2,}/g, ' ')
+        .replace(/\s+([,.;!?])/g, '$1')
+        .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
+        .trim();
+
+      // Quelques tournures trop administratives → français conversationnel.
+      const reformulations = [
+        [/\bLe départ doit être effectué avant\s+/gi, 'Le départ est prévu avant '],
+        [/\bLe départ doit avoir lieu avant\s+/gi, 'Le départ est prévu avant '],
+        [/\bL[’']arrivée est possible à partir de\s+/gi, 'L’arrivée est prévue à partir de '],
+        [/\bVous pouvez vous y rendre en cliquant sur (?:le bouton )?Google Maps\.?/gi, 'Je peux vous y guider avec Google Maps.'],
+        [/\bVous pouvez cliquer sur (?:le bouton )?Google Maps pour vous y rendre\.?/gi, 'Je peux vous y guider avec Google Maps.'],
+        [/\bLe restaurant le plus proche est\s+/gi, 'Le restaurant le plus proche, c’est '],
+        [/\bL[’']hôtel le plus proche est\s+/gi, 'L’hôtel le plus proche, c’est '],
+        [/\bL[’']hôpital le plus proche est\s+/gi, 'L’hôpital le plus proche, c’est '],
+        [/\bLa pharmacie la plus proche est\s+/gi, 'La pharmacie la plus proche, c’est '],
+        [/\bLe site touristique le plus proche est\s+/gi, 'Le site touristique le plus proche, c’est '],
+        [/\bLe mot de passe Wi-?Fi est\s+/gi, 'Pour le Wi-Fi, le mot de passe est '],
+        [/\bLe réseau Wi-?Fi est\s+/gi, 'Le réseau Wi-Fi s’appelle ']
+      ];
+
+      reformulations.forEach(function(regle) {
+        source = source.replace(regle[0], regle[1]);
+      });
+
+      // V9 — Politesse équilibrée : visible, variée, mais jamais envahissante.
+      // On évite toute formule dans les urgences et on ne répète pas mécaniquement
+      // la même entrée. En pratique, environ une réponse sur deux reçoit une formule.
+      const q = String(question || '').toLowerCase();
+      const urgence = /\b(urgence|urgent|danger|accident|samu|pompiers?|police|112|15|17|18)\b/i.test(q + ' ' + source);
+      const dejaPoli = /^(bien sûr|bien entendu|avec plaisir|je vous en prie|volontiers|certainement|sans problème)[\s,.!]/i.test(source);
+
+      gfCompteurPolitesseFr += 1;
+      if (!urgence && !dejaPoli && gfCompteurPolitesseFr % 2 === 1) {
+        const demandeLieu = /\b(restaurants?|hôtels?|hôpitaux?|pharmacies?|balades?|randonnées?|sites? touristiques?|musées?|châteaux?|plages?|parcs?|adresse|itinéraire|où se trouve|plus proche)\b/i.test(q);
+        const demandeService = /\b(wi-?fi|wifi|heure|arriv|départ|parking|animaux|petit[- ]déjeuner|propriétaire|numéro|contact)\b/i.test(q);
+        const formulesLieu = ['Avec plaisir. ', 'Bien sûr. ', 'Bien entendu. '];
+        const formulesService = ['Bien sûr. ', 'Avec plaisir. ', 'Sans problème. '];
+        const formulesNeutres = ['Bien sûr. ', 'Avec plaisir. ', 'Je vous en prie. '];
+        const liste = demandeLieu ? formulesLieu : (demandeService ? formulesService : formulesNeutres);
+        const formule = liste[Math.floor(gfCompteurPolitesseFr / 2) % liste.length];
+        source = formule + source;
+      }
+
+      // Restaurer les URL à l'identique.
+      source = source.replace(/___GFURL(\d+)___/g, function(_, i) {
+        return urls[Number(i)] || '';
+      });
+
+      return source.trim();
+    }
+
     function afficherReponseGuestflow(texte) {
       const zone = document.getElementById('reponse');
       const boiteReponse = zone ? zone.closest('.response-box') : null;
@@ -2966,9 +3038,19 @@
         ).toLowerCase();
 
         const texteAnalyse = (questionCourante + ' ' + contenu.toLowerCase());
-        const motsLieu = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|m[eé]decins?|urgences?|balades?|randonn[eé]es?|promenades?|sites? touristiques?|monuments?|mus[eé]es?|ch[aâ]teaux?|plages?|parcs?|jardins?|commerces?|magasins?|boulangeries?|supermarch[eé]s?|march[eé]s?|activit[eé]s?|gare|a[eé]roport|office de tourisme|adresse|itin[eé]raire|o[uù] se trouve|le plus proche|la plus proche)\b/i;
 
-        if (motsLieu.test(texteAnalyse)) {
+        // Une demande d'urgence générique (ex. « Que faire en cas d'urgence ? »)
+        // ne doit PAS déclencher Google Maps simplement parce que le mot « urgence »
+        // apparaît dans la question ou la réponse. Maps n'est proposé que si la
+        // demande concerne réellement un lieu où se rendre.
+        const urgenceGenerique = /\b(urgence|urgent|danger|accident|112|15|17|18|samu|pompiers?|police)\b/i.test(questionCourante);
+        const lieuUrgenceExplicite = /\b(h[oô]pitaux?|cliniques?|pharmacies?|commissariats?|gendarmeries?|casernes?|centres? m[eé]dicaux?|m[eé]decins?|urgences? hospitali[eè]res?|adresse|itin[eé]raire|o[uù] se trouve|comment (?:aller|se rendre)|le plus proche|la plus proche)\b/i.test(texteAnalyse);
+
+        const motsLieu = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|m[eé]decins?|commissariats?|gendarmeries?|balades?|randonn[eé]es?|promenades?|sites? touristiques?|monuments?|mus[eé]es?|ch[aâ]teaux?|plages?|parcs?|jardins?|commerces?|magasins?|boulangeries?|supermarch[eé]s?|march[eé]s?|activit[eé]s?|gare|a[eé]roport|office de tourisme|adresse|itin[eé]raire|o[uù] se trouve|le plus proche|la plus proche)\b/i;
+
+        const autoriserMaps = (!urgenceGenerique || lieuUrgenceExplicite) && motsLieu.test(texteAnalyse);
+
+        if (autoriserMaps) {
           // Pour une recherche Maps, une phrase courte contenant le nom/adresse est plus robuste
           // qu'une réponse complète. On privilégie la première phrase utile de la réponse.
           let requeteMaps = contenu
@@ -3389,7 +3471,7 @@
       // Vitesse volontairement légèrement inférieure à 1 : la diction est plus liée
       // et moins mécanique sur les voix système Windows.
       const reglages = {
-        fr: { lang: 'fr-FR', rate: 0.93, pitch: 1.00 },
+        fr: { lang: 'fr-FR', rate: 0.97, pitch: 1.00 },
         en: { lang: 'en-GB', rate: 0.97, pitch: 1.00 },
         es: { lang: 'es-ES', rate: 0.95, pitch: 1.00 },
         de: { lang: 'de-DE', rate: 0.94, pitch: 0.99 }
@@ -3453,7 +3535,15 @@
       if (!voixActive) return;
       if (!('speechSynthesis' in window)) return;
 
-      const contenu = nettoyerTextePourLecture(texte);
+      let contenu = nettoyerTextePourLecture(texte);
+      // V9 — ponctuation orale légère : on évite les successions sèches et les
+      // espaces irréguliers qui rendent certaines voix système saccadées.
+      contenu = String(contenu || '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s+([,.;!?])/g, '$1')
+        .replace(/([,;:])(?=\S)/g, '$1 ')
+        .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
+        .trim();
       if (!contenu) {
         viderQuestionApresReponse();
         return;
@@ -3661,10 +3751,18 @@
         const zoneReponseV2314 = document.getElementById('reponse');
         if (zoneReponseV2314) zoneReponseV2314.setAttribute('aria-busy', 'false');
 
-        afficherReponseGuestflow(payload.reponse);
+        const questionPourStyleFr = String(
+          (document.getElementById('gfRefQuestion') && document.getElementById('gfRefQuestion').value) ||
+          (document.getElementById('question') && document.getElementById('question').value) ||
+          question ||
+          ''
+        );
+        const reponseFinale = embellirFrancaisGuestflow_(payload.reponse, questionPourStyleFr);
+
+        afficherReponseGuestflow(reponseFinale);
 
         if (voixActive) {
-          parlerReponseGuestflow(payload.reponse);
+          parlerReponseGuestflow(reponseFinale);
         } else {
           viderQuestionApresReponse();
         }
