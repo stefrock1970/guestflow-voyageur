@@ -2201,7 +2201,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <link rel="manifest" href="./manifest-cacouech.json">
+  <link rel="manifest" id="guestflowManifest" href="./manifest-cacouech.json">
   <link rel="apple-touch-icon" href="./icône-192.png">
 
 
@@ -3986,10 +3986,20 @@
           tokenVoyageur = String(localStorage.getItem('guestflow_token') || '').trim();
         }
 
-        localStorage.setItem('guestflow_langue', 'fr');
+        const langUrl = String(p.get('lang') || '').toLowerCase();
+        const langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase();
+        const langFinale = ['fr','en','es','de'].includes(langUrl)
+          ? langUrl
+          : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
+        localStorage.setItem('guestflow_langue', langFinale);
       } catch (e) {}
 
-      langueSelectionnee = 'fr';
+      const langUrl = String(p.get('lang') || '').toLowerCase();
+      let langSauvee = '';
+      try { langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase(); } catch (e) {}
+      langueSelectionnee = ['fr','en','es','de'].includes(langUrl)
+        ? langUrl
+        : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
 
       const giteName = document.getElementById('giteName');
 
@@ -4158,24 +4168,49 @@
       help.setAttribute('aria-hidden', 'false');
     }
 
+    function appliquerLangueInstallationGuestflow_(lang) {
+      const supportees = ['fr','en','es','de'];
+      const choisie = supportees.includes(lang) ? lang : 'fr';
+      langueSelectionnee = choisie;
+      try { localStorage.setItem('guestflow_langue', choisie); } catch (e) {}
+
+      const manifest = document.getElementById('guestflowManifest');
+      if (manifest) {
+        const manifests = {
+          fr: './manifest-cacouech.json',
+          en: './manifest-cacouech-en.json',
+          es: './manifest-cacouech-es.json',
+          de: './manifest-cacouech-de.json'
+        };
+        manifest.setAttribute('href', manifests[choisie] || manifests.fr);
+      }
+      return choisie;
+    }
+
     document.querySelectorAll('[data-landing-lang]').forEach(function(btn){
       btn.addEventListener('click', function(){
-        const lang = String(btn.dataset.landingLang || 'fr');
-        if (lang === 'fr') {
-          langueSelectionnee = 'fr';
-          try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
-          toastAccueilGuestflow_('Version française sélectionnée.');
-        } else {
-          toastAccueilGuestflow_('Nous validons d’abord la version française.');
-        }
+        const lang = appliquerLangueInstallationGuestflow_(String(btn.dataset.landingLang || 'fr'));
+        const messages = {
+          fr: 'Version française sélectionnée.',
+          en: 'English version selected.',
+          es: 'Versión española seleccionada.',
+          de: 'Deutsche Version ausgewählt.'
+        };
+        toastAccueilGuestflow_(messages[lang] || messages.fr);
       });
     });
+
+    // Si le QR contient ?lang=fr/en/es/de, la langue est sélectionnée avant l’installation.
+    (function(){
+      const p = new URLSearchParams(window.location.search);
+      const langUrl = String(p.get('lang') || '').toLowerCase();
+      if (['fr','en','es','de'].includes(langUrl)) appliquerLangueInstallationGuestflow_(langUrl);
+    })();
 
     const landingInstallBtn = document.getElementById('landingInstallBtn');
     if (landingInstallBtn) {
       landingInstallBtn.addEventListener('click', async function(){
-        langueSelectionnee = 'fr';
-        try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
+        appliquerLangueInstallationGuestflow_(langueSelectionnee);
 
         if (estStandaloneGuestflow_()) {
           toastAccueilGuestflow_('Guestflow est déjà installé.');
