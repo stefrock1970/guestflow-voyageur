@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.7 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.8 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.7 — installation PWA */
+    /* V23.15.8 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1984,7 +1984,7 @@
               </svg>
             </div>
             <div>
-              <h2 id="conciergeTitle">Votre concierge Guestflow</h2>
+              <h2 id="conciergeTitle">Votre concierge Guestflow — V23.15.8</h2>
               <div class="online" id="onlineNow">En ligne maintenant</div>
             </div>
 
@@ -2071,6 +2071,8 @@
   </main>
 
   <script>
+    const GUESTFLOW_APP_VERSION = '23.15.8';
+
     let langueSelectionnee = 'fr';
     let voixActive = true;
     // V23.9 : le nom du gîte est visible, l'ID technique reste masqué.
@@ -2110,7 +2112,7 @@
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
         installApp: 'Ajouter Guestflow à mon téléphone',
         iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
-        conciergeTitle: 'Votre concierge Guestflow',
+        conciergeTitle: 'Votre concierge Guestflow — V23.15.8',
         onlineNow: 'En ligne maintenant',
         answerPlaceholder: 'La réponse du concierge apparaîtra ici.',
         justNow: 'À l’instant'
@@ -2135,7 +2137,7 @@
         micUnsupported: 'Voice dictation is not available in this browser.',
         installApp: 'Add Guestflow to my phone',
         iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
-        conciergeTitle: 'Your Guestflow concierge',
+        conciergeTitle: 'Your Guestflow concierge — V23.15.8',
         onlineNow: 'Online now',
         answerPlaceholder: 'The concierge’s answer will appear here.',
         justNow: 'Just now'
@@ -2160,7 +2162,7 @@
         micUnsupported: 'El dictado por voz no está disponible en este navegador.',
         installApp: 'Añadir Guestflow a mi teléfono',
         iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
-        conciergeTitle: 'Tu conserje Guestflow',
+        conciergeTitle: 'Tu conserje Guestflow — V23.15.8',
         onlineNow: 'En línea ahora',
         answerPlaceholder: 'La respuesta del conserje aparecerá aquí.',
         justNow: 'Ahora mismo'
@@ -2185,7 +2187,7 @@
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
         installApp: 'Guestflow zu meinem Telefon hinzufügen',
         iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
-        conciergeTitle: 'Ihr Guestflow-Concierge',
+        conciergeTitle: 'Ihr Guestflow-Concierge — V23.15.8',
         onlineNow: 'Jetzt online',
         answerPlaceholder: 'Die Antwort des Concierges erscheint hier.',
         justNow: 'Gerade eben'
@@ -3099,7 +3101,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.7 — PWA Android / iPhone
+    // GUESTFLOW V23.15.8 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3169,7 +3171,7 @@
       });
     }
 
-    // V23.15.7 — langue fiable + mémorisée dans la PWA.
+    // V23.15.8 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3207,7 +3209,7 @@
     }
 
     // =========================================================
-    // V23.15.7 — MISE À JOUR AUTOMATIQUE DE LA PWA
+    // V23.15.8 — MISE À JOUR AUTOMATIQUE DE LA PWA
     // =========================================================
     if ('serviceWorker' in navigator) {
       let rechargementApresMaj = false;
@@ -3257,6 +3259,53 @@
     }
 
     majInstallationGuestflow_();
+
+
+
+    // =========================================================
+    // V23.15.8 — CONTRÔLE DE VERSION SANS CACHE
+    // Vérifie version.json à chaque ouverture / retour depuis le cache.
+    // =========================================================
+    async function verifierVersionGuestflow_() {
+      try {
+        const urlVersion = new URL('./version.json', window.location.href);
+        urlVersion.searchParams.set('_ts', Date.now().toString());
+
+        const reponse = await fetch(urlVersion.toString(), {
+          method: 'GET',
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache' }
+        });
+
+        if (!reponse.ok) return;
+
+        const data = await reponse.json();
+        const versionDistante = String(data.version || '').trim();
+
+        if (!versionDistante || versionDistante === GUESTFLOW_APP_VERSION) {
+          return;
+        }
+
+        // Force une nouvelle navigation réseau tout en conservant gîte + token.
+        const nouvelleUrl = new URL(window.location.href);
+        nouvelleUrl.searchParams.set('_gfver', versionDistante);
+        nouvelleUrl.searchParams.set('_gfts', Date.now().toString());
+
+        window.location.replace(nouvelleUrl.toString());
+      } catch (e) {
+        console.warn('Vérification de version Guestflow impossible :', e);
+      }
+    }
+
+    window.addEventListener('pageshow', function() {
+      verifierVersionGuestflow_();
+    });
+
+    document.addEventListener('visibilitychange', function() {
+      if (document.visibilityState === 'visible') {
+        verifierVersionGuestflow_();
+      }
+    });
 
 </script>
 
