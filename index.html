@@ -1947,7 +1947,7 @@
     .hot-en{left:19.2%;top:12.7%;width:14.8%;height:4.2%}
     .hot-es{left:34.3%;top:12.7%;width:14.8%;height:4.2%}
     .hot-de{left:49.3%;top:12.7%;width:14.8%;height:4.2%}
-    .hot-install{left:4.5%;top:69.8%;width:91.0%;height:6.8%}
+    .hot-install{left:3.5%;top:68.5%;width:93%;height:9%;z-index:50;background:rgba(0,0,0,.001);display:block}
 
     .guestflow-toast{
       position:fixed;
@@ -1981,6 +1981,7 @@
       backdrop-filter:blur(4px);
     }
     .guestflow-install-help.show{display:flex}
+    .guestflow-install-help:target{display:flex}
     .guestflow-install-card{
       width:min(100%,520px);
       border-radius:24px;
@@ -2007,6 +2008,11 @@
       color:white;
       font-weight:800;
       cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      line-height:1.2;
     }
 
     /* Dans le navigateur : page d'accueil. Dans la PWA installée : concierge. */
@@ -2055,7 +2061,7 @@
       <button class="guestflow-hotspot hot-en" type="button" data-landing-lang="en" aria-label="English">EN</button>
       <button class="guestflow-hotspot hot-es" type="button" data-landing-lang="es" aria-label="Español">ES</button>
       <button class="guestflow-hotspot hot-de" type="button" data-landing-lang="de" aria-label="Deutsch">DE</button>
-      <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
+      <a class="guestflow-hotspot hot-install" id="landingInstallBtn" href="#guestflowInstallHelp" aria-label="Installer Guestflow">Installer Guestflow</a>
     </div>
   </section>
 
@@ -2065,7 +2071,7 @@
     <div class="guestflow-install-card" role="dialog" aria-modal="true" aria-labelledby="guestflowInstallTitle">
       <h2 id="guestflowInstallTitle">Installer Guestflow</h2>
       <div id="guestflowInstallInstructions"></div>
-      <button class="guestflow-install-close" id="guestflowInstallClose" type="button">J’ai compris</button>
+      <a class="guestflow-install-close" id="guestflowInstallClose" href="#">J’ai compris</a>
     </div>
   </div>
 
@@ -3358,6 +3364,13 @@
       if (!help) return;
       help.classList.remove('show');
       help.setAttribute('aria-hidden', 'true');
+      if (window.location.hash === '#guestflowInstallHelp') {
+        try {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (e) {
+          window.location.hash = '';
+        }
+      }
     }
 
     function ouvrirAideInstallationGuestflow_(messageSupplementaire) {
@@ -3403,16 +3416,12 @@
 
     const landingInstallBtn = document.getElementById('landingInstallBtn');
     if (landingInstallBtn) {
-      landingInstallBtn.addEventListener('click', async function(event){
-        event.preventDefault();
-
+      landingInstallBtn.addEventListener('click', async function(){
         langueSelectionnee = 'fr';
         try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
 
-        // Réaction visible immédiate : le clic ne peut plus sembler "ne rien faire".
-        ouvrirAideInstallationGuestflow_('Installation de Guestflow');
-
-        // Si Chrome/Android a fourni le vrai prompt PWA, on le déclenche.
+        // Le href="#guestflowInstallHelp" assure déjà une aide visible,
+        // même si tout JavaScript échoue. Ici on ajoute seulement le prompt natif.
         if (guestflowDeferredInstallPrompt) {
           const promptEvent = guestflowDeferredInstallPrompt;
           guestflowDeferredInstallPrompt = null;
@@ -3423,11 +3432,9 @@
 
             if (choix && choix.outcome === 'accepted') {
               fermerAideInstallationGuestflow_();
-            } else {
-              ouvrirAideInstallationGuestflow_('Installation non confirmée');
             }
           } catch (e) {
-            ouvrirAideInstallationGuestflow_('Installation automatique indisponible');
+            // Le modal CSS :target reste affiché : aucun clic silencieux possible.
           }
 
           majInstallationGuestflow_();
@@ -3436,7 +3443,11 @@
     }
 
     const landingCloseBtn = document.getElementById('guestflowInstallClose');
-    if (landingCloseBtn) landingCloseBtn.addEventListener('click', fermerAideInstallationGuestflow_);
+    if (landingCloseBtn) {
+      landingCloseBtn.addEventListener('click', function(){
+        fermerAideInstallationGuestflow_();
+      });
+    }
 
     const landingHelp = document.getElementById('guestflowInstallHelp');
     if (landingHelp) {
