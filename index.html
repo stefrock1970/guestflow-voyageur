@@ -2882,11 +2882,12 @@
       mettreAJourInterface(langue);
     }
 
-    // V7 — Français plus naturel et plus agréable à l'oral.
-    // Cette couche reste volontairement légère : elle ne modifie ni les données,
-    // ni les liens, ni le moteur. Elle adoucit seulement quelques tournures
-    // robotiques et ajoute ponctuellement une formule de politesse.
-    let gfCompteurPolitesseFr = 0;
+    // V10 — Français naturel, poli et réellement conversationnel.
+    // La politesse alterne de façon prévisible : une réponse non urgente sur deux,
+    // en commençant par une réponse polie. Les questions demandant une aide ou une
+    // permission reçoivent une formulation adaptée au contexte.
+    let gfDerniereReponsePolieFr = false;
+    let gfIndexFormuleFr = 0;
 
     function embellirFrancaisGuestflow_(texte, question) {
       let source = String(texte || '').trim();
@@ -2906,6 +2907,8 @@
         .replace(/\s+([,.;!?])/g, '$1')
         .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
         .trim();
+
+      const q = String(question || '').toLowerCase();
 
       // Quelques tournures trop administratives → français conversationnel.
       const reformulations = [
@@ -2927,23 +2930,46 @@
         source = source.replace(regle[0], regle[1]);
       });
 
-      // V9 — Politesse équilibrée : visible, variée, mais jamais envahissante.
-      // On évite toute formule dans les urgences et on ne répète pas mécaniquement
-      // la même entrée. En pratique, environ une réponse sur deux reçoit une formule.
-      const q = String(question || '').toLowerCase();
+      // Question typique : « Puis-je arriver en retard / plus tard ? ».
+      // On ne prétend pas que l'arrivée tardive est autorisée si le moteur ne l'a
+      // pas affirmé : on donne une réponse utile et on invite à confirmer avec le propriétaire.
+      const demandeArriveeTardive = /\b(?:puis[- ]?je|peut[- ]?on|est[- ]?ce que je peux|je peux|arriver|arrivée)[^?!.]{0,55}\b(?:en retard|plus tard|tard)\b|\b(?:en retard|plus tard|tard)[^?!.]{0,55}\barriv/iu.test(q);
+      if (demandeArriveeTardive) {
+        const parleDeProprietaire = /\b(propriétaire|hôte|contact|prévenir|prévenez|confirmer)\b/i.test(source);
+        if (!parleDeProprietaire) {
+          source = source.replace(/[.!?\s]+$/, '');
+          source += '. Si vous souhaitez arriver plus tard, le mieux est de prévenir le propriétaire pour confirmer votre heure d’arrivée.';
+        }
+      }
+
+      // Urgences : pas de formule décorative, on reste immédiat et efficace.
       const urgence = /\b(urgence|urgent|danger|accident|samu|pompiers?|police|112|15|17|18)\b/i.test(q + ' ' + source);
       const dejaPoli = /^(bien sûr|bien entendu|avec plaisir|je vous en prie|volontiers|certainement|sans problème)[\s,.!]/i.test(source);
 
-      gfCompteurPolitesseFr += 1;
-      if (!urgence && !dejaPoli && gfCompteurPolitesseFr % 2 === 1) {
-        const demandeLieu = /\b(restaurants?|hôtels?|hôpitaux?|pharmacies?|balades?|randonnées?|sites? touristiques?|musées?|châteaux?|plages?|parcs?|adresse|itinéraire|où se trouve|plus proche)\b/i.test(q);
-        const demandeService = /\b(wi-?fi|wifi|heure|arriv|départ|parking|animaux|petit[- ]déjeuner|propriétaire|numéro|contact)\b/i.test(q);
-        const formulesLieu = ['Avec plaisir. ', 'Bien sûr. ', 'Bien entendu. '];
-        const formulesService = ['Bien sûr. ', 'Avec plaisir. ', 'Sans problème. '];
-        const formulesNeutres = ['Bien sûr. ', 'Avec plaisir. ', 'Je vous en prie. '];
-        const liste = demandeLieu ? formulesLieu : (demandeService ? formulesService : formulesNeutres);
-        const formule = liste[Math.floor(gfCompteurPolitesseFr / 2) % liste.length];
-        source = formule + source;
+      if (urgence) {
+        gfDerniereReponsePolieFr = false;
+      } else if (!dejaPoli) {
+        // Les demandes formulées comme une permission/aide sont toujours polies,
+        // sinon on alterne : polie, directe, polie, directe…
+        const demandePermissionOuAide = /\b(puis[- ]?je|peut[- ]?on|pouvez[- ]?vous|pourriez[- ]?vous|est[- ]?ce que je peux|je peux|aidez[- ]?moi|aide)\b/i.test(q);
+        const doitEtrePoli = demandePermissionOuAide || !gfDerniereReponsePolieFr;
+
+        if (doitEtrePoli) {
+          const demandeLieu = /\b(restaurants?|hôtels?|hôpitaux?|pharmacies?|balades?|randonnées?|sites? touristiques?|musées?|châteaux?|plages?|parcs?|adresse|itinéraire|où se trouve|plus proche)\b/i.test(q);
+          const demandeService = /\b(wi-?fi|wifi|heure|arriv|départ|parking|animaux|petit[- ]déjeuner|propriétaire|numéro|contact)\b/i.test(q);
+          const formulesLieu = ['Avec plaisir. ', 'Bien sûr. ', 'Bien entendu. '];
+          const formulesService = ['Bien sûr. ', 'Avec plaisir. ', 'Sans problème. '];
+          const formulesNeutres = ['Bien sûr. ', 'Avec plaisir. ', 'Je vous en prie. '];
+          const liste = demandeLieu ? formulesLieu : (demandeService ? formulesService : formulesNeutres);
+          const formule = liste[gfIndexFormuleFr % liste.length];
+          gfIndexFormuleFr += 1;
+          source = formule + source;
+          gfDerniereReponsePolieFr = true;
+        } else {
+          gfDerniereReponsePolieFr = false;
+        }
+      } else {
+        gfDerniereReponsePolieFr = true;
       }
 
       // Restaurer les URL à l'identique.
