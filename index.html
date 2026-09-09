@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.4 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.5 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.4 — installation PWA */
+    /* V23.15.5 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1984,8 +1984,8 @@
               </svg>
             </div>
             <div>
-              <h2>Votre concierge</h2>
-              <div class="online">En ligne maintenant</div>
+              <h2 id="conciergeTitle">Votre concierge</h2>
+              <div class="online" id="onlineNow">En ligne maintenant</div>
             </div>
 
         <div id="pwaInstallWrap" class="pwa-install-wrap">
@@ -2112,7 +2112,8 @@
         iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
         conciergeTitle: 'Votre concierge',
         onlineNow: 'En ligne maintenant',
-        answerPlaceholder: 'La réponse du concierge apparaîtra ici.'
+        answerPlaceholder: 'La réponse du concierge apparaîtra ici.',
+        justNow: 'À l’instant'
 
       },
       en: {
@@ -2136,7 +2137,8 @@
         iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
         conciergeTitle: 'Your concierge',
         onlineNow: 'Online now',
-        answerPlaceholder: 'The concierge’s answer will appear here.'
+        answerPlaceholder: 'The concierge’s answer will appear here.',
+        justNow: 'Just now'
 
       },
       es: {
@@ -2160,7 +2162,8 @@
         iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
         conciergeTitle: 'Tu conserje',
         onlineNow: 'En línea ahora',
-        answerPlaceholder: 'La respuesta del conserje aparecerá aquí.'
+        answerPlaceholder: 'La respuesta del conserje aparecerá aquí.',
+        justNow: 'Ahora mismo'
 
       },
       de: {
@@ -2184,7 +2187,8 @@
         iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
         conciergeTitle: 'Ihr Concierge',
         onlineNow: 'Jetzt online',
-        answerPlaceholder: 'Die Antwort des Concierges erscheint hier.'
+        answerPlaceholder: 'Die Antwort des Concierges erscheint hier.',
+        justNow: 'Gerade eben'
 
       }
     };
@@ -2221,9 +2225,26 @@
       const onlineNow = document.getElementById('onlineNow');
       if (onlineNow) onlineNow.textContent = t.onlineNow;
 
-      const answerText = document.getElementById('answerText');
-      if (answerText && !answerText.dataset.hasRealAnswer) {
-        answerText.textContent = t.answerPlaceholder;
+      const responseTime = document.getElementById('responseTime');
+      if (responseTime) responseTime.textContent = t.justNow;
+
+      const reponsePlaceholder = document.getElementById('reponse');
+      if (reponsePlaceholder) {
+        const texteActuel = String(reponsePlaceholder.textContent || '').trim();
+        const textesVides = [
+          'La réponse du concierge apparaîtra ici.',
+          traductionsInterface.fr.answerPlaceholder,
+          traductionsInterface.en.answerPlaceholder,
+          traductionsInterface.es.answerPlaceholder,
+          traductionsInterface.de.answerPlaceholder,
+          traductionsInterface.fr.empty,
+          traductionsInterface.en.empty,
+          traductionsInterface.es.empty,
+          traductionsInterface.de.empty
+        ];
+        if (!texteActuel || textesVides.includes(texteActuel)) {
+          reponsePlaceholder.textContent = t.answerPlaceholder;
+        }
       }
 
       const pwaInstallBtn = document.getElementById('pwaInstallBtn');
@@ -2245,15 +2266,7 @@
       const accessMessage = document.getElementById('accessMessage');
       if (accessMessage && (!tokenVoyageur || (!nomGiteVoyageur && !idGuestflow))) accessMessage.textContent = t.badLink;
 
-      const reponse = document.getElementById('reponse');
-      if (
-        reponse.textContent.trim() === traductionsInterface.fr.empty ||
-        reponse.textContent.trim() === traductionsInterface.en.empty ||
-        reponse.textContent.trim() === traductionsInterface.es.empty ||
-        reponse.textContent.trim() === traductionsInterface.de.empty
-      ) {
-        reponse.textContent = t.empty;
-      }
+      // Le texte d'attente est déjà géré plus haut avec answerPlaceholder.
     }
 
     function choisirLangue(langue) {
@@ -3086,7 +3099,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.4 — PWA Android / iPhone
+    // GUESTFLOW V23.15.5 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3156,7 +3169,7 @@
       });
     }
 
-    // V23.15.4 — langue fiable + mémorisée dans la PWA.
+    // V23.15.5 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
