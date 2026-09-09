@@ -2232,6 +2232,155 @@
     }
   </script>
 
+
+  <style id="guestflow-reference-interface">
+    /* =========================================================
+       GUESTFLOW — INTERFACE CONCIERGE CALÉE SUR LA MAQUETTE VALIDÉE
+       La mécanique existante reste intacte dans .gf-app-shell.
+       ========================================================= */
+    .gf-reference-screen{display:none}
+    body.guestflow-app-mode .gf-reference-screen{
+      display:block;
+      width:min(100%,760px);
+      margin:0 auto;
+      min-height:100vh;
+      background:#f7f2e8;
+      position:relative;
+      z-index:20;
+    }
+    body.guestflow-app-mode .gf-reference-wrap{
+      position:relative;
+      width:100%;
+      line-height:0;
+      background:#f7f2e8;
+    }
+    body.guestflow-app-mode .gf-reference-img{
+      display:block;
+      width:100%;
+      height:auto;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* Le moteur historique reste vivant mais hors écran. */
+    body.guestflow-app-mode .gf-app-shell{
+      position:absolute !important;
+      left:-100000px !important;
+      top:0 !important;
+      width:760px !important;
+      opacity:0 !important;
+      pointer-events:none !important;
+    }
+
+    .gf-ref-hit{
+      position:absolute;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+      z-index:25;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+    }
+    .gf-ref-mic{
+      left:35.5%;
+      top:43.1%;
+      width:29%;
+      height:17%;
+      border-radius:50%;
+    }
+    .gf-ref-input{
+      position:absolute;
+      z-index:26;
+      left:14.5%;
+      top:61.0%;
+      width:68.5%;
+      height:4.9%;
+      border:0;
+      outline:0;
+      resize:none;
+      padding:1.1% 1.4%;
+      background:rgba(255,255,255,.72);
+      color:#34443d;
+      font:500 clamp(14px,3.2vw,22px)/1.25 Inter,Arial,sans-serif;
+      border-radius:999px;
+      box-shadow:none;
+      overflow:hidden;
+    }
+    .gf-ref-input::placeholder{color:#7f8ca5;opacity:.9}
+    .gf-ref-send{
+      left:84.1%;
+      top:60.6%;
+      width:9.1%;
+      height:5.5%;
+      border-radius:50%;
+    }
+
+    .gf-ref-quick-1{left:3.4%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-2{left:26.1%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-3{left:49.0%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-4{left:72.0%; top:72.0%; width:24.0%; height:10.6%}
+
+    .gf-ref-nav-home{left:7%; top:91.2%; width:25%; height:7.2%}
+    .gf-ref-nav-history{left:37%; top:91.2%; width:25%; height:7.2%}
+    .gf-ref-nav-settings{left:68%; top:91.2%; width:25%; height:7.2%}
+
+    .gf-ref-answer{
+      display:none;
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      width:min(calc(100% - 26px),700px);
+      z-index:80;
+      background:#fffdf8;
+      border:1px solid rgba(63,73,51,.14);
+      border-radius:24px;
+      padding:18px 18px 16px;
+      box-shadow:0 22px 70px rgba(35,46,32,.28);
+      color:#253326;
+      font:400 15px/1.5 Inter,Arial,sans-serif;
+    }
+    .gf-ref-answer.show{display:block}
+    .gf-ref-answer-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:9px;
+    }
+    .gf-ref-answer-head strong{
+      font:600 20px/1.1 Georgia,"Times New Roman",serif;
+      color:#254128;
+    }
+    .gf-ref-answer-close{
+      width:36px;height:36px;border:0;border-radius:50%;
+      background:#eef1e9;color:#40543d;font-size:22px;cursor:pointer;
+    }
+    .gf-ref-answer-text{white-space:pre-wrap}
+    .gf-ref-listening{
+      display:none;
+      position:absolute;
+      left:50%;
+      top:52.9%;
+      transform:translateX(-50%);
+      z-index:30;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(38,67,33,.90);
+      color:#fff;
+      font:700 12px/1 Inter,Arial,sans-serif;
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
+    }
+    .gf-ref-listening.show{display:block}
+
+    @media (max-width:520px){
+      body.guestflow-app-mode .gf-reference-screen{width:100%}
+      .gf-ref-answer{bottom:10px;width:calc(100% - 18px)}
+    }
+  </style>
+
 </head>
 
 <body>
@@ -2279,6 +2428,53 @@
       <a class="guestflow-install-close" id="guestflowInstallClose" href="#">J’ai compris</a>
     </div>
   </div>
+
+  
+  <!-- GUESTFLOW — interface visuelle de référence validée -->
+  <section class="gf-reference-screen" id="gfReferenceScreen" aria-label="Concierge Guestflow">
+    <div class="gf-reference-wrap">
+      <img class="gf-reference-img" src="./guestflow-concierge-final.png"
+           alt="Guestflow Les Oliviers — concierge numérique 24h/24">
+
+      <button class="gf-ref-hit gf-ref-mic" id="gfRefMic" type="button"
+              aria-label="Parler à Guestflow"></button>
+
+      <textarea class="gf-ref-input" id="gfRefQuestion"
+                placeholder="Posez votre question ici..."
+                aria-label="Posez votre question"></textarea>
+
+      <button class="gf-ref-hit gf-ref-send" id="gfRefSend" type="button"
+              aria-label="Envoyer la question"></button>
+
+      <button class="gf-ref-hit gf-ref-quick-1" type="button"
+              data-gf-question="Quels sont les horaires d’arrivée et de départ ?"
+              aria-label="Arrivée et départ"></button>
+      <button class="gf-ref-hit gf-ref-quick-2" type="button"
+              data-gf-question="Quel est le mot de passe Wi-Fi ?"
+              aria-label="Wi-Fi"></button>
+      <button class="gf-ref-hit gf-ref-quick-3" type="button"
+              data-gf-question="Que dois-je faire en cas d’urgence ?"
+              aria-label="Urgence"></button>
+      <button class="gf-ref-hit gf-ref-quick-4" type="button"
+              data-gf-question="Quel est le numéro du propriétaire ?"
+              aria-label="Numéro du propriétaire"></button>
+
+      <button class="gf-ref-hit gf-ref-nav-home" type="button" aria-label="Accueil"></button>
+      <button class="gf-ref-hit gf-ref-nav-history" type="button" aria-label="Historique"></button>
+      <button class="gf-ref-hit gf-ref-nav-settings" type="button" aria-label="Paramètres"></button>
+
+      <div class="gf-ref-listening" id="gfRefListening">Je vous écoute…</div>
+    </div>
+  </section>
+
+  <aside class="gf-ref-answer" id="gfRefAnswer" aria-live="polite">
+    <div class="gf-ref-answer-head">
+      <strong>Guestflow</strong>
+      <button class="gf-ref-answer-close" id="gfRefAnswerClose" type="button" aria-label="Fermer">×</button>
+    </div>
+    <div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
+  </aside>
+
 
   <main class="page gf-app-shell">
 
@@ -3813,6 +4009,118 @@
 
 
 
+</script>
+
+
+<script id="guestflow-reference-bridge">
+(function(){
+  function byId(id){ return document.getElementById(id); }
+
+  function syncToEngine(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    if (visual && engine) engine.value = visual.value;
+  }
+
+  function sendVisualQuestion(){
+    syncToEngine();
+    var ask = byId('btnAsk');
+    if (ask) ask.click();
+  }
+
+  function initReferenceInterface(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    var mic = byId('gfRefMic');
+    var engineMic = byId('btnMic');
+    var send = byId('gfRefSend');
+    var answerBox = byId('gfRefAnswer');
+    var answerText = byId('gfRefAnswerText');
+    var engineAnswer = byId('reponse');
+    var listening = byId('gfRefListening');
+
+    if (visual && engine) {
+      visual.addEventListener('input', function(){ engine.value = visual.value; });
+      visual.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendVisualQuestion();
+        }
+      });
+    }
+
+    if (send) send.addEventListener('click', sendVisualQuestion);
+
+    if (mic && engineMic) {
+      mic.addEventListener('click', function(){ engineMic.click(); });
+    }
+
+    document.querySelectorAll('[data-gf-question]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var q = btn.getAttribute('data-gf-question') || '';
+        if (visual) visual.value = q;
+        if (engine) engine.value = q;
+        sendVisualQuestion();
+      });
+    });
+
+    var close = byId('gfRefAnswerClose');
+    if (close && answerBox) close.addEventListener('click', function(){
+      answerBox.classList.remove('show');
+    });
+
+    if (engineAnswer && answerText && answerBox) {
+      var updateAnswer = function(){
+        var txt = (engineAnswer.textContent || '').trim();
+        if (!txt) return;
+        var low = txt.toLowerCase();
+        var placeholders = [
+          'la réponse de guestflow apparaîtra ici.',
+          'guestflow prépare votre réponse…',
+          'guestflow prépare votre réponse...'
+        ];
+        answerText.textContent = txt;
+        if (!placeholders.includes(low)) answerBox.classList.add('show');
+      };
+      new MutationObserver(updateAnswer).observe(engineAnswer, {
+        subtree:true, childList:true, characterData:true
+      });
+    }
+
+    if (engineMic && listening) {
+      var updateMic = function(){
+        var active = engineMic.classList.contains('listening') ||
+                     engineMic.classList.contains('active') ||
+                     engineMic.getAttribute('aria-pressed') === 'true';
+        listening.classList.toggle('show', active);
+      };
+      new MutationObserver(updateMic).observe(engineMic, {
+        attributes:true, attributeFilter:['class','aria-pressed']
+      });
+    }
+
+    var hist = document.querySelector('.gf-ref-nav-history');
+    if (hist) hist.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'L’historique sera ajouté dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+    var settings = document.querySelector('.gf-ref-nav-settings');
+    if (settings) settings.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'Les paramètres seront ajoutés dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReferenceInterface);
+  } else {
+    initReferenceInterface();
+  }
+})();
 </script>
 
 </body>
