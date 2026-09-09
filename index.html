@@ -2240,7 +2240,21 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <link rel="manifest" id="guestflowManifest" href="./manifest-cacouech.json">
+  <script>
+    // Guestflow — le manifest PWA doit être choisi AVANT que Chrome prépare l’installation.
+    (function(){
+      var p = new URLSearchParams(window.location.search);
+      var lang = String(p.get('lang') || 'fr').toLowerCase();
+      var manifests = {
+        fr: './manifest-cacouech.json',
+        en: './manifest-cacouech-en.json',
+        es: './manifest-cacouech-es.json',
+        de: './manifest-cacouech-de.json'
+      };
+      if (!manifests[lang]) lang = 'fr';
+      document.write('<link rel="manifest" id="guestflowManifest" href="' + manifests[lang] + '">');
+    })();
+  </script>
   <link rel="apple-touch-icon" href="./icône-192.png">
 
 
@@ -4237,7 +4251,21 @@
 
     document.querySelectorAll('[data-landing-lang]').forEach(function(btn){
       btn.addEventListener('click', function(){
-        const lang = appliquerLangueInstallationGuestflow_(String(btn.dataset.landingLang || 'fr'));
+        const lang = String(btn.dataset.landingLang || 'fr').toLowerCase();
+        appliquerLangueInstallationGuestflow_(lang);
+
+        // IMPORTANT PWA : Chrome lit le manifest au chargement de la page.
+        // Si la langue change, on recharge donc la même URL avec ?lang=xx
+        // AVANT que l’utilisateur appuie sur « Installer Guestflow ».
+        const url = new URL(window.location.href);
+        const actuelle = String(url.searchParams.get('lang') || 'fr').toLowerCase();
+        if (actuelle !== lang) {
+          url.searchParams.set('lang', lang);
+          url.searchParams.delete('mode');
+          window.location.replace(url.toString());
+          return;
+        }
+
         const messages = {
           fr: 'Version française sélectionnée.',
           en: 'English version selected.',
