@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.15 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.15 — installation PWA */
+    /* V23.15.11 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1911,11 +1911,6 @@
   <meta name="apple-mobile-web-app-title" content="Guestflow">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
-
-
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
 
 </head>
 
@@ -1989,7 +1984,7 @@
               </svg>
             </div>
             <div>
-              <h2 id="conciergeTitle">TEST 231515 — Votre concierge</h2>
+              <h2 id="conciergeTitle">Votre concierge</h2>
               <div class="online" id="onlineNow">En ligne maintenant</div>
             </div>
 
@@ -2115,7 +2110,7 @@
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
         installApp: 'Ajouter Guestflow à mon téléphone',
         iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
-        conciergeTitle: 'TEST 231515 — Votre concierge',
+        conciergeTitle: 'Votre concierge',
         onlineNow: 'En ligne maintenant',
         answerPlaceholder: 'La réponse de Guestflow apparaîtra ici.',
         justNow: 'À l’instant'
@@ -2140,7 +2135,7 @@
         micUnsupported: 'Voice dictation is not available in this browser.',
         installApp: 'Add Guestflow to my phone',
         iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
-        conciergeTitle: 'TEST 231515 — Your concierge',
+        conciergeTitle: 'Your concierge',
         onlineNow: 'Online now',
         answerPlaceholder: 'Guestflow’s answer will appear here.',
         justNow: 'Just now'
@@ -2165,7 +2160,7 @@
         micUnsupported: 'El dictado por voz no está disponible en este navegador.',
         installApp: 'Añadir Guestflow a mi teléfono',
         iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
-        conciergeTitle: 'TEST 231515 — Tu conserje',
+        conciergeTitle: 'Tu conserje',
         onlineNow: 'En línea ahora',
         answerPlaceholder: 'La respuesta de Guestflow aparecerá aquí.',
         justNow: 'Ahora mismo'
@@ -2190,7 +2185,7 @@
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
         installApp: 'Guestflow zu meinem Telefon hinzufügen',
         iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
-        conciergeTitle: 'TEST 231515 — Ihr Concierge',
+        conciergeTitle: 'Ihr Concierge',
         onlineNow: 'Jetzt online',
         answerPlaceholder: 'Die Antwort von Guestflow erscheint hier.',
         justNow: 'Gerade eben'
@@ -3104,7 +3099,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.15 — PWA Android / iPhone
+    // GUESTFLOW V23.15.11 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3174,7 +3169,7 @@
       });
     }
 
-    // V23.15.15 — langue fiable + mémorisée dans la PWA.
+    // V23.15.11 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3211,61 +3206,13 @@
       initialiserLanguesGuestflow_();
     }
 
-    // =========================================================
-    // V23.15.15 — MODE DÉVELOPPEMENT : AUCUN CACHE D'INTERFACE
-    // =========================================================
-    async function preparerPwaGuestflowSansCache_() {
-      if (!('serviceWorker' in navigator)) return;
-
-      try {
-        // Supprime tout ancien Cache Storage Guestflow.
-        if ('caches' in window) {
-          const nomsCaches = await caches.keys();
-          await Promise.all(nomsCaches.map(nom => caches.delete(nom)));
-        }
-
-        // Le paramètre de version force le navigateur à demander le SW courant.
-        const registration = await navigator.serviceWorker.register(
-          './service-worker.js?v=23.15.12',
-          {
-            scope: './',
-            updateViaCache: 'none'
-          }
-        );
-
-        try { await registration.update(); } catch (e) {}
-
-        if (registration.waiting) {
-          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-        }
-
-        registration.addEventListener('updatefound', function() {
-          const worker = registration.installing;
-          if (!worker) return;
-
-          worker.addEventListener('statechange', function() {
-            if (
-              worker.state === 'installed' &&
-              navigator.serviceWorker.controller
-            ) {
-              worker.postMessage({ type: 'SKIP_WAITING' });
-            }
-          });
-        });
-      } catch (e) {
-        console.warn('Préparation PWA Guestflow impossible :', e);
-      }
-    }
-
-    let guestflowReloadApresNouveauSw = false;
+    // Enregistre le service worker.
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', function() {
-        if (guestflowReloadApresNouveauSw) return;
-        guestflowReloadApresNouveauSw = true;
-        window.location.reload();
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
+          console.warn('Service worker Guestflow non enregistré :', err);
+        });
       });
-
-      window.addEventListener('load', preparerPwaGuestflowSansCache_);
     }
 
     majInstallationGuestflow_();
@@ -3273,7 +3220,7 @@
 
 
     // =========================================================
-    // V23.15.15 — MISE À JOUR AUTOMATIQUE
+    // V23.15.11 — MISE À JOUR AUTOMATIQUE
     // =========================================================
     async function verifierVersionGuestflow_() {
       try {
