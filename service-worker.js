@@ -1,4 +1,4 @@
-const CACHE_NAME = 'guestflow-v23-15-8-static-v1';
+const CACHE_NAME = 'guestflow-v23-15-11-static-v1';
 
 const STATIC_ASSETS = [
   './manifest.json',
