@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.8 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.10 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.8 — installation PWA */
+    /* V23.15.10 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1984,7 +1984,7 @@
               </svg>
             </div>
             <div>
-              <h2 id="conciergeTitle">Votre concierge Guestflow — V23.15.8</h2>
+              <h2 id="conciergeTitle">Votre concierge Guestflow</h2>
               <div class="online" id="onlineNow">En ligne maintenant</div>
             </div>
 
@@ -2054,7 +2054,7 @@
 
               <div class="response-bubble">
                 <h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
-                <div id="reponse">La réponse du concierge apparaîtra ici.</div>
+                <div id="reponse">La réponse de Guestflow apparaîtra ici.</div>
               </div>
             </div>
           </div>
@@ -2071,7 +2071,7 @@
   </main>
 
   <script>
-    const GUESTFLOW_APP_VERSION = '23.15.8';
+    const GUESTFLOW_APP_VERSION = '23.15.10';
 
     let langueSelectionnee = 'fr';
     let voixActive = true;
@@ -2112,9 +2112,9 @@
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
         installApp: 'Ajouter Guestflow à mon téléphone',
         iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
-        conciergeTitle: 'Votre concierge Guestflow — V23.15.8',
+        conciergeTitle: 'Votre concierge Guestflow',
         onlineNow: 'En ligne maintenant',
-        answerPlaceholder: 'La réponse du concierge apparaîtra ici.',
+        answerPlaceholder: 'La réponse de Guestflow apparaîtra ici.',
         justNow: 'À l’instant'
 
       },
@@ -2137,9 +2137,9 @@
         micUnsupported: 'Voice dictation is not available in this browser.',
         installApp: 'Add Guestflow to my phone',
         iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
-        conciergeTitle: 'Your Guestflow concierge — V23.15.8',
+        conciergeTitle: 'Your Guestflow concierge',
         onlineNow: 'Online now',
-        answerPlaceholder: 'The concierge’s answer will appear here.',
+        answerPlaceholder: 'Guestflow’s answer will appear here.',
         justNow: 'Just now'
 
       },
@@ -2162,9 +2162,9 @@
         micUnsupported: 'El dictado por voz no está disponible en este navegador.',
         installApp: 'Añadir Guestflow a mi teléfono',
         iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
-        conciergeTitle: 'Tu conserje Guestflow — V23.15.8',
+        conciergeTitle: 'Tu conserje Guestflow',
         onlineNow: 'En línea ahora',
-        answerPlaceholder: 'La respuesta del conserje aparecerá aquí.',
+        answerPlaceholder: 'La respuesta de Guestflow aparecerá aquí.',
         justNow: 'Ahora mismo'
 
       },
@@ -2187,9 +2187,9 @@
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
         installApp: 'Guestflow zu meinem Telefon hinzufügen',
         iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
-        conciergeTitle: 'Ihr Guestflow-Concierge — V23.15.8',
+        conciergeTitle: 'Ihr Guestflow-Concierge',
         onlineNow: 'Jetzt online',
-        answerPlaceholder: 'Die Antwort des Concierges erscheint hier.',
+        answerPlaceholder: 'Die Antwort von Guestflow erscheint hier.',
         justNow: 'Gerade eben'
 
       }
@@ -2235,6 +2235,13 @@
         const texteActuel = String(reponsePlaceholder.textContent || '').trim();
         const textesVides = [
           'La réponse du concierge apparaîtra ici.',
+          'La réponse de Guestflow apparaîtra ici.',
+          'The concierge’s answer will appear here.',
+          'Guestflow’s answer will appear here.',
+          'La respuesta del conserje aparecerá aquí.',
+          'La respuesta de Guestflow aparecerá aquí.',
+          'Die Antwort des Concierges erscheint hier.',
+          'Die Antwort von Guestflow erscheint hier.',
           traductionsInterface.fr.answerPlaceholder,
           traductionsInterface.en.answerPlaceholder,
           traductionsInterface.es.answerPlaceholder,
@@ -3101,7 +3108,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.8 — PWA Android / iPhone
+    // GUESTFLOW V23.15.10 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3171,7 +3178,7 @@
       });
     }
 
-    // V23.15.8 — langue fiable + mémorisée dans la PWA.
+    // V23.15.10 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3209,7 +3216,7 @@
     }
 
     // =========================================================
-    // V23.15.8 — MISE À JOUR AUTOMATIQUE DE LA PWA
+    // V23.15.10 — MISE À JOUR AUTOMATIQUE DE LA PWA
     // =========================================================
     if ('serviceWorker' in navigator) {
       let rechargementApresMaj = false;
@@ -3263,7 +3270,7 @@
 
 
     // =========================================================
-    // V23.15.8 — CONTRÔLE DE VERSION SANS CACHE
+    // V23.15.10 — CONTRÔLE DE VERSION SANS CACHE
     // Vérifie version.json à chaque ouverture / retour depuis le cache.
     // =========================================================
     async function verifierVersionGuestflow_() {
