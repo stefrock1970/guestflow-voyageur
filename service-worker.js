@@ -1,4 +1,4 @@
-// Guestflow V23.15.12 — Service Worker réseau uniquement.
+// Guestflow V23.15.13 — Service Worker réseau uniquement.
 // Objectif : conserver l'installation PWA sans conserver une ancienne interface.
 
 self.addEventListener('install', event => {
