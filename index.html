@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Guestflow — INDEX 408000 | installation native prioritaire Android/Chrome | 2026-09-09 -->
+<!-- Guestflow — V4 FIX QUESTIONS + STOP VOIX | INDEX 408000 | installation native prioritaire Android/Chrome | 2026-09-09 -->
 <html lang="fr">
 <head>
   <base target="_top">
@@ -2360,6 +2360,19 @@
       font:600 20px/1.1 Georgia,"Times New Roman",serif;
       color:#254128;
     }
+    .gf-ref-answer-stop{
+      border:0;
+      border-radius:999px;
+      padding:8px 12px;
+      background:#274b25;
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      margin-left:auto;
+      margin-right:8px;
+    }
+    .gf-ref-answer-stop:active{transform:scale(.97)}
+
     .gf-ref-answer-close{
       width:36px;height:36px;border:0;border-radius:50%;
       background:#eef1e9;color:#40543d;font-size:22px;cursor:pointer;
@@ -2476,6 +2489,7 @@
   <aside class="gf-ref-answer" id="gfRefAnswer" aria-live="polite">
     <div class="gf-ref-answer-head">
       <strong>Guestflow</strong>
+      <button class="gf-ref-answer-stop" id="gfRefAnswerStop" type="button" aria-label="Arrêter la réponse vocale">■ Stop</button>
       <button class="gf-ref-answer-close" id="gfRefAnswerClose" type="button" aria-label="Fermer">×</button>
     </div>
     <div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
@@ -3054,6 +3068,19 @@
 
       reconnaissanceVocale.onstart = function() {
         questionVocaleAEnvoyer = false;
+
+        // V23.16 : une nouvelle question vocale doit toujours repartir proprement.
+        // On efface l'ancienne question (raccourci ou saisie précédente) dans
+        // le champ moteur ET dans le champ visuel de la maquette.
+        const champ = document.getElementById('question');
+        if (champ) champ.value = '';
+
+        const champVisuel = document.getElementById('gfRefQuestion');
+        if (champVisuel) {
+          champVisuel.value = '';
+          champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
         mettreEtatMicro(true);
       };
 
@@ -3074,13 +3101,20 @@
 
         if (texte) {
           const champ = document.getElementById('question');
-          const existant = champ.value.trim();
 
-          champ.value = existant
-            ? existant + (/[.!?]$/.test(existant) ? ' ' : '. ') + texte
-            : texte;
+          // V23.16 : la dictée courante remplace l'ancienne question.
+          // Cela évite qu'un raccourci précédent reste affiché ou soit concaténé.
+          champ.value = texte;
 
-          champ.focus();
+          const champVisuel = document.getElementById('gfRefQuestion');
+          if (champVisuel) {
+            champVisuel.value = texte;
+            champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
+            // Force le rafraîchissement visuel sur Android/PWA avant l'envoi.
+            requestAnimationFrame(function(){
+              try { resizeVisualQuestion(); } catch (e) {}
+            });
+          }
 
           // On mémorise qu'une vraie question vocale a été reconnue.
           // L'envoi sera déclenché dans onend, c'est-à-dire une fois
@@ -3172,6 +3206,12 @@
         : '<path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/><path d="m17 10 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';
     }
 
+    function arreterReponseVocale() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
     function basculerVoix() {
       voixActive = !voixActive;
       if (!voixActive && 'speechSynthesis' in window) {
@@ -3185,6 +3225,12 @@
       const champ = document.getElementById('question');
       if (champ) {
         champ.value = '';
+      }
+
+      const champVisuel = document.getElementById('gfRefQuestion');
+      if (champVisuel) {
+        champVisuel.value = '';
+        champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
       }
     }
 
@@ -4096,8 +4142,18 @@
       });
     });
 
+    var stop = byId('gfRefAnswerStop');
+    if (stop) stop.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+    });
+
     var close = byId('gfRefAnswerClose');
     if (close && answerBox) close.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
       answerBox.classList.remove('show');
     });
 
