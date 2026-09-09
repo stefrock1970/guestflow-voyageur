@@ -2297,21 +2297,22 @@
       top:61.0%;
       width:68.5%;
       height:4.9%;
-      min-height:0 !important;
-      max-height:4.9%;
+      min-height:4.9% !important;
+      max-height:10.5%;
       box-sizing:border-box;
       border:0;
       outline:0;
       resize:none;
-      padding:.45% 1.4%;
+      padding:.55% 1.5%;
       text-indent:0;
-      background:rgba(255,255,255,.72);
+      background:rgba(255,255,255,.96);
       color:#34443d;
-      font:500 clamp(12px,2.8vw,17px)/1.12 Inter,Arial,sans-serif;
-      border-radius:999px;
-      box-shadow:none;
-      overflow-y:auto;
+      font:500 clamp(12px,2.8vw,17px)/1.18 Inter,Arial,sans-serif;
+      border-radius:22px;
+      box-shadow:0 4px 14px rgba(52,68,54,.08);
+      overflow-y:hidden;
       overflow-x:hidden;
+      transform-origin:left bottom;
     }
     .gf-ref-input::placeholder{color:#7f8ca5;opacity:.9}
     .gf-ref-send{
@@ -4021,6 +4022,28 @@
 (function(){
   function byId(id){ return document.getElementById(id); }
 
+  function resizeVisualQuestion(){
+    var visual = byId('gfRefQuestion');
+    var wrap = document.querySelector('.gf-reference-wrap');
+    if (!visual || !wrap) return;
+
+    // Le cadre d'origine fait 4,9 % de la hauteur de la maquette.
+    // On garde son bord inférieur fixe et on l'agrandit vers le haut
+    // afin qu'une question sur 2 ou 3 lignes ne recouvre jamais
+    // la zone « Accès rapides ».
+    var base = wrap.clientHeight * 0.049;
+    var maxH = wrap.clientHeight * 0.105;
+
+    visual.style.height = base + 'px';
+    visual.style.transform = 'translateY(0)';
+
+    var wanted = Math.max(base, Math.min(maxH, visual.scrollHeight));
+    var delta = wanted - base;
+
+    visual.style.height = wanted + 'px';
+    visual.style.transform = 'translateY(-' + delta + 'px)';
+  }
+
   function syncToEngine(){
     var visual = byId('gfRefQuestion');
     var engine = byId('question');
@@ -4045,7 +4068,10 @@
     var listening = byId('gfRefListening');
 
     if (visual && engine) {
-      visual.addEventListener('input', function(){ engine.value = visual.value; });
+      visual.addEventListener('input', function(){
+        engine.value = visual.value;
+        resizeVisualQuestion();
+      });
       visual.addEventListener('keydown', function(e){
         if (e.key === 'Enter' && !e.shiftKey) {
           e.preventDefault();
@@ -4065,6 +4091,7 @@
         var q = btn.getAttribute('data-gf-question') || '';
         if (visual) visual.value = q;
         if (engine) engine.value = q;
+        resizeVisualQuestion();
         sendVisualQuestion();
       });
     });
@@ -4103,6 +4130,9 @@
         attributes:true, attributeFilter:['class','aria-pressed']
       });
     }
+
+    resizeVisualQuestion();
+    window.addEventListener('resize', resizeVisualQuestion);
 
     var hist = document.querySelector('.gf-ref-nav-history');
     if (hist) hist.addEventListener('click', function(){
