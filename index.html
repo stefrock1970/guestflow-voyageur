@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Guestflow — accueil installation FR + concierge sécurisé | QR LANDING FIX 2026-09-09 -->
+<!-- Guestflow — INDEX 408000 | installation native prioritaire Android/Chrome | 2026-09-09 -->
 <html lang="fr">
 <head>
   <base target="_top">
@@ -2038,7 +2038,35 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Guestflow">
   <link rel="manifest" href="./manifest-cacouech.json">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./icône-192.png">
+
+
+  <!-- GUESTFLOW 408000 — capture PWA très précoce -->
+  <script>
+    window.guestflowDeferredInstallPrompt = window.guestflowDeferredInstallPrompt || null;
+
+    window.addEventListener('beforeinstallprompt', function(event) {
+      event.preventDefault();
+      window.guestflowDeferredInstallPrompt = event;
+      try {
+        window.dispatchEvent(new Event('guestflow-install-ready'));
+      } catch (e) {}
+    });
+
+    window.addEventListener('appinstalled', function() {
+      window.guestflowDeferredInstallPrompt = null;
+      try {
+        window.dispatchEvent(new Event('guestflow-install-done'));
+      } catch (e) {}
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js', {
+        scope: './',
+        updateViaCache: 'none'
+      }).catch(function(){});
+    }
+  </script>
 
 </head>
 
@@ -2061,7 +2089,7 @@
       <button class="guestflow-hotspot hot-en" type="button" data-landing-lang="en" aria-label="English">EN</button>
       <button class="guestflow-hotspot hot-es" type="button" data-landing-lang="es" aria-label="Español">ES</button>
       <button class="guestflow-hotspot hot-de" type="button" data-landing-lang="de" aria-label="Deutsch">DE</button>
-      <a class="guestflow-hotspot hot-install" id="landingInstallBtn" href="#guestflowInstallHelp" aria-label="Installer Guestflow">Installer Guestflow</a>
+      <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
     </div>
   </section>
 
@@ -3291,7 +3319,7 @@
     // =========================================================
     // GUESTFLOW V23.15.11 — PWA Android / iPhone
     // =========================================================
-    let guestflowDeferredInstallPrompt = null;
+    /* Le prompt est capturé très tôt dans <head>. */
 
     function estIOSGuestflow_() {
       return /iphone|ipad|ipod/i.test(navigator.userAgent || '');
@@ -3317,7 +3345,7 @@
         traductionsInterface[langueSelectionnee] ||
         traductionsInterface.fr;
 
-      if (guestflowDeferredInstallPrompt) {
+      if (window.guestflowDeferredInstallPrompt) {
         wrap.style.display = 'block';
         btn.style.display = 'block';
         btn.textContent = t.installApp;
@@ -3335,26 +3363,23 @@
       wrap.style.display = 'none';
     }
 
-    window.addEventListener('beforeinstallprompt', function(event) {
-      event.preventDefault();
-      guestflowDeferredInstallPrompt = event;
+    window.addEventListener('guestflow-install-ready', function() {
       majInstallationGuestflow_();
     });
 
-    window.addEventListener('appinstalled', function() {
-      guestflowDeferredInstallPrompt = null;
+    window.addEventListener('guestflow-install-done', function() {
       majInstallationGuestflow_();
     });
 
     const pwaInstallBtn = document.getElementById('pwaInstallBtn');
     if (pwaInstallBtn) {
       pwaInstallBtn.addEventListener('click', async function() {
-        if (!guestflowDeferredInstallPrompt) return;
-        guestflowDeferredInstallPrompt.prompt();
+        if (!window.guestflowDeferredInstallPrompt) return;
+        window.guestflowDeferredInstallPrompt.prompt();
         try {
-          await guestflowDeferredInstallPrompt.userChoice;
+          await window.guestflowDeferredInstallPrompt.userChoice;
         } catch (e) {}
-        guestflowDeferredInstallPrompt = null;
+        window.guestflowDeferredInstallPrompt = null;
         majInstallationGuestflow_();
       });
     }
@@ -3433,11 +3458,17 @@
         langueSelectionnee = 'fr';
         try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
 
-        // Le href="#guestflowInstallHelp" assure déjà une aide visible,
-        // même si tout JavaScript échoue. Ici on ajoute seulement le prompt natif.
-        if (guestflowDeferredInstallPrompt) {
-          const promptEvent = guestflowDeferredInstallPrompt;
-          guestflowDeferredInstallPrompt = null;
+        if (estStandaloneGuestflow_()) {
+          toastAccueilGuestflow_('Guestflow est déjà installé.');
+          return;
+        }
+
+        const promptEvent = window.guestflowDeferredInstallPrompt;
+
+        // CAS NORMAL ANDROID / CHROME :
+        // un clic sur le bouton ouvre directement la boîte native d'installation.
+        if (promptEvent) {
+          window.guestflowDeferredInstallPrompt = null;
 
           try {
             await promptEvent.prompt();
@@ -3445,13 +3476,69 @@
 
             if (choix && choix.outcome === 'accepted') {
               fermerAideInstallationGuestflow_();
+              toastAccueilGuestflow_('Installation de Guestflow lancée.');
+            } else {
+              // Si l'utilisateur annule, on ne le force pas vers un menu navigateur.
+              toastAccueilGuestflow_('Installation annulée.');
             }
           } catch (e) {
-            // Le modal CSS :target reste affiché : aucun clic silencieux possible.
+            ouvrirAideInstallationGuestflow_(
+              'Chrome n’a pas pu ouvrir la fenêtre d’installation automatiquement.'
+            );
           }
 
           majInstallationGuestflow_();
+          return;
         }
+
+        // iPhone : iOS ne fournit pas beforeinstallprompt.
+        if (estIOSGuestflow_()) {
+          ouvrirAideInstallationGuestflow_();
+          return;
+        }
+
+        // Android : le navigateur n'a pas encore déclaré la PWA installable.
+        // On ne renvoie PAS immédiatement vers le menu ⋮.
+        // On tente d'abord de laisser quelques instants au SW/manifest de devenir prêts.
+        toastAccueilGuestflow_('Préparation de l’installation…');
+
+        const debut = Date.now();
+        const limite = 2500;
+
+        const attendrePrompt = function() {
+          if (window.guestflowDeferredInstallPrompt) {
+            const evt = window.guestflowDeferredInstallPrompt;
+            window.guestflowDeferredInstallPrompt = null;
+
+            evt.prompt().then(function() {
+              return evt.userChoice;
+            }).then(function(choix) {
+              if (choix && choix.outcome === 'accepted') {
+                fermerAideInstallationGuestflow_();
+                toastAccueilGuestflow_('Installation de Guestflow lancée.');
+              } else {
+                toastAccueilGuestflow_('Installation annulée.');
+              }
+              majInstallationGuestflow_();
+            }).catch(function() {
+              ouvrirAideInstallationGuestflow_(
+                'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+              );
+            });
+            return;
+          }
+
+          if (Date.now() - debut < limite) {
+            setTimeout(attendrePrompt, 150);
+            return;
+          }
+
+          ouvrirAideInstallationGuestflow_(
+            'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+          );
+        };
+
+        attendrePrompt();
       });
     }
 
