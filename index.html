@@ -1952,7 +1952,7 @@
 
   <script>
   // =========================================================
-  // GUESTFLOW — MANIFEST AUTOMATIQUE PAR GÎTE — GF-G
+  // GUESTFLOW — MANIFEST AUTOMATIQUE PAR GÎTE — GF-H
   // Le QR fournit gîte + token.
   // Le manifest est généré par Apps Script et reçoit une URL
   // différente pour chaque gîte afin d'éviter les mélanges/cache.
@@ -1971,11 +1971,13 @@
         manifestUrl.searchParams.set('api', 'manifest');
         manifestUrl.searchParams.set('gite', gite);
         manifestUrl.searchParams.set('token', token);
+        const lang = String(u.searchParams.get('lang') || localStorage.getItem('guestflow_langue') || 'fr').toLowerCase();
+        manifestUrl.searchParams.set('lang', ['fr','en','es','de'].includes(lang) ? lang : 'fr');
 
         // Version du mécanisme de manifest.
         // Si un jour on doit forcer Chrome à oublier un ancien manifest,
         // il suffira d'incrémenter cette valeur.
-        manifestUrl.searchParams.set('mv', '1');
+        manifestUrl.searchParams.set('mv', '2');
 
         link.href = manifestUrl.toString();
       }
@@ -1985,39 +1987,203 @@
   })();
   </script>
 
+
+<style>
+/* =========================================================
+   GUESTFLOW GF-H — ÉCRAN INSTALLATION + INTERFACE VOYAGEUR
+   ========================================================= */
+:root{
+  --gf-olive:#596d3f;
+  --gf-olive-dark:#34452c;
+  --gf-cream:#fbf8ef;
+  --gf-paper:#fffdf8;
+  --gf-line:#ded8ca;
+  --gf-soft:#eef2e8;
+  --gf-text:#203027;
+}
+.gf-install-screen{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 80% 8%, rgba(167,184,131,.34), transparent 28%),
+    linear-gradient(180deg,#fffdf7 0%,#f5efe2 100%);
+  color:var(--gf-text);
+  padding:18px 14px 32px;
+}
+.gf-install-shell{
+  width:min(100%,560px);
+  margin:0 auto;
+  background:rgba(255,253,248,.96);
+  border:1px solid rgba(89,109,63,.14);
+  border-radius:28px;
+  padding:22px 18px 24px;
+  box-shadow:0 18px 55px rgba(55,60,43,.12);
+}
+.gf-install-brand{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.gf-install-leaf{font-size:42px;color:var(--gf-olive);line-height:1}
+.gf-install-logo{font-family:Georgia,serif;font-size:36px;font-weight:700;color:#1d3128;line-height:1}
+.gf-install-gite{font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--gf-olive);margin-top:4px}
+.gf-install-lang-title{font-size:13px;font-weight:700;color:#697064;margin:10px 0 7px}
+.gf-install-langs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:18px}
+.gf-install-lang{
+  border:1px solid #e3dfd4;background:#fff;border-radius:999px;padding:10px 7px;
+  font-size:13px;font-weight:700;color:#4c5548
+}
+.gf-install-lang.active{background:var(--gf-olive);color:white;border-color:var(--gf-olive)}
+.gf-install-hero{
+  border-radius:24px;padding:24px 22px;margin:4px 0 18px;position:relative;overflow:hidden;
+  background:
+    linear-gradient(135deg,rgba(255,255,255,.92),rgba(239,236,219,.78)),
+    radial-gradient(circle at 90% 10%,rgba(93,116,67,.22),transparent 35%);
+}
+.gf-install-hero:after{
+  content:"";position:absolute;right:-38px;bottom:-55px;width:170px;height:170px;
+  border:2px solid rgba(89,109,63,.10);border-radius:50%;
+}
+.gf-install-kicker{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:800;color:var(--gf-olive)}
+.gf-install-hero h1{font-family:Georgia,serif;font-size:34px;line-height:1.05;margin:8px 0 12px;color:#183027}
+.gf-install-hero p{font-size:16px;line-height:1.48;margin:0;color:#4d574e}
+.gf-install-script{font-family:Georgia,serif;font-style:italic;color:var(--gf-olive);font-size:19px;margin-top:18px}
+.gf-install-steps{display:grid;gap:10px}
+.gf-install-step{
+  display:grid;grid-template-columns:36px 36px 1fr;align-items:center;gap:10px;
+  padding:14px;border:1px solid #ebe6da;border-radius:17px;background:white
+}
+.gf-step-num{
+  width:34px;height:34px;border-radius:50%;background:var(--gf-olive);color:#fff;
+  display:grid;place-items:center;font-weight:800
+}
+.gf-step-icon{font-size:24px;color:var(--gf-olive-dark);text-align:center}
+.gf-install-step strong{font-size:15px;line-height:1.25}
+.gf-install-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:14px 0}
+.gf-install-benefits span{
+  background:#f5f3eb;border-radius:14px;padding:10px 6px;text-align:center;font-size:12px;font-weight:700;color:#596252
+}
+.gf-install-main-btn{
+  width:100%;border:0;border-radius:18px;padding:16px 18px;background:var(--gf-olive);
+  color:#fff;font-family:Georgia,serif;font-size:22px;font-weight:700;display:flex;justify-content:center;gap:12px;
+  box-shadow:0 8px 20px rgba(58,78,42,.22)
+}
+.gf-install-main-btn:disabled{opacity:.6}
+.gf-install-hint{font-size:13px;line-height:1.4;color:#5e665d;text-align:center;margin-top:10px}
+.gf-install-footer{text-align:right;font-family:Georgia,serif;font-style:italic;color:var(--gf-olive);font-size:17px;margin-top:18px}
+
+/* App : plus premium, plus vocale, moins "traducteur" */
+body.gf-standalone .language-row{display:none!important}
+body.gf-standalone #pwaInstallWrap{display:none!important}
+body.gf-standalone #guestflowApp{
+  max-width:680px;margin:0 auto;padding:10px 10px 26px
+}
+body.gf-standalone .topbar{
+  border-radius:24px 24px 0 0;background:rgba(255,253,247,.97);
+  border-bottom:1px solid #e6dfd2
+}
+body.gf-standalone .brand{font-family:Georgia,serif;font-size:36px}
+body.gf-standalone .gite-name{letter-spacing:.15em;text-transform:uppercase;color:var(--gf-olive);font-size:13px}
+body.gf-standalone .intro{display:none}
+body.gf-standalone .concierge{
+  border-radius:0 0 26px 26px;background:rgba(255,253,248,.98)
+}
+.gf-voice-premium{
+  display:flex;gap:12px;align-items:center;background:linear-gradient(90deg,#eef3e8,#f8f5eb);
+  border:1px solid #e1e5d8;border-radius:16px;padding:12px 14px;margin:10px 0 14px;color:#35462f
+}
+.gf-voice-premium strong{display:block;font-size:14px}
+.gf-voice-premium span:not(.gf-voice-bars){display:block;font-size:12px;color:#667064;margin-top:2px}
+.gf-voice-bars{font-size:20px;letter-spacing:2px;color:var(--gf-olive)}
+.gf-quick-wrap{margin:4px 0 16px}
+.gf-quick-heading{text-align:center;margin:5px 0 10px}
+.gf-quick-heading strong{display:block;font-family:Georgia,serif;font-size:21px;color:#27382d}
+.gf-quick-heading span{font-size:12px;color:#7a7f76}
+.gf-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.gf-quick-card{
+  min-height:112px;border:1px solid #ece7dc;border-radius:16px;background:white;padding:12px 8px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:#253326
+}
+.gf-quick-card strong{font-size:13px;line-height:1.1;text-align:center}
+.gf-quick-card small{font-size:10px;line-height:1.15;color:#7a7d76;text-align:center}
+.gf-quick-icon{font-size:27px;color:var(--gf-olive)}
+.gf-quick-emergency .gf-quick-icon{color:#b74136}
+.gf-any-question{font-size:12px;color:#687066;background:#f8f6f0;border-radius:14px;padding:10px 12px;margin-top:9px;text-align:center}
+@media(max-width:430px){
+  .gf-install-shell{padding:18px 13px 20px;border-radius:22px}
+  .gf-install-logo{font-size:31px}
+  .gf-install-hero h1{font-size:29px}
+  .gf-install-langs{gap:5px}
+  .gf-install-lang{font-size:12px;padding:9px 4px}
+  .gf-quick-grid{grid-template-columns:repeat(2,1fr)}
+  .gf-quick-card{min-height:95px}
+}
+</style>
+
 </head>
 
 <body>
 
-<div id="gf-diagnostic"
-     style="margin:10px auto 12px;max-width:760px;padding:10px 14px;border:1px solid #b9b9a8;border-radius:12px;background:#fffdf6;font:600 14px/1.45 Arial,sans-serif;color:#39422e;">
-  <div>DIAGNOSTIC PWA — <span id="gf-diag-build">GF-G</span></div>
-  <div>Gîte détecté : <span id="gf-diag-gite">...</span></div>
-  <div>Token détecté : <span id="gf-diag-token">...</span></div>
-</div>
 
-<script>
-(function afficherDiagnosticPwa_() {
-  try {
-    const u = new URL(window.location.href);
-    const gite = u.searchParams.get('gite') || u.searchParams.get('id') || '';
-    const tokenPresent = !!u.searchParams.get('token');
 
-    const g = document.getElementById('gf-diag-gite');
-    const t = document.getElementById('gf-diag-token');
+  
+  <section id="guestflowInstallScreen" class="gf-install-screen" hidden>
+    <div class="gf-install-shell">
+      <div class="gf-install-brand">
+        <div class="gf-install-leaf" aria-hidden="true">❧</div>
+        <div>
+          <div class="gf-install-logo">Guestflow</div>
+          <div id="installGiteName" class="gf-install-gite">Votre hébergement</div>
+        </div>
+      </div>
 
-    if (g) g.textContent = gite ? 'OUI' : 'NON';
-    if (t) t.textContent = tokenPresent ? 'OUI' : 'NON';
-  } catch (e) {
-    const g = document.getElementById('gf-diag-gite');
-    const t = document.getElementById('gf-diag-token');
-    if (g) g.textContent = 'ERREUR';
-    if (t) t.textContent = 'ERREUR';
-  }
-})();
-</script>
+      <div class="gf-install-lang-title" id="installLangTitle">Choisissez votre langue</div>
+      <div class="gf-install-langs" aria-label="Choix de la langue">
+        <button class="lang-btn gf-install-lang active" type="button" data-lang="fr">Français</button>
+        <button class="lang-btn gf-install-lang" type="button" data-lang="en">English</button>
+        <button class="lang-btn gf-install-lang" type="button" data-lang="es">Español</button>
+        <button class="lang-btn gf-install-lang" type="button" data-lang="de">Deutsch</button>
+      </div>
 
-  <main class="page">
+      <div class="gf-install-hero">
+        <div class="gf-install-kicker" id="installKicker">Votre concierge numérique</div>
+        <h1 id="installTitle">Ajoutez Guestflow à votre téléphone</h1>
+        <p id="installIntro">
+          Installez votre concierge en quelques secondes et profitez d’un accompagnement personnalisé pendant votre séjour.
+        </p>
+        <div class="gf-install-script" id="installScript">Votre expérience en toute simplicité</div>
+      </div>
+
+      <div class="gf-install-steps">
+        <div class="gf-install-step">
+          <span class="gf-step-num">1</span>
+          <span class="gf-step-icon">⇩</span>
+          <div><strong id="installStep1">Installez Guestflow</strong></div>
+        </div>
+        <div class="gf-install-step">
+          <span class="gf-step-num">2</span>
+          <span class="gf-step-icon">⌂</span>
+          <div><strong id="installStep2">Ajoutez-le à votre écran d’accueil</strong></div>
+        </div>
+        <div class="gf-install-step">
+          <span class="gf-step-num">3</span>
+          <span class="gf-step-icon">✦</span>
+          <div><strong id="installStep3">Ouvrez Guestflow et posez vos questions</strong></div>
+        </div>
+      </div>
+
+      <div class="gf-install-benefits">
+        <span id="installBenefit1">Sans compte</span>
+        <span id="installBenefit2">Réponse immédiate</span>
+        <span id="installBenefit3">Données sécurisées</span>
+      </div>
+
+      <button id="installScreenBtn" class="gf-install-main-btn" type="button">
+        <span aria-hidden="true">⇩</span>
+        <span id="installButtonText">Installer Guestflow</span>
+      </button>
+      <div id="installScreenHint" class="gf-install-hint"></div>
+
+      <div class="gf-install-footer" id="installFooter">Profitez de chaque instant</div>
+    </div>
+  </section>
+
+  <main class="page" id="guestflowApp">
 
     <header class="topbar">
       <div class="brand-wrap">
@@ -2110,6 +2276,47 @@
 
         <div id="accessMessage" class="status"></div>
 
+
+        <div class="gf-voice-premium">
+          <span class="gf-voice-bars" aria-hidden="true">▮▯▮▯▮</span>
+          <div>
+            <strong id="voicePremiumTitle">Vous pouvez parler naturellement !</strong>
+            <span id="voicePremiumText">Appuyez sur le micro et posez votre question, ou écrivez-la.</span>
+          </div>
+        </div>
+
+        <div class="gf-quick-wrap">
+          <div class="gf-quick-heading">
+            <strong id="quickTitle">Accès rapides</strong>
+            <span id="quickSubtitle">Les informations les plus demandées</span>
+          </div>
+          <div class="gf-quick-grid">
+            <button type="button" class="gf-quick-card" onclick="guestflowQuick('arrival')">
+              <span class="gf-quick-icon">▣</span>
+              <strong id="quickArrival">Arrivée / départ</strong>
+              <small id="quickArrivalSub">Horaires et consignes</small>
+            </button>
+            <button type="button" class="gf-quick-card" onclick="guestflowQuick('wifi')">
+              <span class="gf-quick-icon">⌁</span>
+              <strong>Wi‑Fi</strong>
+              <small id="quickWifiSub">Réseau et accès</small>
+            </button>
+            <button type="button" class="gf-quick-card gf-quick-emergency" onclick="guestflowQuick('emergency')">
+              <span class="gf-quick-icon">✚</span>
+              <strong id="quickEmergency">Urgence</strong>
+              <small id="quickEmergencySub">Contacts utiles</small>
+            </button>
+            <button type="button" class="gf-quick-card" onclick="guestflowQuick('owner')">
+              <span class="gf-quick-icon">☎</span>
+              <strong id="quickOwner">Propriétaire</strong>
+              <small id="quickOwnerSub">Afficher le contact</small>
+            </button>
+          </div>
+          <div class="gf-any-question" id="quickAnyQuestion">
+            Vous pouvez aussi me poser n’importe quelle autre question sur votre séjour.
+          </div>
+        </div>
+
         <div class="field">
           <div class="question-label">
             <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
@@ -2173,7 +2380,7 @@
   </main>
 
   <script>
-  const GUESTFLOW_BUILD = "GF-G";
+  const GUESTFLOW_BUILD = "GF-H";
 
 
 
@@ -2353,7 +2560,36 @@
         }
       }
 
-      const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+  
+    const installScreenBtn = document.getElementById('installScreenBtn');
+    if (installScreenBtn) {
+      installScreenBtn.addEventListener('click', async function() {
+        const hint = document.getElementById('installScreenHint');
+        const t = guestflowInstallTranslations[langueSelectionnee] || guestflowInstallTranslations.fr;
+
+        if (guestflowDeferredInstallPrompt) {
+          guestflowDeferredInstallPrompt.prompt();
+          try { await guestflowDeferredInstallPrompt.userChoice; } catch (e) {}
+          guestflowDeferredInstallPrompt = null;
+          return;
+        }
+
+        if (estIOSGuestflow_()) {
+          if (hint) hint.textContent = t.ios;
+          return;
+        }
+
+        if (hint) {
+          hint.textContent =
+            langueSelectionnee === 'en' ? 'If the install button does not appear, open the browser menu and choose “Add to Home screen”.' :
+            langueSelectionnee === 'es' ? 'Si no aparece la instalación, abre el menú del navegador y elige «Añadir a pantalla de inicio».' :
+            langueSelectionnee === 'de' ? 'Falls die Installation nicht erscheint, öffnen Sie das Browsermenü und wählen Sie „Zum Startbildschirm hinzufügen“.' :
+            'Si l’installation ne se propose pas, ouvrez le menu du navigateur puis choisissez « Ajouter à l’écran d’accueil ».';
+        }
+      });
+    }
+
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
       if (pwaInstallBtn) pwaInstallBtn.textContent = t.installApp;
 
       const pwaInstallHint = document.getElementById('pwaInstallHint');
@@ -2388,6 +2624,19 @@
       try {
         localStorage.setItem('guestflow_langue', langue);
       } catch (e) {}
+
+      try {
+        const u = new URL(window.location.href);
+        u.searchParams.set('lang', langue);
+        history.replaceState(null, '', u.toString());
+      } catch (e) {}
+
+      if (typeof guestflowApplyPremiumTranslations_ === 'function') {
+        guestflowApplyPremiumTranslations_(langue);
+      }
+      if (typeof guestflowUpdateManifestLang_ === 'function') {
+        guestflowUpdateManifestLang_(langue);
+      }
 
       document
         .querySelectorAll('.lang-btn')
@@ -3280,8 +3529,12 @@
       let langueInitiale = 'fr';
 
       try {
+        const langueUrl = String(new URLSearchParams(window.location.search).get('lang') || '').toLowerCase();
         const langueSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase();
-        if (['fr','en','es','de'].includes(langueSauvee)) {
+
+        if (['fr','en','es','de'].includes(langueUrl)) {
+          langueInitiale = langueUrl;
+        } else if (['fr','en','es','de'].includes(langueSauvee)) {
           langueInitiale = langueSauvee;
         } else {
           const langueTelephone = String(
@@ -3380,6 +3633,196 @@
 
 
 
+</script>
+
+
+<script>
+const guestflowInstallTranslations = {
+  fr:{
+    langTitle:"Choisissez votre langue",
+    kicker:"Votre concierge numérique",
+    title:"Ajoutez Guestflow à votre téléphone",
+    intro:"Installez votre concierge en quelques secondes et profitez d’un accompagnement personnalisé pendant votre séjour.",
+    script:"Votre expérience en toute simplicité",
+    step1:"Installez Guestflow",
+    step2:"Ajoutez-le à votre écran d’accueil",
+    step3:"Ouvrez Guestflow et posez vos questions",
+    benefit1:"Sans compte", benefit2:"Réponse immédiate", benefit3:"Données sécurisées",
+    install:"Installer Guestflow",
+    ios:"Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».",
+    footer:"Profitez de chaque instant",
+    voiceTitle:"Vous pouvez parler naturellement !",
+    voiceText:"Appuyez sur le micro et posez votre question, ou écrivez-la.",
+    quickTitle:"Accès rapides", quickSubtitle:"Les informations les plus demandées",
+    arrival:"Arrivée / départ", arrivalSub:"Horaires et consignes", wifiSub:"Réseau et accès",
+    emergency:"Urgence", emergencySub:"Contacts utiles", owner:"Propriétaire", ownerSub:"Afficher le contact",
+    any:"Vous pouvez aussi me poser n’importe quelle autre question sur votre séjour."
+  },
+  en:{
+    langTitle:"Choose your language",
+    kicker:"Your digital concierge",
+    title:"Add Guestflow to your phone",
+    intro:"Install your concierge in seconds and enjoy personalised support throughout your stay.",
+    script:"Your experience, made simple",
+    step1:"Install Guestflow",
+    step2:"Add it to your Home Screen",
+    step3:"Open Guestflow and ask your questions",
+    benefit1:"No account", benefit2:"Instant answers", benefit3:"Secure data",
+    install:"Install Guestflow",
+    ios:"On iPhone: tap Share, then “Add to Home Screen”.",
+    footer:"Enjoy every moment",
+    voiceTitle:"You can speak naturally!",
+    voiceText:"Tap the microphone and ask your question, or type it.",
+    quickTitle:"Quick access", quickSubtitle:"The most requested information",
+    arrival:"Arrival / departure", arrivalSub:"Times and instructions", wifiSub:"Network and access",
+    emergency:"Emergency", emergencySub:"Useful contacts", owner:"Host", ownerSub:"Show contact",
+    any:"You can also ask me any other question about your stay."
+  },
+  es:{
+    langTitle:"Elige tu idioma",
+    kicker:"Tu conserje digital",
+    title:"Añade Guestflow a tu teléfono",
+    intro:"Instala tu conserje en unos segundos y disfruta de asistencia personalizada durante toda tu estancia.",
+    script:"Tu experiencia, con toda sencillez",
+    step1:"Instala Guestflow",
+    step2:"Añádelo a tu pantalla de inicio",
+    step3:"Abre Guestflow y haz tus preguntas",
+    benefit1:"Sin cuenta", benefit2:"Respuesta inmediata", benefit3:"Datos seguros",
+    install:"Instalar Guestflow",
+    ios:"En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».",
+    footer:"Disfruta de cada instante",
+    voiceTitle:"¡Puedes hablar con naturalidad!",
+    voiceText:"Toca el micrófono y haz tu pregunta, o escríbela.",
+    quickTitle:"Accesos rápidos", quickSubtitle:"La información más solicitada",
+    arrival:"Llegada / salida", arrivalSub:"Horarios e instrucciones", wifiSub:"Red y acceso",
+    emergency:"Emergencia", emergencySub:"Contactos útiles", owner:"Anfitrión", ownerSub:"Ver contacto",
+    any:"También puedes hacerme cualquier otra pregunta sobre tu estancia."
+  },
+  de:{
+    langTitle:"Wählen Sie Ihre Sprache",
+    kicker:"Ihr digitaler Concierge",
+    title:"Fügen Sie Guestflow Ihrem Smartphone hinzu",
+    intro:"Installieren Sie Ihren Concierge in wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.",
+    script:"Ihr Aufenthalt, ganz unkompliziert",
+    step1:"Guestflow installieren",
+    step2:"Zum Startbildschirm hinzufügen",
+    step3:"Guestflow öffnen und Fragen stellen",
+    benefit1:"Kein Konto", benefit2:"Sofortige Antwort", benefit3:"Sichere Daten",
+    install:"Guestflow installieren",
+    ios:"Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.",
+    footer:"Genießen Sie jeden Augenblick",
+    voiceTitle:"Sie können ganz natürlich sprechen!",
+    voiceText:"Tippen Sie auf das Mikrofon und stellen Sie Ihre Frage, oder schreiben Sie sie.",
+    quickTitle:"Schnellzugriff", quickSubtitle:"Die meistgefragten Informationen",
+    arrival:"Ankunft / Abreise", arrivalSub:"Zeiten und Hinweise", wifiSub:"Netzwerk und Zugang",
+    emergency:"Notfall", emergencySub:"Wichtige Kontakte", owner:"Gastgeber", ownerSub:"Kontakt anzeigen",
+    any:"Sie können mir auch jede andere Frage zu Ihrem Aufenthalt stellen."
+  }
+};
+
+function gfSetText_(id, value){
+  const el=document.getElementById(id); if(el) el.textContent=value;
+}
+function guestflowApplyPremiumTranslations_(lang){
+  const t=guestflowInstallTranslations[lang]||guestflowInstallTranslations.fr;
+  gfSetText_("installLangTitle",t.langTitle);
+  gfSetText_("installKicker",t.kicker);
+  gfSetText_("installTitle",t.title);
+  gfSetText_("installIntro",t.intro);
+  gfSetText_("installScript",t.script);
+  gfSetText_("installStep1",t.step1);
+  gfSetText_("installStep2",t.step2);
+  gfSetText_("installStep3",t.step3);
+  gfSetText_("installBenefit1",t.benefit1);
+  gfSetText_("installBenefit2",t.benefit2);
+  gfSetText_("installBenefit3",t.benefit3);
+  gfSetText_("installButtonText",t.install);
+  gfSetText_("installFooter",t.footer);
+  gfSetText_("voicePremiumTitle",t.voiceTitle);
+  gfSetText_("voicePremiumText",t.voiceText);
+  gfSetText_("quickTitle",t.quickTitle);
+  gfSetText_("quickSubtitle",t.quickSubtitle);
+  gfSetText_("quickArrival",t.arrival);
+  gfSetText_("quickArrivalSub",t.arrivalSub);
+  gfSetText_("quickWifiSub",t.wifiSub);
+  gfSetText_("quickEmergency",t.emergency);
+  gfSetText_("quickEmergencySub",t.emergencySub);
+  gfSetText_("quickOwner",t.owner);
+  gfSetText_("quickOwnerSub",t.ownerSub);
+  gfSetText_("quickAnyQuestion",t.any);
+  const hint=document.getElementById("installScreenHint");
+  if(hint && estIOSGuestflow_() && !estStandaloneGuestflow_()) hint.textContent=t.ios;
+}
+function guestflowSetInstallGite_(){
+  const p=new URLSearchParams(location.search);
+  const g=(p.get("gite")||"").replace(/-+/g," ").trim();
+  if(g) gfSetText_("installGiteName",g);
+}
+function guestflowUpdateManifestLang_(lang){
+  const link=document.getElementById("guestflow-manifest-link");
+  if(!link || !link.href) return;
+  try{
+    const u=new URL(link.href);
+    u.searchParams.set("lang",lang);
+    u.searchParams.set("mv","2");
+    link.href=u.toString();
+  }catch(e){}
+}
+function guestflowShowCorrectInterface_(){
+  const install=document.getElementById("guestflowInstallScreen");
+  const app=document.getElementById("guestflowApp");
+  if(estStandaloneGuestflow_()){
+    document.body.classList.add("gf-standalone");
+    if(install) install.hidden=true;
+    if(app) app.hidden=false;
+  }else{
+    document.body.classList.remove("gf-standalone");
+    if(install) install.hidden=false;
+    if(app) app.hidden=true;
+  }
+}
+function guestflowQuick(type){
+  const qs={
+    fr:{
+      arrival:"Quels sont les horaires et les consignes d’arrivée et de départ ?",
+      wifi:"Comment accéder au Wi‑Fi ?",
+      emergency:"Quels sont les contacts utiles en cas d’urgence ?",
+      owner:"Comment puis-je contacter le propriétaire ?"
+    },
+    en:{
+      arrival:"What are the arrival and departure times and instructions?",
+      wifi:"How do I access the Wi‑Fi?",
+      emergency:"What are the useful emergency contacts?",
+      owner:"How can I contact the host?"
+    },
+    es:{
+      arrival:"¿Cuáles son los horarios y las instrucciones de llegada y salida?",
+      wifi:"¿Cómo accedo al Wi‑Fi?",
+      emergency:"¿Cuáles son los contactos útiles en caso de emergencia?",
+      owner:"¿Cómo puedo contactar con el anfitrión?"
+    },
+    de:{
+      arrival:"Wie lauten die Ankunfts- und Abreisezeiten und Hinweise?",
+      wifi:"Wie erhalte ich Zugang zum WLAN?",
+      emergency:"Welche wichtigen Notfallkontakte gibt es?",
+      owner:"Wie kann ich den Gastgeber kontaktieren?"
+    }
+  };
+  const q=((qs[langueSelectionnee]||qs.fr)[type]||"");
+  const box=document.getElementById("question");
+  if(box){box.value=q; box.focus();}
+  if(q) envoyerQuestion();
+}
+
+window.addEventListener("DOMContentLoaded",function(){
+  guestflowShowCorrectInterface_();
+  guestflowSetInstallGite_();
+  const p=new URLSearchParams(location.search);
+  const urlLang=String(p.get("lang")||"").toLowerCase();
+  const lang=["fr","en","es","de"].includes(urlLang)?urlLang:(langueSelectionnee||"fr");
+  guestflowApplyPremiumTranslations_(lang);
+  guestflowUpdateManifestLang_(lang);
+});
 </script>
 
 </body>
