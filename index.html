@@ -3397,12 +3397,6 @@
         langueSelectionnee = 'fr';
         try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
 
-        if (estStandaloneGuestflow_()) {
-          // Dans une vraie ouverture d'application, l'URL doit contenir ?mode=app.
-          // On ne masque jamais l'accueil sur la seule base d'un détecteur navigateur.
-          return;
-        }
-
         if (guestflowDeferredInstallPrompt) {
           guestflowDeferredInstallPrompt.prompt();
           try {
