@@ -2031,6 +2031,170 @@
     /* Mode application explicite uniquement : concierge visible. */
     body.guestflow-app-mode > .guestflow-landing{display:none !important}
     body.guestflow-app-mode > .page{display:flex !important}
+
+
+    /* =========================================================
+       GUESTFLOW — CONCIERGE V3 / INTERFACE MOBILE PREMIUM
+       Ajout visuel uniquement : moteur, micro, PWA et API conservés.
+       ========================================================= */
+    body.guestflow-app-mode{
+      background:#f4efe5 !important;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body.guestflow-app-mode::before{display:none !important}
+    body.guestflow-app-mode .gf-app-shell{
+      width:min(100%,760px);
+      margin:0 auto;
+      padding:0;
+      display:block !important;
+    }
+    body.guestflow-app-mode .gf-app-card{
+      min-height:100vh;
+      background:linear-gradient(180deg,#f8f4eb 0%,#f4efe5 100%);
+      overflow:hidden;
+      position:relative;
+    }
+    .gf-app-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:20px 20px 14px;
+      background:linear-gradient(180deg,#edf4f2 0%,#f6f2e9 100%);
+      border-bottom:1px solid rgba(63,73,51,.08);
+    }
+    .gf-brand-block{display:flex;align-items:center;gap:11px;min-width:0}
+    .gf-leaf-logo{width:46px;height:46px;color:#355b35;flex:none}
+    .gf-leaf-logo svg{width:100%;height:100%}
+    .gf-brand-copy{min-width:0}
+    .gf-brand-name{font:600 32px/1 Georgia,"Times New Roman",serif;color:#152516;letter-spacing:-.035em}
+    .gf-property-name{display:block !important;margin:3px 0 0 !important;max-width:230px;color:#586c43;font-size:14px;letter-spacing:.12em;text-transform:none}
+    .gf-property-name::before{content:"" !important}
+    .gf-brand-subtitle{margin-top:4px;color:#687168;font-size:12px}
+    .gf-header-actions{display:flex;align-items:center;gap:8px}
+    .gf-sound-btn{width:42px;height:42px;border-radius:50%;background:#fffdf8}
+
+    .gf-hero-card{
+      margin:0 14px;
+      padding:26px 24px 24px;
+      min-height:240px;
+      border-radius:0 0 28px 28px;
+      color:#17331e;
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 86% 22%,rgba(255,255,255,.66),transparent 23%),
+        radial-gradient(circle at 14% 100%,rgba(114,136,82,.20),transparent 34%),
+        linear-gradient(135deg,#edf4f1 0%,#f7f1e4 48%,#dce6d0 100%);
+      box-shadow:0 18px 44px rgba(64,77,55,.11);
+    }
+    .gf-hero-card::after{
+      content:"";position:absolute;width:210px;height:210px;right:-95px;bottom:-115px;border-radius:50%;
+      border:1px solid rgba(60,93,53,.13);box-shadow:0 0 0 34px rgba(60,93,53,.035),0 0 0 68px rgba(60,93,53,.025)
+    }
+    .gf-hero-kicker{font:italic 600 19px/1.1 Georgia,"Times New Roman",serif;color:#45663b;margin-bottom:18px}
+    .gf-hero-card h1{margin:0;font:500 clamp(38px,9vw,56px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.045em;color:#142416;position:relative;z-index:1}
+    .gf-hero-card h1 span{font-style:italic;color:#4e663f}
+    .gf-hero-card p{margin:17px 0 0;max-width:520px;color:#4f5f53;font-size:15px;line-height:1.55;position:relative;z-index:1}
+    .gf-live-pill{display:inline-flex;align-items:center;gap:9px;margin-top:18px;padding:9px 13px;border-radius:999px;background:rgba(64,90,55,.10);border:1px solid rgba(64,90,55,.12);color:#35543a;font-size:12px;font-weight:800;position:relative;z-index:1}
+    .gf-live-dot{width:8px;height:8px;border-radius:50%;background:#6d9256;box-shadow:0 0 0 4px rgba(109,146,86,.13)}
+
+    .gf-concierge-panel{
+      margin:-2px 14px 88px;
+      padding:22px 18px 24px;
+      border-radius:28px;
+      background:rgba(255,253,248,.96);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 18px 55px rgba(66,72,57,.12);
+      position:relative;z-index:2;
+    }
+    .gf-panel-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .gf-panel-title{font:600 30px/1 Georgia,"Times New Roman",serif;color:#243226}
+    .gf-panel-subtitle{margin-top:7px;max-width:430px;color:#687168;font-size:13px;line-height:1.5}
+    .gf-languages{max-width:170px;flex:none}
+    .gf-languages .lang-btn{min-width:38px;height:32px;padding:0 8px;border-radius:10px;font-size:11px}
+    .gf-pwa-hidden{display:none !important}
+
+    .gf-mic-zone{text-align:center;padding:20px 0 13px}
+    .gf-main-mic{
+      position:relative !important;inset:auto !important;
+      width:132px !important;height:132px !important;
+      border-radius:50% !important;
+      border:5px solid rgba(255,255,255,.94) !important;
+      background:linear-gradient(145deg,#6d8254,#385334) !important;
+      color:#fff !important;
+      margin:0 auto !important;
+      display:grid !important;place-items:center !important;
+      box-shadow:0 0 0 9px rgba(102,126,81,.12),0 18px 36px rgba(52,73,44,.22) !important;
+      cursor:pointer;overflow:visible !important;
+    }
+    .gf-main-mic:hover{transform:translateY(-2px) scale(1.01)}
+    .gf-main-mic svg{width:54px;height:54px;position:relative;z-index:2}
+    .gf-main-mic .mic-wave{position:absolute;inset:0;display:none;align-items:center;justify-content:center;gap:4px;border-radius:50%;background:rgba(39,69,34,.90)}
+    .gf-main-mic.listening .mic-wave,.gf-main-mic.active .mic-wave{display:flex}
+    .gf-main-mic .mic-wave i{width:4px;border-radius:99px;background:#fff;animation:gfWave .85s infinite ease-in-out}
+    .gf-main-mic .mic-wave i:nth-child(1),.gf-main-mic .mic-wave i:nth-child(5){height:18px}
+    .gf-main-mic .mic-wave i:nth-child(2),.gf-main-mic .mic-wave i:nth-child(4){height:31px;animation-delay:.12s}
+    .gf-main-mic .mic-wave i:nth-child(3){height:44px;animation-delay:.24s}
+    @keyframes gfWave{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1.15)}}
+    .gf-mic-title{margin-top:14px;font:600 23px/1.1 Georgia,"Times New Roman",serif;color:#263626}
+    .gf-mic-help{display:inline-flex !important;margin:9px auto 0 !important;padding:7px 12px !important;border-radius:999px !important;background:#edf2e7 !important;color:#4f634c !important;font-size:12px !important;line-height:1 !important}
+
+    .gf-question-field{margin-top:10px}
+    .gf-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .gf-input-row{display:flex;align-items:center;gap:10px;padding:7px 7px 7px 15px;border-radius:20px;background:#fff;border:1px solid rgba(54,75,49,.12);box-shadow:0 8px 22px rgba(54,64,48,.07);overflow:visible}
+    .gf-input-row textarea{min-height:48px;height:48px;padding:13px 4px;border:0;resize:none;font-size:15px;line-height:1.4;overflow:hidden;background:transparent}
+    .gf-send-btn{position:static!important;width:48px!important;height:48px!important;min-width:48px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:linear-gradient(145deg,#70865a,#3d5a37)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(56,78,49,.22)!important}
+    .gf-send-btn svg{width:22px;height:22px}
+    .gf-examples{margin-top:10px!important;padding:0!important;background:transparent!important;border:0!important;color:#899087!important;font-size:11px!important;text-align:center}
+    .gf-clear-row{margin-top:4px!important;justify-content:center!important}
+    .gf-clear-btn{padding:7px 10px!important;min-height:auto!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#8b9088!important;font-size:11px!important}
+
+    .gf-quick-section{margin-top:18px;padding-top:8px;border-top:1px solid rgba(63,73,51,.08)}
+    .gf-section-heading{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-top:8px}
+    .gf-section-heading span{height:1px;background:rgba(63,73,51,.22)}
+    .gf-section-heading h2{margin:0;font:600 23px/1 Georgia,"Times New Roman",serif;color:#29372b}
+    .gf-section-subtitle{text-align:center;margin-top:6px;color:#7b837b;font-size:12px}
+    .gf-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:15px}
+    .gf-quick-card{min-height:120px;padding:13px 8px;border-radius:18px;border:1px solid rgba(63,73,51,.09);background:linear-gradient(180deg,#fff,#fbf8f2);color:#29342b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;box-shadow:0 8px 20px rgba(58,65,51,.05);cursor:pointer}
+    .gf-quick-card:active{transform:scale(.98)}
+    .gf-quick-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eef1e9;color:#47613e;font-size:24px;font-weight:900;line-height:1}
+    .gf-quick-icon.gf-wifi{font-size:31px;transform:rotate(180deg)}
+    .gf-quick-icon.gf-emergency{background:#f8e7e2;color:#c94435;font-size:31px}
+    .gf-quick-card strong{font:600 14px/1.08 Georgia,"Times New Roman",serif}
+    .gf-quick-card small{color:#838a82;font-size:10.5px;line-height:1.2}
+
+    .gf-response-box{margin-top:16px!important;padding:14px!important;border-radius:20px!important;background:linear-gradient(180deg,#fffdf9,#f9f5ed)!important;border:1px solid rgba(63,73,51,.09)!important;box-shadow:none!important}
+    .gf-response-avatar{background:#eef1e8!important;color:#45613f!important;border-radius:50%!important}
+    .gf-response-avatar svg{width:27px!important;height:27px!important}
+    .gf-response-bubble{background:#fff!important;border:1px solid rgba(63,73,51,.10)!important;border-radius:16px!important;box-shadow:0 6px 18px rgba(57,66,51,.05)!important}
+    .gf-footer-hint{text-align:center!important;margin-top:13px!important;color:#8a9089!important;font-size:10.5px!important}
+
+    .gf-bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);height:74px;padding:8px 18px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:rgba(255,253,249,.96);border-top:1px solid rgba(63,73,51,.10);backdrop-filter:blur(14px);z-index:40;box-shadow:0 -12px 30px rgba(61,67,54,.08)}
+    .gf-bottom-nav button{border:0;background:transparent;color:#808781;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:19px;cursor:pointer}
+    .gf-bottom-nav button strong{font-size:11px;font-weight:700}
+    .gf-bottom-nav button.active{color:#315c38}
+
+    @media (max-width:620px){
+      body.guestflow-app-mode .gf-app-shell{width:100%}
+      .gf-app-header{padding:16px 14px 12px}
+      .gf-brand-name{font-size:29px}
+      .gf-brand-subtitle{display:none}
+      .gf-hero-card{margin:0 8px;padding:22px 18px 22px;min-height:218px}
+      .gf-hero-card h1{font-size:41px}
+      .gf-concierge-panel{margin:0 8px 84px;padding:19px 12px 20px}
+      .gf-panel-topline{display:block}
+      .gf-languages{margin-top:12px;justify-content:flex-start;max-width:none}
+      .gf-main-mic{width:122px!important;height:122px!important}
+      .gf-quick-grid{grid-template-columns:repeat(2,1fr)}
+      .gf-quick-card{min-height:108px}
+    }
+
+    @media (min-width:621px){
+      body.guestflow-app-mode .gf-app-card{border-left:1px solid rgba(63,73,51,.08);border-right:1px solid rgba(63,73,51,.08)}
+    }
+
   </style>
 
   <meta name="theme-color" content="#596b50">
@@ -2116,89 +2280,54 @@
     </div>
   </div>
 
-  <main class="page">
+  <main class="page gf-app-shell">
 
-    <header class="topbar">
-      <div class="brand-wrap">
-        <div class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 3.5c3.1 0 5.8 1.6 7.3 4.1-1.9-.2-3.6.3-5 1.4-2 1.5-3.1 3.7-3.4 6.8-2.7-.8-4.8-2.6-5.8-5.1C4 8 5 5.6 7.2 4.4c1.4-.8 3-.9 4.8-.9Z" fill="currentColor" opacity=".95"/>
-            <path d="M11.1 16c1.6-4.2 4-6.6 7.6-7.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <div class="brand-copy">
-          <h1 class="brand">Guestflow</h1>
-          <div id="giteName" class="gite-name" hidden></div>
-        </div>
-      </div>
-
-      <div class="top-actions">
-        <button id="btnSound" class="sound-btn" type="button" onclick="basculerVoix()" aria-label="Couper la réponse vocale" title="Couper la réponse vocale">
-          <svg id="soundIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/>
-            <path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-    </header>
-
-    <section class="hero">
-
-      <div class="intro">
-        <div>
-          <div class="eyebrow">
-            <span class="eyebrow-dot"></span>
-            Concierge numérique · Disponible 24 h / 24
+    <section class="gf-app-card" aria-label="Concierge Guestflow">
+      <header class="gf-app-header">
+        <div class="gf-brand-block">
+          <div class="gf-leaf-logo" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M23 42C22 27 28 14 42 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M28 27C34 25 39 20 41 14C35 14 30 18 28 27Z" fill="currentColor" opacity=".95"/>
+              <path d="M22 33C16 31 11 26 9 20C15 20 20 24 22 33Z" fill="currentColor" opacity=".82"/>
+              <path d="M31 17C28 12 29 7 33 3C37 8 36 13 31 17Z" fill="currentColor" opacity=".72"/>
+            </svg>
           </div>
-
-          <div class="intro-copy">
-            <h2 class="intro-title">Votre séjour,<br><em>tout simplement.</em></h2>
-            <p class="subtitle" id="pageSubtitle">
-              Posez votre question naturellement. Guestflow vous répond immédiatement à partir des informations de votre hébergement.
-            </p>
+          <div class="gf-brand-copy">
+            <div class="gf-brand-name">Guestflow</div>
+            <div id="giteName" class="gite-name gf-property-name">Cacouech</div>
+            <div class="gf-brand-subtitle">Votre concierge de séjour</div>
           </div>
         </div>
 
-        <div class="promise-row" aria-hidden="true">
-          <div class="promise">
-            <svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Réponse immédiate
-          </div>
-          <div class="promise">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3v9l5 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
-            24 h / 24
-          </div>
-          <div class="promise">
-            <svg viewBox="0 0 24 24" fill="none"><path d="M5 19c3.2-7.6 7-11.6 14-14-2.4 7-6.4 10.8-14 14Z" stroke="currentColor" stroke-width="1.7"/></svg>
-            Pensé pour votre séjour
-          </div>
-        </div>
-      </div>
-
-      <div class="concierge">
-        <div class="concierge-head">
-          <div class="concierge-title">
-            <div class="avatar" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 7.8A3.8 3.8 0 0 1 8.8 4h6.4A3.8 3.8 0 0 1 19 7.8v5.4a3.8 3.8 0 0 1-3.8 3.8H11l-4.6 3v-3.3A3.8 3.8 0 0 1 5 13.2V7.8Z" stroke="currentColor" stroke-width="1.7"/>
-                <path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div>
-              <h2 id="conciergeTitle">Votre concierge</h2>
-              <div class="online" id="onlineNow">En ligne maintenant</div>
-            </div>
-
-        <div id="pwaInstallWrap" class="pwa-install-wrap">
-          <button id="pwaInstallBtn" class="pwa-install-btn" type="button">
-            Ajouter Guestflow à mon téléphone
+        <div class="gf-header-actions">
+          <button id="btnSound" class="sound-btn gf-sound-btn" type="button" onclick="basculerVoix()" aria-label="Couper la réponse vocale" title="Couper la réponse vocale">
+            <svg id="soundIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/>
+              <path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
           </button>
-          <div id="pwaInstallHint" class="pwa-install-hint"></div>
         </div>
+      </header>
 
+      <section class="gf-hero-card">
+        <div class="gf-hero-kicker">Bien plus qu’un séjour</div>
+        <h1>Votre concierge<br><span>numérique 24h/24</span></h1>
+        <p id="pageSubtitle">Une question ? Posez-la naturellement, Guestflow vous répond immédiatement.</p>
+        <div class="gf-live-pill">
+          <span class="gf-live-dot"></span>
+          Réponse immédiate · 24h/24, 7j/7
+        </div>
+      </section>
+
+      <section class="gf-concierge-panel">
+        <div class="gf-panel-topline">
+          <div>
+            <div id="conciergeTitle" class="gf-panel-title">Bonjour !</div>
+            <div id="onlineNow" class="gf-panel-subtitle">Je suis Guestflow, votre concierge numérique. Posez-moi votre question par écrit ou à l’oral.</div>
           </div>
 
-          <div class="language-row" aria-label="Choix de la langue">
+          <div class="language-row gf-languages" aria-label="Choix de la langue">
             <span class="language-label" id="labelLangue">Langue :</span>
             <button type="button" class="lang-btn active" data-lang="fr"><span aria-hidden="true">🇫🇷</span><span class="lang-code">FR</span></button>
             <button type="button" class="lang-btn" data-lang="en"><span aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
@@ -2207,68 +2336,108 @@
           </div>
         </div>
 
+        <div id="pwaInstallWrap" class="pwa-install-wrap gf-pwa-hidden">
+          <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Ajouter Guestflow à mon téléphone</button>
+          <div id="pwaInstallHint" class="pwa-install-hint"></div>
+        </div>
+
         <div id="accessMessage" class="status"></div>
 
-        <div class="field">
-          <div class="question-label">
+        <div class="gf-mic-zone">
+          <button id="btnMic" class="mic-btn gf-main-mic" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">
+            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect x="23" y="9" width="18" height="31" rx="9" stroke="currentColor" stroke-width="4"/>
+              <path d="M16 30c0 9 7 16 16 16s16-7 16-16M32 46v9M23 55h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </button>
+          <div class="gf-mic-title">Parlez à Guestflow</div>
+          <div id="micHelp" class="mic-help gf-mic-help">Vous pouvez parler naturellement.</div>
+        </div>
+
+        <div class="field gf-question-field">
+          <div class="question-label gf-visually-hidden">
             <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
           </div>
-
-          <div class="voice-row">
-            <textarea id="question" placeholder="Ex. Quel est le mot de passe Wi-Fi ?"></textarea>
-            <button id="btnMic" class="mic-btn" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">
-              <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          <div class="voice-row gf-input-row">
+            <textarea id="question" placeholder="Posez votre question ici..."></textarea>
+            <button id="btnAsk" class="primary gf-send-btn" type="button" onclick="envoyerQuestion()" aria-label="Envoyer ma question" title="Envoyer ma question">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12 20 4l-5 16-3-6-8-2Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="m12 14 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
             </button>
           </div>
-
-          <div class="mic-help" id="micHelp">
-            Touchez le micro et parlez naturellement. Guestflow vous répond automatiquement.
-          </div>
-
-          <div class="example" id="examplesBox">
-            Exemples : « Les animaux sont-ils acceptés ? » · « Quel est le mot de passe Wi-Fi ? » · « À quelle heure puis-je arriver ? »
-          </div>
+          <div id="examplesBox" class="example gf-examples">Exemples : Wi‑Fi · horaires · restaurants · consignes du séjour</div>
         </div>
 
-        <div class="buttons">
-          <button id="btnAsk" class="primary" type="button" onclick="envoyerQuestion()">Poser la question à Guestflow</button>
-          <button id="btnClear" class="secondary" type="button" onclick="vider()">Effacer</button>
+        <div class="buttons gf-clear-row">
+          <button id="btnClear" class="secondary gf-clear-btn" type="button" onclick="vider()">Effacer la question</button>
         </div>
-
         <div id="status" class="status"></div>
 
-        <div class="response-box">
-          <div class="response-conversation">
-            <div class="response-avatar" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M5 7.8A3.8 3.8 0 0 1 8.8 4h6.4A3.8 3.8 0 0 1 19 7.8v5.4a3.8 3.8 0 0 1-3.8 3.8H11l-4.6 3v-3.3A3.8 3.8 0 0 1 5 13.2V7.8Z" stroke="currentColor" stroke-width="1.7"/>
-                <path d="M9 10.5h.01M12 10.5h.01M15 10.5h.01" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-              </svg>
-            </div>
+        <section class="gf-quick-section" aria-label="Accès rapides">
+          <div class="gf-section-heading">
+            <span></span><h2>Accès rapides</h2><span></span>
+          </div>
+          <div class="gf-section-subtitle">Les informations les plus demandées</div>
 
+          <div class="gf-quick-grid">
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quels sont les horaires d’arrivée et de départ ?';envoyerQuestion();">
+              <span class="gf-quick-icon" aria-hidden="true">▣</span>
+              <strong>Arrivée / départ</strong>
+              <small>Horaires et consignes</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le mot de passe Wi-Fi ?';envoyerQuestion();">
+              <span class="gf-quick-icon gf-wifi" aria-hidden="true">⌁</span>
+              <strong>Wi‑Fi</strong>
+              <small>Réseau et accès</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Que dois-je faire en cas d’urgence ?';envoyerQuestion();">
+              <span class="gf-quick-icon gf-emergency" aria-hidden="true">+</span>
+              <strong>Urgence</strong>
+              <small>Contacts utiles</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le numéro du propriétaire ?';envoyerQuestion();">
+              <span class="gf-quick-icon" aria-hidden="true">☎</span>
+              <strong>Numéro du propriétaire</strong>
+              <small>Contact direct</small>
+            </button>
+          </div>
+        </section>
+
+        <section class="response-box gf-response-box" aria-live="polite">
+          <div class="response-conversation">
+            <div class="response-avatar gf-response-avatar" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M24 43C23 29 28 16 41 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 28c6-2 10-7 12-13-6 0-11 5-12 13Z" fill="currentColor"/><path d="M22 34c-6-2-10-7-12-13 6 0 11 5 12 13Z" fill="currentColor" opacity=".75"/></svg>
+            </div>
             <div class="response-content">
               <div class="response-meta">
                 <span class="response-name">Guestflow</span>
                 <span class="response-dot"></span>
                 <span class="response-time" id="responseTime">À l’instant</span>
               </div>
-
-              <div class="response-bubble">
+              <div class="response-bubble gf-response-bubble">
                 <h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
                 <div id="reponse">La réponse de Guestflow apparaîtra ici.</div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div class="hint" id="footerText">
-          Guestflow répond à partir des informations fournies par votre hébergement.
-        </div>
-      </div>
+        <div class="hint gf-footer-hint" id="footerText">Guestflow répond à partir des informations fournies par votre hébergement.</div>
+      </section>
 
+      <nav class="gf-bottom-nav" aria-label="Navigation Guestflow">
+        <button type="button" class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+          <span aria-hidden="true">⌂</span><strong>Accueil</strong>
+        </button>
+        <button type="button" onclick="document.querySelector('.gf-response-box').scrollIntoView({behavior:'smooth',block:'center'})">
+          <span aria-hidden="true">◷</span><strong>Historique</strong>
+        </button>
+        <button type="button" onclick="document.querySelector('.gf-languages').scrollIntoView({behavior:'smooth',block:'center'})">
+          <span aria-hidden="true">⚙</span><strong>Paramètres</strong>
+        </button>
+      </nav>
     </section>
 
-    <div class="footer">Guestflow · L’hospitalité en toute simplicité</div>
   </main>
 
   <script>
