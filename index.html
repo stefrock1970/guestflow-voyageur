@@ -2,12 +2,48 @@
 <!-- Guestflow V23.12 — voix multilingue plus fluide -->
 <html lang="fr">
 <head>
+
+<script>
+(function guestflowBootstrapLienSecurise_() {
+  try {
+    const KEY = 'guestflow_secure_link_v2';
+    const u = new URL(window.location.href);
+
+    const gite = u.searchParams.get('gite') || u.searchParams.get('id') || '';
+    const token = u.searchParams.get('token') || '';
+
+    if (gite && token) {
+      localStorage.setItem(KEY, JSON.stringify({
+        gite: gite,
+        token: token
+      }));
+      return;
+    }
+
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return;
+
+    const saved = JSON.parse(raw);
+    if (!saved || !saved.gite || !saved.token) return;
+    if (u.searchParams.get('_gf_restored') === '1') return;
+
+    u.searchParams.set('gite', saved.gite);
+    u.searchParams.set('token', saved.token);
+    u.searchParams.set('_gf_restored', '1');
+
+    window.location.replace(u.toString());
+  } catch (e) {
+    console.warn('Bootstrap lien sécurisé Guestflow impossible :', e);
+  }
+})();
+</script>
+
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
-  <title>Guestflow — Votre concierge numérique</title>
+  <title>Guestflow — Votre concierge numérique — GF-F</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
   <style>
@@ -1915,6 +1951,35 @@
 </head>
 
 <body>
+
+<div id="gf-diagnostic"
+     style="margin:10px auto 12px;max-width:760px;padding:10px 14px;border:1px solid #b9b9a8;border-radius:12px;background:#fffdf6;font:600 14px/1.45 Arial,sans-serif;color:#39422e;">
+  <div>DIAGNOSTIC PWA — <span id="gf-diag-build">GF-F</span></div>
+  <div>Gîte détecté : <span id="gf-diag-gite">...</span></div>
+  <div>Token détecté : <span id="gf-diag-token">...</span></div>
+</div>
+
+<script>
+(function afficherDiagnosticPwa_() {
+  try {
+    const u = new URL(window.location.href);
+    const gite = u.searchParams.get('gite') || u.searchParams.get('id') || '';
+    const tokenPresent = !!u.searchParams.get('token');
+
+    const g = document.getElementById('gf-diag-gite');
+    const t = document.getElementById('gf-diag-token');
+
+    if (g) g.textContent = gite ? 'OUI' : 'NON';
+    if (t) t.textContent = tokenPresent ? 'OUI' : 'NON';
+  } catch (e) {
+    const g = document.getElementById('gf-diag-gite');
+    const t = document.getElementById('gf-diag-token');
+    if (g) g.textContent = 'ERREUR';
+    if (t) t.textContent = 'ERREUR';
+  }
+})();
+</script>
+
   <main class="page">
 
     <header class="topbar">
@@ -2071,6 +2136,10 @@
   </main>
 
   <script>
+  const GUESTFLOW_BUILD = "GF-F";
+
+
+
     let langueSelectionnee = 'fr';
     let voixActive = true;
     // V23.9 : le nom du gîte est visible, l'ID technique reste masqué.
@@ -3206,51 +3275,73 @@
       initialiserLanguesGuestflow_();
     }
 
-    // Enregistre le service worker.
+    // =========================================================
+    // GUESTFLOW — MISE À JOUR STABLE PAR build.txt
+    // =========================================================
+    async function guestflowFetchNoCache_(url) {
+      const sep = url.includes('?') ? '&' : '?';
+      return fetch(url + sep + '_ts=' + Date.now(), {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+    }
+
+    async function verifierBuildGuestflow_() {
+      try {
+        const rBuild = await guestflowFetchNoCache_('./build.txt');
+        if (!rBuild.ok) return;
+
+        const buildDistant = String(await rBuild.text()).trim();
+        if (!buildDistant || buildDistant === GUESTFLOW_BUILD) return;
+
+        const rIndex = await guestflowFetchNoCache_(
+          './index.html?candidate=' + encodeURIComponent(buildDistant)
+        );
+        if (!rIndex.ok) return;
+
+        const candidate = await rIndex.text();
+        const marqueur = 'const GUESTFLOW_BUILD = "' + buildDistant + '"';
+
+        if (!candidate.includes(marqueur)) {
+          setTimeout(verifierBuildGuestflow_, 3000);
+          return;
+        }
+
+        // Conserve gîte + token + autres paramètres existants.
+        const nouvelleUrl = new URL(window.location.href);
+        nouvelleUrl.searchParams.set('build', buildDistant);
+        nouvelleUrl.searchParams.set('_ts', Date.now().toString());
+        window.location.replace(nouvelleUrl.toString());
+
+      } catch (e) {
+        console.warn('Contrôle de mise à jour Guestflow indisponible :', e);
+      }
+    }
+
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
+      window.addEventListener('load', async function() {
+        try {
+          await navigator.serviceWorker.register('./service-worker.js', {
+            scope: './',
+            updateViaCache: 'none'
+          });
+        } catch (err) {
           console.warn('Service worker Guestflow non enregistré :', err);
-        });
+        }
+
+        verifierBuildGuestflow_();
+      });
+
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          verifierBuildGuestflow_();
+        }
       });
     }
 
     majInstallationGuestflow_();
 
 
-
-    // =========================================================
-    // V23.15.11 — MISE À JOUR AUTOMATIQUE
-    // =========================================================
-    async function verifierVersionGuestflow_() {
-      try {
-        const u = new URL('./version.json', window.location.href);
-        u.searchParams.set('_ts', Date.now().toString());
-
-        const r = await fetch(u.toString(), {
-          cache: 'no-store',
-          headers: { 'Cache-Control': 'no-cache' }
-        });
-
-        if (!r.ok) return;
-        const d = await r.json();
-        const distante = String(d.version || '').trim();
-
-        if (distante && distante !== GUESTFLOW_APP_VERSION) {
-          const nouvelle = new URL(window.location.href);
-          nouvelle.searchParams.set('_gfver', distante);
-          nouvelle.searchParams.set('_gfts', Date.now().toString());
-          window.location.replace(nouvelle.toString());
-        }
-      } catch (e) {
-        console.warn('Mise à jour Guestflow indisponible :', e);
-      }
-    }
-
-    window.addEventListener('pageshow', verifierVersionGuestflow_);
-    document.addEventListener('visibilitychange', function() {
-      if (document.visibilityState === 'visible') verifierVersionGuestflow_();
-    });
 
 </script>
 
