@@ -2956,6 +2956,53 @@
         zone.appendChild(document.createTextNode(apres));
       }
 
+      // Si le moteur n'a pas fourni de lien Maps, on en crée un automatiquement
+      // dès que la question/réponse concerne un lieu physique identifiable.
+      if (!lienTrouve && contenu) {
+        const questionCourante = String(
+          (document.getElementById('gfRefQuestion') && document.getElementById('gfRefQuestion').value) ||
+          (document.getElementById('question') && document.getElementById('question').value) ||
+          ''
+        ).toLowerCase();
+
+        const texteAnalyse = (questionCourante + ' ' + contenu.toLowerCase());
+        const motsLieu = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|m[eé]decins?|urgences?|balades?|randonn[eé]es?|promenades?|sites? touristiques?|monuments?|mus[eé]es?|ch[aâ]teaux?|plages?|parcs?|jardins?|commerces?|magasins?|boulangeries?|supermarch[eé]s?|march[eé]s?|activit[eé]s?|gare|a[eé]roport|office de tourisme|adresse|itin[eé]raire|o[uù] se trouve|le plus proche|la plus proche)\b/i;
+
+        if (motsLieu.test(texteAnalyse)) {
+          // Pour une recherche Maps, une phrase courte contenant le nom/adresse est plus robuste
+          // qu'une réponse complète. On privilégie la première phrase utile de la réponse.
+          let requeteMaps = contenu
+            .replace(/https?:\/\/\S+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          const premierePhrase = requeteMaps.split(/(?<=[.!?])\s+/)[0];
+          if (premierePhrase && premierePhrase.length >= 4) requeteMaps = premierePhrase;
+          if (requeteMaps.length > 180) requeteMaps = requeteMaps.slice(0, 180);
+
+          if (requeteMaps) {
+            const urlMaps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(requeteMaps);
+            if (zone.childNodes.length) zone.appendChild(document.createElement('br'));
+
+            const lienAuto = document.createElement('a');
+            lienAuto.className = 'maps-link';
+            lienAuto.href = urlMaps;
+            lienAuto.target = '_blank';
+            lienAuto.rel = 'noopener noreferrer';
+
+            const libellesAuto = {
+              fr: 'Ouvrir dans Google Maps',
+              en: 'Open in Google Maps',
+              es: 'Abrir en Google Maps',
+              de: 'In Google Maps öffnen'
+            };
+            lienAuto.textContent = libellesAuto[langueSelectionnee] || libellesAuto.fr;
+            zone.appendChild(lienAuto);
+            lienTrouve = true;
+          }
+        }
+      }
+
       if (!contenu) {
         zone.textContent =
           (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
@@ -3271,37 +3318,38 @@
 
       if (!code.startsWith(racine)) return -10000;
 
+      // Pour le français, on refuse explicitement les variantes canadiennes :
+      // l'utilisateur doit entendre une voix française de France.
+      if (langue === 'fr' && (code === 'fr-ca' || /canad|québec|quebec/.test(nom))) {
+        return -10000;
+      }
+
       let score = 0;
 
-      // Une voix correspondant exactement à la variante linguistique voulue est prioritaire.
-      if (code === cible) score += 200;
-      else score += 100;
+      // Priorité très forte à la variante exacte du pays souhaité.
+      if (code === cible) score += 1000;
+      else score += 50;
 
-      // Sur Windows / Chrome / Edge, ces libellés correspondent souvent aux voix
-      // les plus naturelles disponibles localement ou en ligne.
-      if (nom.includes('natural')) score += 180;
-      if (nom.includes('online')) score += 140;
-      if (nom.includes('neural')) score += 140;
+      if (nom.includes('natural')) score += 220;
+      if (nom.includes('neural')) score += 200;
+      if (nom.includes('online')) score += 160;
       if (nom.includes('google')) score += 120;
-      if (nom.includes('microsoft')) score += 90;
+      if (nom.includes('microsoft')) score += 100;
+      if (nom.includes('france') || nom.includes('français') || nom.includes('francais')) score += 120;
 
-      // Préférences connues par langue, seulement lorsqu'elles existent sur l'appareil.
       const priorites = {
-        fr: ['denise', 'henri', 'hortense', 'julie', 'paul'],
+        fr: ['denise', 'hortense', 'julie', 'audrey', 'paul', 'henri'],
         en: ['sonia', 'ryan', 'libby', 'george', 'hazel'],
         es: ['elvira', 'alvaro', 'helena', 'dalia', 'pablo'],
         de: ['katja', 'conrad', 'hedda', 'stefan']
       };
 
       (priorites[langue] || []).forEach(function(nomPrefere, index) {
-        if (nom.includes(nomPrefere)) {
-          score += 80 - (index * 8);
-        }
+        if (nom.includes(nomPrefere)) score += 120 - (index * 10);
       });
 
       if (voix && voix.default) score += 10;
       if (voix && voix.localService === false) score += 20;
-
       return score;
     }
 
@@ -3309,25 +3357,39 @@
       const voix = window.speechSynthesis.getVoices() || [];
       if (!voix.length) return null;
 
-      let meilleure = null;
-      let meilleurScore = -10000;
+      const cible = { fr: 'fr-fr', en: 'en-gb', es: 'es-es', de: 'de-de' }[langue] || 'fr-fr';
 
-      voix.forEach(function(v) {
-        const score = scoreVoixGuestflow_(v, langue);
-        if (score > meilleurScore) {
-          meilleurScore = score;
-          meilleure = v;
-        }
+      // En français, utiliser uniquement une voix fr-FR si l'appareil en propose une.
+      // S'il n'y en a pas, ne jamais forcer fr-CA : on laisse le moteur système
+      // choisir avec message.lang='fr-FR'.
+      if (langue === 'fr') {
+        const frFrance = voix.filter(function(v) {
+          const code = String(v.lang || '').toLowerCase();
+          const nom = String(v.name || '').toLowerCase();
+          return code === 'fr-fr' && !/canad|québec|quebec/.test(nom);
+        });
+        if (!frFrance.length) return null;
+        frFrance.sort(function(a, b) {
+          return scoreVoixGuestflow_(b, langue) - scoreVoixGuestflow_(a, langue);
+        });
+        return frFrance[0] || null;
+      }
+
+      const compatibles = voix.filter(function(v) {
+        return String(v.lang || '').toLowerCase().startsWith(cible.split('-')[0]);
       });
-
-      return meilleurScore > -10000 ? meilleure : null;
+      if (!compatibles.length) return null;
+      compatibles.sort(function(a, b) {
+        return scoreVoixGuestflow_(b, langue) - scoreVoixGuestflow_(a, langue);
+      });
+      return compatibles[0] || null;
     }
 
     function reglagesVoixGuestflow_(langue) {
       // Vitesse volontairement légèrement inférieure à 1 : la diction est plus liée
       // et moins mécanique sur les voix système Windows.
       const reglages = {
-        fr: { lang: 'fr-FR', rate: 0.96, pitch: 1.02 },
+        fr: { lang: 'fr-FR', rate: 0.93, pitch: 1.00 },
         en: { lang: 'en-GB', rate: 0.97, pitch: 1.00 },
         es: { lang: 'es-ES', rate: 0.95, pitch: 1.00 },
         de: { lang: 'de-DE', rate: 0.94, pitch: 0.99 }
@@ -4167,7 +4229,10 @@
           'guestflow prépare votre réponse…',
           'guestflow prépare votre réponse...'
         ];
-        answerText.textContent = txt;
+        // V23.17 : conserver le HTML sûr construit par afficherReponseGuestflow(),
+        // notamment le bouton/lien Google Maps. L'ancienne copie via textContent
+        // transformait le lien en simple texte dans l'interface visible.
+        answerText.innerHTML = engineAnswer.innerHTML;
         if (!placeholders.includes(low)) answerBox.classList.add('show');
       };
       new MutationObserver(updateAnswer).observe(engineAnswer, {
