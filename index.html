@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.10 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.10 — installation PWA */
+    /* V23.15.11 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1984,7 +1984,7 @@
               </svg>
             </div>
             <div>
-              <h2 id="conciergeTitle">Votre concierge Guestflow</h2>
+              <h2 id="conciergeTitle">Votre concierge</h2>
               <div class="online" id="onlineNow">En ligne maintenant</div>
             </div>
 
@@ -1999,10 +1999,10 @@
 
           <div class="language-row" aria-label="Choix de la langue">
             <span class="language-label" id="labelLangue">Langue :</span>
-            <button type="button" class="lang-btn active" data-lang="fr"><span class="flag flag-fr" aria-hidden="true"></span><span class="lang-code">FR</span></button>
-            <button type="button" class="lang-btn" data-lang="en"><span class="flag flag-gb" aria-hidden="true"></span><span class="lang-code">EN</span></button>
-            <button type="button" class="lang-btn" data-lang="es"><span class="flag flag-es" aria-hidden="true"></span><span class="lang-code">ES</span></button>
-            <button type="button" class="lang-btn" data-lang="de"><span class="flag flag-de" aria-hidden="true"></span><span class="lang-code">DE</span></button>
+            <button type="button" class="lang-btn active" data-lang="fr"><span aria-hidden="true">🇫🇷</span><span class="lang-code">FR</span></button>
+            <button type="button" class="lang-btn" data-lang="en"><span aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
+            <button type="button" class="lang-btn" data-lang="es"><span aria-hidden="true">🇪🇸</span><span class="lang-code">ES</span></button>
+            <button type="button" class="lang-btn" data-lang="de"><span aria-hidden="true">🇩🇪</span><span class="lang-code">DE</span></button>
           </div>
         </div>
 
@@ -2071,8 +2071,6 @@
   </main>
 
   <script>
-    const GUESTFLOW_APP_VERSION = '23.15.10';
-
     let langueSelectionnee = 'fr';
     let voixActive = true;
     // V23.9 : le nom du gîte est visible, l'ID technique reste masqué.
@@ -2112,7 +2110,7 @@
         micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
         installApp: 'Ajouter Guestflow à mon téléphone',
         iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
-        conciergeTitle: 'Votre concierge Guestflow',
+        conciergeTitle: 'Votre concierge',
         onlineNow: 'En ligne maintenant',
         answerPlaceholder: 'La réponse de Guestflow apparaîtra ici.',
         justNow: 'À l’instant'
@@ -2137,7 +2135,7 @@
         micUnsupported: 'Voice dictation is not available in this browser.',
         installApp: 'Add Guestflow to my phone',
         iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
-        conciergeTitle: 'Your Guestflow concierge',
+        conciergeTitle: 'Your concierge',
         onlineNow: 'Online now',
         answerPlaceholder: 'Guestflow’s answer will appear here.',
         justNow: 'Just now'
@@ -2162,7 +2160,7 @@
         micUnsupported: 'El dictado por voz no está disponible en este navegador.',
         installApp: 'Añadir Guestflow a mi teléfono',
         iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
-        conciergeTitle: 'Tu conserje Guestflow',
+        conciergeTitle: 'Tu conserje',
         onlineNow: 'En línea ahora',
         answerPlaceholder: 'La respuesta de Guestflow aparecerá aquí.',
         justNow: 'Ahora mismo'
@@ -2187,7 +2185,7 @@
         micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
         installApp: 'Guestflow zu meinem Telefon hinzufügen',
         iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
-        conciergeTitle: 'Ihr Guestflow-Concierge',
+        conciergeTitle: 'Ihr Concierge',
         onlineNow: 'Jetzt online',
         answerPlaceholder: 'Die Antwort von Guestflow erscheint hier.',
         justNow: 'Gerade eben'
@@ -2235,13 +2233,6 @@
         const texteActuel = String(reponsePlaceholder.textContent || '').trim();
         const textesVides = [
           'La réponse du concierge apparaîtra ici.',
-          'La réponse de Guestflow apparaîtra ici.',
-          'The concierge’s answer will appear here.',
-          'Guestflow’s answer will appear here.',
-          'La respuesta del conserje aparecerá aquí.',
-          'La respuesta de Guestflow aparecerá aquí.',
-          'Die Antwort des Concierges erscheint hier.',
-          'Die Antwort von Guestflow erscheint hier.',
           traductionsInterface.fr.answerPlaceholder,
           traductionsInterface.en.answerPlaceholder,
           traductionsInterface.es.answerPlaceholder,
@@ -3108,7 +3099,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.10 — PWA Android / iPhone
+    // GUESTFLOW V23.15.11 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3178,7 +3169,7 @@
       });
     }
 
-    // V23.15.10 — langue fiable + mémorisée dans la PWA.
+    // V23.15.11 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3215,53 +3206,12 @@
       initialiserLanguesGuestflow_();
     }
 
-    // =========================================================
-    // V23.15.10 — MISE À JOUR AUTOMATIQUE DE LA PWA
-    // =========================================================
+    // Enregistre le service worker.
     if ('serviceWorker' in navigator) {
-      let rechargementApresMaj = false;
-
-      navigator.serviceWorker.addEventListener('controllerchange', function() {
-        if (rechargementApresMaj) return;
-        rechargementApresMaj = true;
-        window.location.reload();
-      });
-
-      window.addEventListener('load', async function() {
-        try {
-          const registration = await navigator.serviceWorker.register(
-            './service-worker.js',
-            { updateViaCache: 'none' }
-          );
-
-          // Force une vérification immédiate à chaque ouverture.
-          try {
-            await registration.update();
-          } catch (e) {}
-
-          // Si une nouvelle version attend déjà, on l'active tout de suite.
-          if (registration.waiting) {
-            registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-          }
-
-          // Si une mise à jour est trouvée pendant l'ouverture, on l'active
-          // dès qu'elle est prête.
-          registration.addEventListener('updatefound', function() {
-            const nouveauWorker = registration.installing;
-            if (!nouveauWorker) return;
-
-            nouveauWorker.addEventListener('statechange', function() {
-              if (
-                nouveauWorker.state === 'installed' &&
-                navigator.serviceWorker.controller
-              ) {
-                nouveauWorker.postMessage({ type: 'SKIP_WAITING' });
-              }
-            });
-          });
-        } catch (err) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
           console.warn('Service worker Guestflow non enregistré :', err);
-        }
+        });
       });
     }
 
@@ -3270,48 +3220,36 @@
 
 
     // =========================================================
-    // V23.15.10 — CONTRÔLE DE VERSION SANS CACHE
-    // Vérifie version.json à chaque ouverture / retour depuis le cache.
+    // V23.15.11 — MISE À JOUR AUTOMATIQUE
     // =========================================================
     async function verifierVersionGuestflow_() {
       try {
-        const urlVersion = new URL('./version.json', window.location.href);
-        urlVersion.searchParams.set('_ts', Date.now().toString());
+        const u = new URL('./version.json', window.location.href);
+        u.searchParams.set('_ts', Date.now().toString());
 
-        const reponse = await fetch(urlVersion.toString(), {
-          method: 'GET',
+        const r = await fetch(u.toString(), {
           cache: 'no-store',
           headers: { 'Cache-Control': 'no-cache' }
         });
 
-        if (!reponse.ok) return;
+        if (!r.ok) return;
+        const d = await r.json();
+        const distante = String(d.version || '').trim();
 
-        const data = await reponse.json();
-        const versionDistante = String(data.version || '').trim();
-
-        if (!versionDistante || versionDistante === GUESTFLOW_APP_VERSION) {
-          return;
+        if (distante && distante !== GUESTFLOW_APP_VERSION) {
+          const nouvelle = new URL(window.location.href);
+          nouvelle.searchParams.set('_gfver', distante);
+          nouvelle.searchParams.set('_gfts', Date.now().toString());
+          window.location.replace(nouvelle.toString());
         }
-
-        // Force une nouvelle navigation réseau tout en conservant gîte + token.
-        const nouvelleUrl = new URL(window.location.href);
-        nouvelleUrl.searchParams.set('_gfver', versionDistante);
-        nouvelleUrl.searchParams.set('_gfts', Date.now().toString());
-
-        window.location.replace(nouvelleUrl.toString());
       } catch (e) {
-        console.warn('Vérification de version Guestflow impossible :', e);
+        console.warn('Mise à jour Guestflow indisponible :', e);
       }
     }
 
-    window.addEventListener('pageshow', function() {
-      verifierVersionGuestflow_();
-    });
-
+    window.addEventListener('pageshow', verifierVersionGuestflow_);
     document.addEventListener('visibilitychange', function() {
-      if (document.visibilityState === 'visible') {
-        verifierVersionGuestflow_();
-      }
+      if (document.visibilityState === 'visible') verifierVersionGuestflow_();
     });
 
 </script>
