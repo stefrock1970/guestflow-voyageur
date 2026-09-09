@@ -6,7 +6,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
+  <!-- Guestflow V23.15.12 — PWA Android + iPhone -->
   <title>Guestflow — Votre concierge numérique</title>
   <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
 
@@ -1876,7 +1876,7 @@
     }
 
   
-    /* V23.15.11 — installation PWA */
+    /* V23.15.12 — installation PWA */
     .pwa-install-wrap {
       display: none;
       margin: 8px 0 0;
@@ -1911,6 +1911,11 @@
   <meta name="apple-mobile-web-app-title" content="Guestflow">
   <link rel="manifest" href="./manifest.json">
   <link rel="apple-touch-icon" href="./icon-192.png">
+
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 
 </head>
 
@@ -3099,7 +3104,7 @@
   
 
     // =========================================================
-    // GUESTFLOW V23.15.11 — PWA Android / iPhone
+    // GUESTFLOW V23.15.12 — PWA Android / iPhone
     // =========================================================
     let guestflowDeferredInstallPrompt = null;
 
@@ -3169,7 +3174,7 @@
       });
     }
 
-    // V23.15.11 — langue fiable + mémorisée dans la PWA.
+    // V23.15.12 — langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
       let langueInitiale = 'fr';
 
@@ -3206,13 +3211,61 @@
       initialiserLanguesGuestflow_();
     }
 
-    // Enregistre le service worker.
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('./service-worker.js').catch(function(err) {
-          console.warn('Service worker Guestflow non enregistré :', err);
+    // =========================================================
+    // V23.15.12 — MODE DÉVELOPPEMENT : AUCUN CACHE D'INTERFACE
+    // =========================================================
+    async function preparerPwaGuestflowSansCache_() {
+      if (!('serviceWorker' in navigator)) return;
+
+      try {
+        // Supprime tout ancien Cache Storage Guestflow.
+        if ('caches' in window) {
+          const nomsCaches = await caches.keys();
+          await Promise.all(nomsCaches.map(nom => caches.delete(nom)));
+        }
+
+        // Le paramètre de version force le navigateur à demander le SW courant.
+        const registration = await navigator.serviceWorker.register(
+          './service-worker.js?v=23.15.12',
+          {
+            scope: './',
+            updateViaCache: 'none'
+          }
+        );
+
+        try { await registration.update(); } catch (e) {}
+
+        if (registration.waiting) {
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+
+        registration.addEventListener('updatefound', function() {
+          const worker = registration.installing;
+          if (!worker) return;
+
+          worker.addEventListener('statechange', function() {
+            if (
+              worker.state === 'installed' &&
+              navigator.serviceWorker.controller
+            ) {
+              worker.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
         });
+      } catch (e) {
+        console.warn('Préparation PWA Guestflow impossible :', e);
+      }
+    }
+
+    let guestflowReloadApresNouveauSw = false;
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (guestflowReloadApresNouveauSw) return;
+        guestflowReloadApresNouveauSw = true;
+        window.location.reload();
       });
+
+      window.addEventListener('load', preparerPwaGuestflowSansCache_);
     }
 
     majInstallationGuestflow_();
@@ -3220,7 +3273,7 @@
 
 
     // =========================================================
-    // V23.15.11 — MISE À JOUR AUTOMATIQUE
+    // V23.15.12 — MISE À JOUR AUTOMATIQUE
     // =========================================================
     async function verifierVersionGuestflow_() {
       try {
