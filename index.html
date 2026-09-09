@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Guestflow — accueil installation FR + concierge sécurisé -->
+<!-- Guestflow — accueil installation FR + concierge sécurisé | QR LANDING FIX 2026-09-09 -->
 <html lang="fr">
 <head>
   <base target="_top">
@@ -2017,13 +2017,14 @@
       overscroll-behavior:auto !important;
       background:#f4efe5 !important;
     }
-    body:not(.guestflow-standalone)::before{display:none !important}
-    body:not(.guestflow-standalone) > .page{display:none !important}
-    body.guestflow-standalone > .guestflow-landing{display:none !important}
+    /* QR / navigateur : accueil toujours visible. */
+    body::before{display:none !important}
+    body > .guestflow-landing{display:block !important}
+    body > .page{display:none !important}
 
-    /* IMPORTANT : ne pas masquer l’accueil via CSS selon display-mode.
-       Le choix accueil/concierge est géré uniquement par le script ci-dessous,
-       afin qu’un navigateur/QR qui se déclare standalone n’affiche jamais une page vide. */
+    /* Mode application explicite uniquement : concierge visible. */
+    body.guestflow-app-mode > .guestflow-landing{display:none !important}
+    body.guestflow-app-mode > .page{display:flex !important}
   </style>
 
   <meta name="theme-color" content="#596b50">
@@ -2037,22 +2038,12 @@
 
 <body>
   <script>
+    // Guestflow — mode d'ouverture déterministe.
+    // Le QR code (sans ?mode=app) affiche TOUJOURS l'écran d'accueil.
+    // Seule une URL contenant ?mode=app ouvre directement le concierge.
     (function(){
-      var standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-      if (window.navigator.standalone === true) standalone = true;
-
-      var forceApp = new URLSearchParams(window.location.search).get('mode') === 'app';
-      var installationConfirmee = false;
-      try {
-        installationConfirmee = localStorage.getItem('guestflow_installed') === '1';
-      } catch (e) {}
-
-      // Le QR code doit toujours afficher l'accueil dans le navigateur.
-      // Le concierge direct n'est autorisé que si l'installation a réellement été confirmée
-      // ou si l'URL demande explicitement le mode application.
-      if (forceApp || (standalone && installationConfirmee)) {
-        document.body.classList.add('guestflow-standalone');
-      }
+      var isAppMode = new URLSearchParams(window.location.search).get('mode') === 'app';
+      if (isAppMode) document.body.classList.add('guestflow-app-mode');
     })();
   </script>
 
@@ -3333,7 +3324,6 @@
 
     window.addEventListener('appinstalled', function() {
       guestflowDeferredInstallPrompt = null;
-      try { localStorage.setItem('guestflow_installed', '1'); } catch (e) {}
       majInstallationGuestflow_();
     });
 
@@ -3408,7 +3398,8 @@
         try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
 
         if (estStandaloneGuestflow_()) {
-          document.body.classList.add('guestflow-standalone');
+          // Dans une vraie ouverture d'application, l'URL doit contenir ?mode=app.
+          // On ne masque jamais l'accueil sur la seule base d'un détecteur navigateur.
           return;
         }
 
