@@ -2453,6 +2453,87 @@
     }
   </style>
 
+
+  <style id="guestflow-multilingual-install-v1">
+    .gf-install-landing{
+      min-height:100vh;
+      padding:24px 16px max(28px,env(safe-area-inset-bottom));
+      background:
+        radial-gradient(circle at 12% 8%,rgba(177,190,145,.25),transparent 28%),
+        radial-gradient(circle at 88% 18%,rgba(226,207,176,.32),transparent 30%),
+        linear-gradient(180deg,#fbf8f2 0%,#f1eadf 100%);
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      color:#2f392f;
+    }
+    .gf-install-shell{
+      width:min(100%,560px);
+      margin:0 auto;
+      background:rgba(255,253,249,.96);
+      border:1px solid rgba(63,73,51,.10);
+      border-radius:30px;
+      box-shadow:0 24px 70px rgba(54,61,45,.14);
+      padding:24px 22px 22px;
+    }
+    .gf-install-brand{display:flex;align-items:center;gap:12px}
+    .gf-install-mark{
+      width:46px;height:46px;border-radius:15px;display:grid;place-items:center;
+      background:linear-gradient(145deg,#66734b,#3f4933);color:#fff;
+      font:700 25px/1 Georgia,"Times New Roman",serif;
+      box-shadow:0 10px 24px rgba(63,73,51,.20)
+    }
+    .gf-install-brand-name{font:700 25px/1.05 Georgia,"Times New Roman",serif;color:#34402f}
+    .gf-install-brand-sub{margin-top:4px;font-size:12px;color:#717a70}
+    .gf-install-landing .guestflow-language-switch{
+      position:static !important;width:100% !important;height:auto !important;
+      margin:22px 0 26px;padding:5px;gap:4px;background:#eeebe3;border-radius:999px;
+      display:flex;line-height:1;box-sizing:border-box;
+    }
+    .gf-install-landing .guestflow-language-switch button{
+      min-height:42px;font-size:13px;gap:6px;
+    }
+    .gf-install-hero{
+      padding:28px 22px;
+      border-radius:24px;
+      background:linear-gradient(145deg,#5f7049,#44553d);
+      color:#fff;
+      box-shadow:0 18px 40px rgba(63,73,51,.18);
+    }
+    .gf-install-kicker{
+      display:inline-block;margin-bottom:10px;padding:6px 10px;border-radius:999px;
+      background:rgba(255,255,255,.13);font-size:11px;font-weight:800;
+      letter-spacing:.08em;text-transform:uppercase
+    }
+    .gf-install-hero h1{
+      margin:0;font:600 clamp(28px,7vw,42px)/1.08 Georgia,"Times New Roman",serif;
+      letter-spacing:-.02em
+    }
+    .gf-install-hero p{margin:15px 0 0;font-size:15px;line-height:1.55;color:rgba(255,255,255,.90)}
+    .gf-install-features{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 18px
+    }
+    .gf-install-features div{
+      min-height:88px;padding:12px 8px;border:1px solid rgba(63,73,51,.10);
+      border-radius:16px;background:#f7f3eb;display:flex;flex-direction:column;
+      align-items:center;justify-content:center;text-align:center;gap:7px
+    }
+    .gf-install-features div>span{font-size:20px;font-weight:800;color:#536545}
+    .gf-install-features strong{font-size:11px;line-height:1.25;color:#465044}
+    .gf-install-main-btn{
+      width:100%;min-height:58px;border:0;border-radius:18px;background:#4d623a;color:#fff;
+      font:800 16px/1.2 Inter,Arial,sans-serif;cursor:pointer;
+      box-shadow:0 12px 28px rgba(63,73,51,.20)
+    }
+    .gf-install-main-btn:active{transform:scale(.99)}
+    .gf-install-note{margin:11px 4px 0;text-align:center;font-size:12px;line-height:1.4;color:#727b71}
+    @media(max-width:420px){
+      .gf-install-landing{padding:12px 9px 20px}
+      .gf-install-shell{padding:18px 14px;border-radius:24px}
+      .gf-install-hero{padding:24px 18px}
+      .gf-install-features{grid-template-columns:1fr}
+      .gf-install-features div{min-height:58px;flex-direction:row;justify-content:flex-start;padding:10px 14px;text-align:left}
+    }
+  </style>
+
 </head>
 
 <body>
@@ -2466,9 +2547,15 @@
     })();
   </script>
 
-  <section class="guestflow-landing" id="guestflowLanding" aria-label="Installer Guestflow">
-    <div class="guestflow-landing-inner">
-      <img class="guestflow-landing-image" src="./accueil-guestflow-fr.png" alt="Guestflow Les Oliviers — installer votre concierge de séjour">
+  <section class="guestflow-landing gf-install-landing" id="guestflowLanding" aria-label="Installer Guestflow">
+    <div class="gf-install-shell">
+      <div class="gf-install-brand">
+        <div class="gf-install-mark" aria-hidden="true">G</div>
+        <div>
+          <div class="gf-install-brand-name">Guestflow</div>
+          <div class="gf-install-brand-sub" id="landingBrandSub">Votre concierge numérique</div>
+        </div>
+      </div>
 
       <div class="guestflow-language-switch" aria-label="Choix de la langue">
         <button type="button" class="active" data-landing-lang="fr" aria-label="Français" aria-pressed="true"><span class="landing-flag" aria-hidden="true">🇫🇷</span><span>FR</span></button>
@@ -2476,7 +2563,21 @@
         <button type="button" data-landing-lang="es" aria-label="Español" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇪🇸</span><span>ES</span></button>
         <button type="button" data-landing-lang="de" aria-label="Deutsch" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇩🇪</span><span>DE</span></button>
       </div>
-      <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
+
+      <div class="gf-install-hero">
+        <div class="gf-install-kicker" id="landingKicker">Bienvenue</div>
+        <h1 id="landingTitle">Votre concierge de séjour, toujours à portée de main.</h1>
+        <p id="landingText">Installez Guestflow sur votre téléphone pour poser vos questions, obtenir les informations du logement et vous guider pendant votre séjour.</p>
+      </div>
+
+      <div class="gf-install-features">
+        <div><span aria-hidden="true">🎙️</span><strong id="landingFeature1">Questions vocales</strong></div>
+        <div><span aria-hidden="true">🗺️</span><strong id="landingFeature2">Itinéraires Google Maps</strong></div>
+        <div><span aria-hidden="true">24/7</span><strong id="landingFeature3">Disponible à tout moment</strong></div>
+      </div>
+
+      <button class="gf-install-main-btn" id="landingInstallBtn" type="button">Installer Guestflow</button>
+      <p class="gf-install-note" id="landingNote">L’installation prend seulement quelques secondes.</p>
     </div>
   </section>
 
@@ -2485,20 +2586,7 @@
   <div class="guestflow-install-help" id="guestflowInstallHelp" aria-hidden="true">
     <div class="guestflow-install-card" role="dialog" aria-modal="true" aria-labelledby="guestflowInstallTitle">
       <h2 id="guestflowInstallTitle">Installer Guestflow</h2>
-      <div id="guestflowInstallInstructions">
-          <p><strong>Sur Android :</strong></p>
-          <ol>
-            <li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>
-            <li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>
-            <li>Confirmez avec <strong>Installer</strong> ou <strong>Ajouter</strong>.</li>
-          </ol>
-          <p><strong>Sur iPhone :</strong></p>
-          <ol>
-            <li>Touchez <strong>Partager</strong>.</li>
-            <li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>
-            <li>Touchez <strong>Ajouter</strong>.</li>
-          </ol>
-        </div>
+      <div id="guestflowInstallInstructions"></div>
       <a class="guestflow-install-close" id="guestflowInstallClose" href="#">J’ai compris</a>
     </div>
   </div>
@@ -4195,28 +4283,111 @@
       }
     }
 
+    const gfInstallationI18n_ = {
+      fr: {
+        brand:'Votre concierge numérique', kicker:'Bienvenue',
+        title:'Votre concierge de séjour, toujours à portée de main.',
+        text:'Installez Guestflow sur votre téléphone pour poser vos questions, obtenir les informations du logement et vous guider pendant votre séjour.',
+        f1:'Questions vocales', f2:'Itinéraires Google Maps', f3:'Disponible à tout moment',
+        install:'Installer Guestflow', note:'L’installation prend seulement quelques secondes.',
+        dialog:'Installer Guestflow', close:'J’ai compris',
+        iosTitle:'Pour installer Guestflow sur iPhone :',
+        ios:['Touchez <strong>Partager</strong>.','Choisissez <strong>Sur l’écran d’accueil</strong>.','Touchez <strong>Ajouter</strong>.'],
+        androidTitle:'Pour installer Guestflow sur Android :',
+        android:['Ouvrez le menu <strong>⋮</strong> de votre navigateur.','Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.','Confirmez l’installation.'],
+        already:'Guestflow est déjà installé.', launched:'Installation de Guestflow lancée.', cancelled:'Installation annulée.',
+        preparing:'Préparation de l’installation…',
+        chromeAuto:gfInstallationTexte_().chromeAuto,
+        chromeNotReady:gfInstallationTexte_().chromeNotReady
+      },
+      en: {
+        brand:'Your digital concierge', kicker:'Welcome',
+        title:'Your stay concierge, always within reach.',
+        text:'Install Guestflow on your phone to ask questions, access accommodation information and get directions throughout your stay.',
+        f1:'Voice questions', f2:'Google Maps directions', f3:'Available anytime',
+        install:'Install Guestflow', note:'Installation only takes a few seconds.',
+        dialog:'Install Guestflow', close:'Got it',
+        iosTitle:'To install Guestflow on iPhone:',
+        ios:['Tap <strong>Share</strong>.','Choose <strong>Add to Home Screen</strong>.','Tap <strong>Add</strong>.'],
+        androidTitle:'To install Guestflow on Android:',
+        android:['Open the <strong>⋮</strong> menu in your browser.','Choose <strong>Install app</strong> or <strong>Add to Home screen</strong>.','Confirm the installation.'],
+        already:'Guestflow is already installed.', launched:'Guestflow installation started.', cancelled:'Installation cancelled.',
+        preparing:'Preparing installation…',
+        chromeAuto:'Chrome could not open the installation window automatically.',
+        chromeNotReady:'Chrome is not offering automatic installation on this device yet.'
+      },
+      es: {
+        brand:'Tu conserje digital', kicker:'Bienvenido',
+        title:'Tu conserje de estancia, siempre a mano.',
+        text:'Instala Guestflow en tu teléfono para hacer preguntas, consultar la información del alojamiento y obtener indicaciones durante tu estancia.',
+        f1:'Preguntas por voz', f2:'Rutas con Google Maps', f3:'Disponible en todo momento',
+        install:'Instalar Guestflow', note:'La instalación solo tarda unos segundos.',
+        dialog:'Instalar Guestflow', close:'Entendido',
+        iosTitle:'Para instalar Guestflow en iPhone:',
+        ios:['Toca <strong>Compartir</strong>.','Elige <strong>Añadir a pantalla de inicio</strong>.','Toca <strong>Añadir</strong>.'],
+        androidTitle:'Para instalar Guestflow en Android:',
+        android:['Abre el menú <strong>⋮</strong> del navegador.','Elige <strong>Instalar aplicación</strong> o <strong>Añadir a pantalla de inicio</strong>.','Confirma la instalación.'],
+        already:'Guestflow ya está instalado.', launched:'Se ha iniciado la instalación de Guestflow.', cancelled:'Instalación cancelada.',
+        preparing:'Preparando la instalación…',
+        chromeAuto:'Chrome no ha podido abrir automáticamente la ventana de instalación.',
+        chromeNotReady:'Chrome todavía no ofrece la instalación automática en este dispositivo.'
+      },
+      de: {
+        brand:'Ihr digitaler Concierge', kicker:'Willkommen',
+        title:'Ihr Reise-Concierge, jederzeit griffbereit.',
+        text:'Installieren Sie Guestflow auf Ihrem Smartphone, um Fragen zu stellen, Unterkunftsinformationen abzurufen und während Ihres Aufenthalts Wegbeschreibungen zu erhalten.',
+        f1:'Sprachfragen', f2:'Google-Maps-Routen', f3:'Jederzeit verfügbar',
+        install:'Guestflow installieren', note:'Die Installation dauert nur wenige Sekunden.',
+        dialog:'Guestflow installieren', close:'Verstanden',
+        iosTitle:'So installieren Sie Guestflow auf dem iPhone:',
+        ios:['Tippen Sie auf <strong>Teilen</strong>.','Wählen Sie <strong>Zum Home-Bildschirm</strong>.','Tippen Sie auf <strong>Hinzufügen</strong>.'],
+        androidTitle:'So installieren Sie Guestflow auf Android:',
+        android:['Öffnen Sie das Menü <strong>⋮</strong> Ihres Browsers.','Wählen Sie <strong>App installieren</strong> oder <strong>Zum Startbildschirm hinzufügen</strong>.','Bestätigen Sie die Installation.'],
+        already:'Guestflow ist bereits installiert.', launched:'Die Guestflow-Installation wurde gestartet.', cancelled:'Installation abgebrochen.',
+        preparing:'Installation wird vorbereitet…',
+        chromeAuto:'Chrome konnte das Installationsfenster nicht automatisch öffnen.',
+        chromeNotReady:'Chrome bietet die automatische Installation auf diesem Gerät noch nicht an.'
+      }
+    };
+
+    function gfInstallationTexte_() {
+      return gfInstallationI18n_[langueSelectionnee] || gfInstallationI18n_.fr;
+    }
+
+    function traduireInstallationGuestflow_(lang) {
+      const t = gfInstallationI18n_[lang] || gfInstallationI18n_.fr;
+      const map = {
+        landingBrandSub:'brand', landingKicker:'kicker', landingTitle:'title', landingText:'text',
+        landingFeature1:'f1', landingFeature2:'f2', landingFeature3:'f3',
+        landingInstallBtn:'install', landingNote:'note', guestflowInstallTitle:'dialog',
+        guestflowInstallClose:'close'
+      };
+      Object.keys(map).forEach(function(id){
+        const el = document.getElementById(id);
+        if (el) el.textContent = t[map[id]];
+      });
+      document.documentElement.lang = lang;
+      const landing = document.getElementById('guestflowLanding');
+      if (landing) landing.setAttribute('aria-label', t.install);
+    }
+
     function ouvrirAideInstallationGuestflow_(messageSupplementaire) {
       const help = document.getElementById('guestflowInstallHelp');
       const zone = document.getElementById('guestflowInstallInstructions');
       if (!help || !zone) return;
 
+      const t = gfInstallationTexte_();
       let html = '';
 
       if (messageSupplementaire) {
         html += '<p><strong>' + messageSupplementaire + '</strong></p>';
       }
 
-      if (estIOSGuestflow_()) {
-        html += '<p>Pour installer Guestflow sur iPhone :</p>' +
-          '<ol><li>Touchez <strong>Partager</strong>.</li>' +
-          '<li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>' +
-          '<li>Touchez <strong>Ajouter</strong>.</li></ol>';
-      } else {
-        html += '<p>Pour installer Guestflow sur Android :</p>' +
-          '<ol><li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>' +
-          '<li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>' +
-          '<li>Confirmez l’installation.</li></ol>';
-      }
+      const titre = estIOSGuestflow_() ? t.iosTitle : t.androidTitle;
+      const etapes = estIOSGuestflow_() ? t.ios : t.android;
+      html += '<p>' + titre + '</p><ol>' +
+        etapes.map(function(x){ return '<li>' + x + '</li>'; }).join('') +
+        '</ol>';
 
       zone.innerHTML = html;
       help.classList.add('show');
@@ -4228,6 +4399,7 @@
       const choisie = supportees.includes(lang) ? lang : 'fr';
       langueSelectionnee = choisie;
       try { localStorage.setItem('guestflow_langue', choisie); } catch (e) {}
+      traduireInstallationGuestflow_(choisie);
 
       // Synchronise immédiatement l'indicateur visuel de langue sur l'écran d'installation.
       document.querySelectorAll('[data-landing-lang]').forEach(function(bouton){
@@ -4289,7 +4461,7 @@
         appliquerLangueInstallationGuestflow_(langueSelectionnee);
 
         if (estStandaloneGuestflow_()) {
-          toastAccueilGuestflow_('Guestflow est déjà installé.');
+          toastAccueilGuestflow_(gfInstallationTexte_().already);
           return;
         }
 
@@ -4306,14 +4478,14 @@
 
             if (choix && choix.outcome === 'accepted') {
               fermerAideInstallationGuestflow_();
-              toastAccueilGuestflow_('Installation de Guestflow lancée.');
+              toastAccueilGuestflow_(gfInstallationTexte_().launched);
             } else {
               // Si l'utilisateur annule, on ne le force pas vers un menu navigateur.
-              toastAccueilGuestflow_('Installation annulée.');
+              toastAccueilGuestflow_(gfInstallationTexte_().cancelled);
             }
           } catch (e) {
             ouvrirAideInstallationGuestflow_(
-              'Chrome n’a pas pu ouvrir la fenêtre d’installation automatiquement.'
+              gfInstallationTexte_().chromeAuto
             );
           }
 
@@ -4330,7 +4502,7 @@
         // Android : le navigateur n'a pas encore déclaré la PWA installable.
         // On ne renvoie PAS immédiatement vers le menu ⋮.
         // On tente d'abord de laisser quelques instants au SW/manifest de devenir prêts.
-        toastAccueilGuestflow_('Préparation de l’installation…');
+        toastAccueilGuestflow_(gfInstallationTexte_().preparing);
 
         const debut = Date.now();
         const limite = 2500;
@@ -4345,14 +4517,14 @@
             }).then(function(choix) {
               if (choix && choix.outcome === 'accepted') {
                 fermerAideInstallationGuestflow_();
-                toastAccueilGuestflow_('Installation de Guestflow lancée.');
+                toastAccueilGuestflow_(gfInstallationTexte_().launched);
               } else {
-                toastAccueilGuestflow_('Installation annulée.');
+                toastAccueilGuestflow_(gfInstallationTexte_().cancelled);
               }
               majInstallationGuestflow_();
             }).catch(function() {
               ouvrirAideInstallationGuestflow_(
-                'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+                gfInstallationTexte_().chromeNotReady
               );
             });
             return;
@@ -4364,7 +4536,7 @@
           }
 
           ouvrirAideInstallationGuestflow_(
-            'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+            gfInstallationTexte_().chromeNotReady
           );
         };
 
@@ -4386,18 +4558,25 @@
       });
     }
 
-    // V23.15.11 — langue fiable + mémorisée dans la PWA.
+    // Langue fiable + mémorisée dans la PWA.
     function initialiserLanguesGuestflow_() {
-      langueSelectionnee = 'fr';
-      try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
+      const p = new URLSearchParams(window.location.search);
+      const langUrl = String(p.get('lang') || '').toLowerCase();
+      let langSauvee = '';
+      try { langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase(); } catch (e) {}
+
+      const initiale = ['fr','en','es','de'].includes(langUrl)
+        ? langUrl
+        : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
+
       document.querySelectorAll('.lang-btn[data-lang]').forEach(function(btn) {
         btn.addEventListener('click', function(event) {
           event.preventDefault();
-          // Phase de validation : seule la version française est active.
-          choisirLangue('fr');
+          choisirLangue(String(btn.dataset.lang || 'fr').toLowerCase());
         });
       });
-      choisirLangue('fr');
+
+      choisirLangue(initiale);
     }
 
     if (document.readyState === 'loading') {
