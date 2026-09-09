@@ -1,5 +1,5 @@
-// Guestflow PWA Lab — build A
-const BUILD = "A";
+// Guestflow PWA Lab — build B
+const BUILD = "B";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
