@@ -1,0 +1,16 @@
+{
+  "id": "./?app=Cacouech-de",
+  "name": "Guestflow — Cacouech (Deutsch)",
+  "short_name": "Guestflow DE",
+  "description": "Ihr digitaler Concierge",
+  "start_url": "./?gite=Cacouech&token=260104f791e7465fa2cd2078544d933ce46a723d964a48afa70aae4aa0f26ef3&lang=de&mode=app",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#6f7f4e",
+  "prefer_related_applications": false,
+  "icons": [
+    {"src":"./gf192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./gf512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}
