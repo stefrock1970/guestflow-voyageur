@@ -1,5 +1,5 @@
-// Guestflow PWA Lab — build B
-const BUILD = "B";
+// Guestflow PWA Lab — build C
+const SW_BUILD = "C";
 
 self.addEventListener("install", event => {
   self.skipWaiting();
@@ -14,17 +14,23 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("message", event => {
-  if (event.data && event.data.type === "SKIP_WAITING") {
-    self.skipWaiting();
-  }
+  if (event.data && event.data.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("fetch", event => {
   const req = event.request;
   if (req.method !== "GET") return;
 
-  if (req.mode === "navigate") {
-    event.respondWith(fetch(req, {cache:"no-store"}));
+  const url = new URL(req.url);
+
+  // Pour toute navigation dans le labo, on demande index.html
+  // avec un paramètre unique lié au build du SW + timestamp.
+  if (req.mode === "navigate" && url.pathname.includes("/pwa-lab/")) {
+    const fresh = new URL("./index.html", self.registration.scope);
+    fresh.searchParams.set("swbuild", SW_BUILD);
+    fresh.searchParams.set("_ts", Date.now().toString());
+
+    event.respondWith(fetch(fresh.toString(), {cache:"no-store"}));
     return;
   }
 
