@@ -2882,18 +2882,34 @@
       mettreAJourInterface(langue);
     }
 
-    // V10 — Français naturel, poli et réellement conversationnel.
-    // La politesse alterne de façon prévisible : une réponse non urgente sur deux,
-    // en commençant par une réponse polie. Les questions demandant une aide ou une
-    // permission reçoivent une formulation adaptée au contexte.
-    let gfDerniereReponsePolieFr = false;
+    // V12 — Français premium universel : aucun lieu touristique précis codé en dur.
+    // Objectifs :
+    // - transformer les réponses « étiquette + donnée » en vraies phrases ;
+    // - varier les formules de politesse sans les répéter mécaniquement ;
+    // - adapter le ton au contexte : pratique, recommandation, culture, patrimoine, nature, ville, urgence ;
+    // - appliquer les mêmes formulations à n’importe quelle destination, sans cas spécial Carcassonne/Paris/Rouen ;
+    // - ne jamais inventer une information absente de la réponse du moteur.
     let gfIndexFormuleFr = 0;
+    let gfIndexVariationFr = 0;
+
+    function gfChoisir_(liste, decalage) {
+      if (!liste || !liste.length) return '';
+      const i = (gfIndexVariationFr + (decalage || 0)) % liste.length;
+      gfIndexVariationFr += 1;
+      return liste[i];
+    }
+
+    function gfAjoutePhraseSiAbsente_(source, phrase, test) {
+      if (!phrase) return source;
+      if (test && test.test(source)) return source;
+      return source.replace(/[\s.!?]+$/, '') + '. ' + phrase;
+    }
 
     function embellirFrancaisGuestflow_(texte, question) {
       let source = String(texte || '').trim();
       if (!source || langueSelectionnee !== 'fr') return source;
 
-      // Protéger les URL : aucune réécriture ne doit casser un lien Google Maps.
+      // Protéger les URL pour ne jamais casser un lien Google Maps.
       const urls = [];
       source = source.replace(/https?:\/\/[^\s]+/gi, function(url) {
         const cle = '___GFURL' + urls.length + '___';
@@ -2901,22 +2917,43 @@
         return cle;
       });
 
-      // Nettoyage typographique léger.
       source = source
         .replace(/[ \t]{2,}/g, ' ')
         .replace(/\s+([,.;!?])/g, '$1')
         .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
+        .replace(/\s*:\s*/g, ' : ')
         .trim();
 
       const q = String(question || '').toLowerCase();
+      const ensemble = (q + ' ' + source).toLowerCase();
 
-      // Quelques tournures trop administratives → français conversationnel.
+      const urgence = /\b(urgence|urgent|danger|accident|samu|pompiers?|police|112|15|17|18)\b/i.test(ensemble);
+      const contactProprietaire = /\b(propriétaire|hôte|contact|numéro|téléphone|joindre|appeler|souci|problème dans le logement)\b/i.test(q);
+      const arriveeTardive = /\b(?:puis[- ]?je|peut[- ]?on|est[- ]?ce que je peux|je peux|arriver|arrivée)[^?!.]{0,70}\b(?:en retard|plus tard|tard)\b|\b(?:en retard|plus tard|tard)[^?!.]{0,70}\barriv/iu.test(q);
+      // Catégories universelles : aucun lieu précis n'est codé en dur.
+      // Le nom réel du lieu doit venir des données du gîte / du moteur.
+      const musee = /\b(mus[eé]e(?:s)?|galerie(?:s)?|exposition(?:s)?|centre culturel|centre d[’']art)\b/i.test(q);
+      const patrimoine = /\b(ch[aâ]teau(?:x)?|citadelle(?:s)?|fort(?:s)?|forteresse(?:s)?|abbaye(?:s)?|monast[eè]re(?:s)?|cath[eé]drale(?:s)?|basilique(?:s)?|[eé]glise(?:s)?|chapelle(?:s)?|monument(?:s)?|patrimoine|site historique|quartier historique|vieille ville|centre historique)\b/i.test(q);
+      const eauPromenade = /\b(canal|rivi[eè]re|fleuve|lac|port|quai|berge|front de mer|bord de mer|promenade au bord de l[’']eau)\b/i.test(q);
+      const visiteVille = /\b(visiter|visite|d[eé]couvrir|promener|promenade)[^?!.]{0,55}\b(ville|centre[- ]ville|village|quartier)\b|\b(ville|centre[- ]ville|village|quartier)[^?!.]{0,55}\b(visiter|visite|d[eé]couvrir|promener)\b/i.test(q);
+      const jardin = /\b(jardin(?:s)?|parc(?:s)?|espace vert|jardin botanique|arboretum)\b/i.test(q);
+      const rando = /\b(randonn[eé]e|rando|sentier|marche|balade|promenade|circuit p[eé]destre|voie verte)\b/i.test(q);
+      const panoramaNature = /\b(point de vue|belv[eé]d[eè]re|panorama|cascade|gorge(?:s)?|for[eê]t|bois|plage|site naturel|r[eé]serve naturelle)\b/i.test(q);
+      const loisirFamille = /\b(zoo|aquarium|parc animalier|parc d[’']attractions|activit[eé] familiale|avec des enfants)\b/i.test(q);
+      const restaurant = /\b(restaurants?|d[iî]ner|d[eé]jeuner|manger)\b/i.test(q);
+      const santeLieu = /\b(h[oô]pital|clinique|pharmacie|m[eé]decin)\b/i.test(q);
+      const wifi = /\bwi-?fi|wifi\b/i.test(q);
+      const depart = /\b(d[eé]part|quitter|lib[eé]rer le logement)\b/i.test(q);
+      const lieuTouristiqueGenerique = musee || patrimoine || eauPromenade || visiteVille || jardin || rando || panoramaNature || loisirFamille || /\b(site touristique|lieu touristique|lieu [àa] visiter|visite culturelle|curiosit[eé]|attraction touristique)\b/i.test(q);
+      const lieuPhysique = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|mus[eé]es?|galeries?|ch[aâ]teaux?|citadelles?|forteresses?|abbayes?|cath[eé]drales?|basiliques?|[eé]glises?|monuments?|sites? touristiques?|sites? historiques?|jardins?|parcs?|randonn[eé]es?|balades?|promenades?|canaux?|rivi[eè]res?|lacs?|ports?|plages?|belv[eé]d[eè]res?|panoramas?|gares?|a[eé]roports?|office de tourisme)\b/i.test(q);
+
+      // Réécritures ciblées : supprimer le ton « fiche technique ».
       const reformulations = [
         [/\bLe départ doit être effectué avant\s+/gi, 'Le départ est prévu avant '],
         [/\bLe départ doit avoir lieu avant\s+/gi, 'Le départ est prévu avant '],
         [/\bL[’']arrivée est possible à partir de\s+/gi, 'L’arrivée est prévue à partir de '],
-        [/\bVous pouvez vous y rendre en cliquant sur (?:le bouton )?Google Maps\.?/gi, 'Je peux vous y guider avec Google Maps.'],
-        [/\bVous pouvez cliquer sur (?:le bouton )?Google Maps pour vous y rendre\.?/gi, 'Je peux vous y guider avec Google Maps.'],
+        [/\bVous pouvez vous y rendre en cliquant sur (?:le bouton )?Google Maps\.?/gi, 'Vous pouvez ouvrir l’itinéraire avec Google Maps.'],
+        [/\bVous pouvez cliquer sur (?:le bouton )?Google Maps pour vous y rendre\.?/gi, 'Vous pouvez ouvrir l’itinéraire avec Google Maps.'],
         [/\bLe restaurant le plus proche est\s+/gi, 'Le restaurant le plus proche, c’est '],
         [/\bL[’']hôtel le plus proche est\s+/gi, 'L’hôtel le plus proche, c’est '],
         [/\bL[’']hôpital le plus proche est\s+/gi, 'L’hôpital le plus proche, c’est '],
@@ -2925,52 +2962,109 @@
         [/\bLe mot de passe Wi-?Fi est\s+/gi, 'Pour le Wi-Fi, le mot de passe est '],
         [/\bLe réseau Wi-?Fi est\s+/gi, 'Le réseau Wi-Fi s’appelle ']
       ];
+      reformulations.forEach(function(regle) { source = source.replace(regle[0], regle[1]); });
 
-      reformulations.forEach(function(regle) {
-        source = source.replace(regle[0], regle[1]);
-      });
+      // Cas propriétaire : remplacer les libellés secs par une phrase réellement parlée.
+      if (contactProprietaire && !urgence) {
+        const mTel = source.match(/(?:t[eé]l[eé]phone(?: de contact)?|num[eé]ro(?: du propri[eé]taire)?|contact)\s*:\s*([^\n.]+)/i);
+        if (mTel) {
+          const numero = mTel[1].trim();
+          source = source.replace(mTel[0], 'En cas de souci dans le logement, n’hésitez pas à contacter le propriétaire au ' + numero);
+        }
+      }
 
-      // Question typique : « Puis-je arriver en retard / plus tard ? ».
-      // On ne prétend pas que l'arrivée tardive est autorisée si le moteur ne l'a
-      // pas affirmé : on donne une réponse utile et on invite à confirmer avec le propriétaire.
-      const demandeArriveeTardive = /\b(?:puis[- ]?je|peut[- ]?on|est[- ]?ce que je peux|je peux|arriver|arrivée)[^?!.]{0,55}\b(?:en retard|plus tard|tard)\b|\b(?:en retard|plus tard|tard)[^?!.]{0,55}\barriv/iu.test(q);
-      if (demandeArriveeTardive) {
+      // Arrivée tardive : répondre vraiment à la demande, sans inventer une autorisation.
+      if (arriveeTardive) {
         const parleDeProprietaire = /\b(propriétaire|hôte|contact|prévenir|prévenez|confirmer)\b/i.test(source);
         if (!parleDeProprietaire) {
-          source = source.replace(/[.!?\s]+$/, '');
-          source += '. Si vous souhaitez arriver plus tard, le mieux est de prévenir le propriétaire pour confirmer votre heure d’arrivée.';
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous pensez arriver plus tard, le mieux est de prévenir le propriétaire afin qu’il puisse s’organiser.',
+            /prévenir le propriétaire|confirmer votre heure d’arrivée/i);
         }
       }
 
-      // Urgences : pas de formule décorative, on reste immédiat et efficace.
-      const urgence = /\b(urgence|urgent|danger|accident|samu|pompiers?|police|112|15|17|18)\b/i.test(q + ' ' + source);
-      const dejaPoli = /^(bien sûr|bien entendu|avec plaisir|je vous en prie|volontiers|certainement|sans problème)[\s,.!]/i.test(source);
+      // Enrichissements contextuels premium. Ils n'ajoutent aucun fait concret :
+      // ils donnent uniquement un ton de concierge et proposent d'affiner la demande.
+      if (!urgence) {
+        if (musee) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous me dites le temps dont vous disposez, je peux aussi vous orienter vers une visite plus courte ou plus complète.',
+              'Si vous souhaitez une autre idée culturelle dans les environs, je peux aussi vous proposer une alternative.'
+            ]), /temps dont vous disposez|autre idée culturelle/i);
+        } else if (patrimoine) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous aimez le patrimoine, je peux aussi vous proposer une autre visite dans les environs.',
+              'Si vous me dites combien de temps vous avez, je peux vous orienter vers une visite adaptée.'
+            ]), /autre visite|combien de temps/i);
+        } else if (eauPromenade) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous me dites combien de temps vous souhaitez marcher, je peux vous aider à choisir une promenade adaptée.',
+              'Si vous préférez une balade courte ou une sortie plus longue, je peux affiner la suggestion.'
+            ]), /combien de temps.*marcher|balade courte|sortie plus longue/i);
+        } else if (visiteVille) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous préférez une promenade tranquille ou plutôt une visite axée sur le patrimoine, je peux affiner la suggestion.',
+            /promenade tranquille.*patrimoine/i);
+        } else if (jardin) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous cherchez plutôt une sortie courte et tranquille, je peux aussi vous proposer une autre option.',
+            /sortie courte et tranquille/i);
+        } else if (rando) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me précisez la durée souhaitée et le niveau de difficulté, je peux mieux vous orienter.',
+            /durée souhaitée.*niveau de difficulté/i);
+        } else if (panoramaNature) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me dites si vous cherchez surtout un beau point de vue, une balade facile ou une sortie plus nature, je peux affiner la suggestion.',
+            /beau point de vue|balade facile|sortie plus nature/i);
+        } else if (loisirFamille) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me précisez l’âge des enfants et le temps dont vous disposez, je peux vous orienter vers une sortie plus adaptée.',
+            /âge des enfants|sortie plus adaptée/i);
+        } else if (lieuTouristiqueGenerique) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me dites ce que vous aimez et le temps dont vous disposez, je peux vous proposer une visite plus adaptée.',
+            /ce que vous aimez.*temps dont vous disposez|visite plus adaptée/i);
+        }
+      }
 
-      if (urgence) {
-        gfDerniereReponsePolieFr = false;
-      } else if (!dejaPoli) {
-        // Les demandes formulées comme une permission/aide sont toujours polies,
-        // sinon on alterne : polie, directe, polie, directe…
-        const demandePermissionOuAide = /\b(puis[- ]?je|peut[- ]?on|pouvez[- ]?vous|pourriez[- ]?vous|est[- ]?ce que je peux|je peux|aidez[- ]?moi|aide)\b/i.test(q);
-        const doitEtrePoli = demandePermissionOuAide || !gfDerniereReponsePolieFr;
-
-        if (doitEtrePoli) {
-          const demandeLieu = /\b(restaurants?|hôtels?|hôpitaux?|pharmacies?|balades?|randonnées?|sites? touristiques?|musées?|châteaux?|plages?|parcs?|adresse|itinéraire|où se trouve|plus proche)\b/i.test(q);
-          const demandeService = /\b(wi-?fi|wifi|heure|arriv|départ|parking|animaux|petit[- ]déjeuner|propriétaire|numéro|contact)\b/i.test(q);
-          const formulesLieu = ['Avec plaisir. ', 'Bien sûr. ', 'Bien entendu. '];
-          const formulesService = ['Bien sûr. ', 'Avec plaisir. ', 'Sans problème. '];
-          const formulesNeutres = ['Bien sûr. ', 'Avec plaisir. ', 'Je vous en prie. '];
-          const liste = demandeLieu ? formulesLieu : (demandeService ? formulesService : formulesNeutres);
-          const formule = liste[gfIndexFormuleFr % liste.length];
-          gfIndexFormuleFr += 1;
-          source = formule + source;
-          gfDerniereReponsePolieFr = true;
+      // Politesse : visible mais non mécanique. On choisit selon le contexte et on
+      // évite toute formule décorative dans une urgence.
+      const dejaPoli = /^(bien sûr|bien entendu|avec plaisir|volontiers|certainement|sans problème)[\s,.!]/i.test(source);
+      if (!urgence && !dejaPoli) {
+        let formules;
+        if (lieuPhysique || lieuTouristiqueGenerique || restaurant) {
+          formules = ['Avec plaisir. ', 'Bien sûr. ', 'Volontiers. ', 'Bien entendu. '];
+        } else if (contactProprietaire || arriveeTardive || wifi || depart) {
+          formules = ['Bien sûr. ', 'Avec plaisir. ', 'Bien entendu. ', 'Sans problème. '];
         } else {
-          gfDerniereReponsePolieFr = false;
+          formules = ['Bien sûr. ', 'Avec plaisir. ', 'Volontiers. ', 'Bien entendu. '];
         }
-      } else {
-        gfDerniereReponsePolieFr = true;
+
+        // Deux réponses sur trois reçoivent une formule explicite. La troisième
+        // reste directe pour éviter l'effet robotique et répétitif.
+        const cycle = gfIndexFormuleFr % 3;
+        if (cycle !== 2) {
+          source = formules[gfIndexFormuleFr % formules.length] + source;
+        }
+        gfIndexFormuleFr += 1;
       }
+
+      // Pour une question de santé/localisation, rester bref et factuel : pas de
+      // phrase touristique ou décorative supplémentaire.
+      if (santeLieu && !urgence) {
+        source = source.replace(/\s+(Si vous aimez le patrimoine|Si vous souhaitez une autre idée culturelle)[^.]*\.?/gi, '');
+      }
+
+      // Nettoyage final pensé pour la synthèse vocale : phrases courtes et espaces propres.
+      source = source
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\.\s*\./g, '.')
+        .replace(/([!?])\s*\./g, '$1')
+        .trim();
 
       // Restaurer les URL à l'identique.
       source = source.replace(/___GFURL(\d+)___/g, function(_, i) {
