@@ -1,99 +1,4606 @@
-<!doctype html>
+<!DOCTYPE html>
+<!-- Guestflow — V9 FRANÇAIS NATUREL + POLITESSE ÉQUILIBRÉE + VOIX PLUS FLUIDE | base V8 validée | 2026-09-09 -->
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#63784f">
-<title>Guestflow — Les Oliviers</title>
-<script>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
+  <title>Guestflow — Votre concierge numérique</title>
+  <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
+
+  <style>
+    :root{
+      --ink:#263026;
+      --ink-soft:#657064;
+      --olive:#66734b;
+      --olive-deep:#3f4933;
+      --olive-pale:#edf0e6;
+      --sand:#efe5d4;
+      --cream:#f8f4ec;
+      --paper:#fffdf9;
+      --line:rgba(63,73,51,.13);
+      --shadow:0 28px 80px rgba(54,61,45,.12);
+      --shadow-soft:0 10px 30px rgba(54,61,45,.08);
+      --radius-xl:32px;
+      --radius-lg:24px;
+      --radius-md:18px;
+    }
+
+    *{box-sizing:border-box}
+
+    html{scroll-behavior:smooth}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--ink);
+      font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(177,190,145,.22), transparent 28%),
+        radial-gradient(circle at 88% 18%, rgba(226,207,176,.28), transparent 30%),
+        linear-gradient(180deg,#fbf8f2 0%,#f4efe5 100%);
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.28;
+      background-image:
+        linear-gradient(rgba(255,255,255,.35) 1px, transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.35) 1px, transparent 1px);
+      background-size:42px 42px;
+      mask-image:linear-gradient(to bottom,black,transparent 70%);
+    }
+
+    button,input,textarea{font:inherit}
+
+    button{touch-action:manipulation}
+
+    .page{
+      width:min(1120px,calc(100% - 32px));
+      margin:0 auto;
+      padding:34px 0 70px;
+      position:relative;
+      z-index:1;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:28px;
+    }
+
+    .brand-wrap{
+      display:flex;
+      align-items:center;
+      gap:13px;
+    }
+
+    .brand-mark{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(145deg,var(--olive),var(--olive-deep));
+      color:white;
+      box-shadow:0 12px 24px rgba(63,73,51,.22);
+    }
+
+    .brand-mark svg{width:24px;height:24px}
+
+    .brand{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:30px;
+      font-weight:600;
+      letter-spacing:-.035em;
+      color:var(--olive-deep);
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    .gite-name{
+      margin-top:2px;
+      color:var(--ink-soft);
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.01em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:340px;
+    }
+
+    .gite-name::before{
+      content:"· ";
+      color:var(--olive);
+    }
+
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+
+    .sound-btn{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,253,249,.82);
+      color:var(--olive-deep);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow:0 6px 18px rgba(60,67,51,.06);
+      transition:.2s ease;
+    }
+
+    .sound-btn:hover{transform:translateY(-1px);background:white}
+    .sound-btn.off{opacity:.58}
+    .sound-btn svg{width:20px;height:20px}
+
+    .hero{
+      display:grid;
+      grid-template-columns:minmax(0,1.02fr) minmax(380px,.98fr);
+      gap:28px;
+      align-items:stretch;
+    }
+
+    .intro{
+      min-height:650px;
+      padding:58px 54px;
+      border-radius:var(--radius-xl);
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      background:
+        linear-gradient(145deg,rgba(67,78,53,.97),rgba(86,100,65,.92)),
+        var(--olive-deep);
+      color:white;
+      box-shadow:var(--shadow);
+    }
+
+    .intro::before{
+      content:"";
+      position:absolute;
+      width:360px;
+      height:360px;
+      border-radius:50%;
+      right:-140px;
+      top:-120px;
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow:
+        0 0 0 44px rgba(255,255,255,.035),
+        0 0 0 88px rgba(255,255,255,.025);
+    }
+
+    .intro::after{
+      content:"";
+      position:absolute;
+      width:240px;
+      height:240px;
+      border-radius:50%;
+      left:-110px;
+      bottom:-120px;
+      background:rgba(237,224,198,.09);
+      filter:blur(1px);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      width:max-content;
+      max-width:100%;
+      padding:9px 13px;
+      border:1px solid rgba(255,255,255,.20);
+      border-radius:999px;
+      background:rgba(255,255,255,.08);
+      color:rgba(255,255,255,.9);
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.025em;
+      backdrop-filter:blur(8px);
+    }
+
+    .eyebrow-dot{
+      width:8px;height:8px;border-radius:50%;
+      background:#dfe8c7;
+      box-shadow:0 0 0 5px rgba(223,232,199,.12);
+      flex:none;
+    }
+
+    .intro-copy{position:relative;z-index:1;margin-top:45px}
+
+    .intro-title{
+      margin:0;
+      max-width:650px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(48px,5.2vw,74px);
+      line-height:.98;
+      letter-spacing:-.045em;
+      font-weight:500;
+    }
+
+    .intro-title em{
+      font-style:italic;
+      color:#e8ddc7;
+    }
+
+    .subtitle{
+      margin:25px 0 0;
+      max-width:580px;
+      color:rgba(255,255,255,.78);
+      font-size:18px;
+      line-height:1.7;
+    }
+
+    .promise-row{
+      position:relative;
+      z-index:1;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:42px;
+    }
+
+    .promise{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:13px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.12);
+      color:rgba(255,255,255,.86);
+      font-size:13px;
+    }
+
+    .promise svg{width:16px;height:16px;opacity:.9}
+
+    .concierge{
+      background:rgba(255,253,249,.90);
+      border:1px solid rgba(255,255,255,.7);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius-xl);
+      padding:28px;
+      backdrop-filter:blur(18px);
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+    }
+
+    .concierge-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      margin-bottom:22px;
+    }
+
+    .concierge-title{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .avatar{
+      width:46px;height:46px;border-radius:15px;
+      background:linear-gradient(145deg,#f0eadf,#e1d6c3);
+      border:1px solid rgba(63,73,51,.10);
+      color:var(--olive-deep);
+      display:grid;place-items:center;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    .avatar svg{width:23px;height:23px}
+
+    .concierge-title h2{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      color:var(--olive-deep);
+      font-size:22px;
+      font-weight:600;
+    }
+
+    .online{
+      margin-top:4px;
+      color:var(--ink-soft);
+      font-size:12px;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .online::before{
+      content:"";
+      width:7px;height:7px;border-radius:50%;
+      background:#7e9b63;
+      box-shadow:0 0 0 4px rgba(126,155,99,.12);
+    }
+
+    .language-row{
+      display:flex;
+      gap:6px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .language-label{display:none}
+
+    .lang-btn{
+      min-width:42px;
+      height:36px;
+      padding:0 10px;
+      border-radius:11px;
+      border:1px solid var(--line);
+      background:#faf7f1;
+      color:var(--ink-soft);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      font-size:12px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .lang-btn:hover{transform:translateY(-1px);background:white}
+    .lang-btn.active{
+      color:white;
+      border-color:var(--olive);
+      background:var(--olive);
+      box-shadow:0 7px 16px rgba(102,115,75,.20);
+    }
+
+    .flag{
+      width:18px;height:12px;border-radius:3px;display:inline-block;
+      border:1px solid rgba(0,0,0,.10);
+      overflow:hidden;flex:none;
+    }
+    .flag-fr{background:linear-gradient(90deg,#173e8f 0 33.33%,#fff 33.33% 66.66%,#ed2939 66.66%)}
+    .flag-gb{background:linear-gradient(135deg,#173f8a 0 42%,#fff 42% 48%,#c8102e 48% 54%,#fff 54% 60%,#173f8a 60% 100%)}
+    .flag-es{background:linear-gradient(#aa151b 0 25%,#f1bf00 25% 75%,#aa151b 75%)}
+    .flag-de{background:linear-gradient(#111 0 33.33%,#d00 33.33% 66.66%,#ffce00 66.66%)}
+
+    #accessMessage{margin:0 0 10px}
+
+    .field{margin:0}
+
+    .question-label{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:0 0 10px;
+      color:var(--olive-deep);
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .voice-row{
+      position:relative;
+      border:1px solid rgba(63,73,51,.14);
+      border-radius:22px;
+      background:#fff;
+      box-shadow:0 10px 28px rgba(55,64,47,.07);
+      transition:.22s ease;
+      overflow:hidden;
+    }
+
+    .voice-row:focus-within{
+      border-color:rgba(102,115,75,.55);
+      box-shadow:0 0 0 4px rgba(102,115,75,.09),0 14px 30px rgba(55,64,47,.08);
+    }
+
+    textarea{
+      width:100%;
+      min-height:138px;
+      padding:18px 82px 50px 18px;
+      border:0;
+      outline:0;
+      resize:none;
+      background:transparent;
+      color:var(--ink);
+      line-height:1.55;
+      font-size:16px;
+    }
+
+    textarea::placeholder{color:#9a9d94}
+
+    .mic-btn{
+      position:absolute;
+      right:14px;
+      bottom:14px;
+      width:58px;height:58px;
+      border:0;
+      border-radius:19px;
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      color:white;
+      background:linear-gradient(145deg,var(--olive),var(--olive-deep));
+      box-shadow:0 12px 25px rgba(63,73,51,.25);
+      transition:.2s ease;
+      font-size:0;
+    }
+
+    .mic-btn::before{
+      content:"";
+      width:19px;height:25px;
+      border:2.2px solid currentColor;
+      border-radius:12px;
+      box-sizing:border-box;
+    }
+
+    .mic-btn::after{
+      content:"";
+      position:absolute;
+      width:26px;height:15px;
+      border:2.2px solid currentColor;
+      border-top:0;
+      border-radius:0 0 15px 15px;
+      bottom:13px;
+    }
+
+    .mic-btn:hover{transform:translateY(-2px);box-shadow:0 16px 30px rgba(63,73,51,.30)}
+    .mic-btn.listening{
+      background:#8c554e;
+      animation:micPulse 1.4s infinite;
+    }
+    .mic-btn.listening::before,.mic-btn.listening::after{display:none}
+    .mic-btn.listening{font-size:18px}
+
+    @keyframes micPulse{
+      0%,100%{box-shadow:0 0 0 0 rgba(140,85,78,.20),0 12px 25px rgba(63,73,51,.22)}
+      50%{box-shadow:0 0 0 11px rgba(140,85,78,0),0 12px 25px rgba(63,73,51,.22)}
+    }
+
+    .mic-help{
+      min-height:20px;
+      margin:10px 3px 0;
+      color:var(--ink-soft);
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .example{
+      margin-top:14px;
+      padding:12px 14px;
+      border-radius:15px;
+      background:var(--olive-pale);
+      color:#58624b;
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    .buttons{
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    .buttons button{
+      height:48px;
+      border:0;
+      border-radius:15px;
+      padding:0 18px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.18s ease;
+    }
+
+    .primary{
+      flex:1;
+      color:white;
+      background:var(--olive);
+      box-shadow:0 10px 20px rgba(102,115,75,.18);
+    }
+
+    .primary:hover{background:var(--olive-deep);transform:translateY(-1px)}
+    .primary:disabled{opacity:.5;cursor:wait;transform:none}
+
+    .secondary{
+      color:var(--olive-deep);
+      background:#eee9df;
+    }
+    .secondary:hover{background:#e7e0d4}
+
+    .status{
+      min-height:22px;
+      margin-top:14px;
+      color:var(--olive);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .response-box{
+      position:relative;
+      margin-top:12px;
+      padding:22px 22px 22px 24px;
+      border-radius:20px;
+      border:1px solid rgba(63,73,51,.10);
+      background:linear-gradient(180deg,#faf8f3,#f5f1e8);
+      overflow:hidden;
+    }
+
+    .response-box::before{
+      content:"";
+      position:absolute;left:0;top:18px;bottom:18px;width:3px;
+      background:var(--olive);
+      border-radius:0 4px 4px 0;
+    }
+
+    .response-title{
+      margin:0 0 8px;
+      font-size:12px;
+      text-transform:uppercase;
+      letter-spacing:.105em;
+      color:#7f8873;
+    }
+
+    #reponse{
+      min-height:58px;
+      white-space:pre-wrap;
+      color:#364033;
+      line-height:1.68;
+      font-size:15px;
+    }
+
+    .maps-link{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:12px;
+      padding:10px 13px;
+      border-radius:12px;
+      background:var(--olive);
+      color:white;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:0 7px 16px rgba(102,115,75,.18);
+    }
+    .maps-link::before{content:"↗";font-size:14px}
+    .maps-link:hover{background:var(--olive-deep)}
+
+    .hint{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:auto;
+      padding-top:18px;
+      color:#85897f;
+      font-size:11px;
+      line-height:1.5;
+    }
+
+    .hint::before{
+      content:"";
+      width:6px;height:6px;border-radius:50%;background:#9fac88;flex:none;
+    }
+
+    .footer{
+      text-align:center;
+      margin-top:22px;
+      color:#8f918a;
+      font-size:11px;
+      letter-spacing:.02em;
+    }
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .intro{min-height:430px;padding:42px}
+      .intro-title{font-size:56px}
+      .concierge{min-height:auto}
+    }
+
+    @media(max-width:620px){
+      body{background:#f7f2e9}
+      .page{width:min(100% - 20px,1120px);padding:16px 0 38px}
+      .topbar{margin-bottom:15px}
+      .brand{font-size:27px}
+      .brand-mark{width:42px;height:42px;border-radius:14px}
+      .sound-btn{width:42px;height:42px}
+      .hero{gap:14px}
+      .intro{
+        min-height:355px;
+        padding:34px 27px;
+        border-radius:25px;
+      }
+      .intro-title{font-size:46px}
+      .subtitle{font-size:16px;margin-top:18px}
+      .promise-row{margin-top:28px}
+      .concierge{padding:20px;border-radius:25px}
+      .concierge-head{flex-direction:column;align-items:stretch}
+      .language-row{justify-content:flex-start}
+      .voice-row{border-radius:19px}
+      textarea{min-height:126px;padding:16px 76px 50px 16px}
+      .mic-btn{width:54px;height:54px;border-radius:17px;right:11px;bottom:11px}
+      .buttons{flex-direction:column}
+      .buttons button{width:100%}
+      .response-box{padding:18px 18px 18px 20px}
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+    }
+  
+    /* ===== V2 PREMIUM FINALE ===== */
+
+    .intro{
+      min-height:610px;
+      padding-top:52px;
+      padding-bottom:46px;
+    }
+
+    .concierge{
+      padding:26px 28px 24px;
+    }
+
+    .response-box{
+      min-height:128px;
+      transition:
+        transform .35s cubic-bezier(.2,.8,.2,1),
+        opacity .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease;
+    }
+
+    .response-box.response-ready{
+      animation:responseReveal .5s cubic-bezier(.2,.8,.2,1) both;
+      border-color:rgba(102,115,75,.18);
+      box-shadow:0 12px 28px rgba(63,73,51,.08);
+    }
+
+    @keyframes responseReveal{
+      from{opacity:.35;transform:translateY(8px) scale(.993)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    #status.thinking{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--olive-deep);
+      min-height:28px;
+    }
+
+    .thinking-label{
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .thinking-dots{
+      display:inline-flex;
+      gap:4px;
+      align-items:center;
+    }
+
+    .thinking-dots i{
+      display:block;
+      width:6px;
+      height:6px;
+      border-radius:50%;
+      background:var(--olive);
+      animation:thinkingBounce 1.05s infinite ease-in-out;
+    }
+
+    .thinking-dots i:nth-child(2){animation-delay:.14s}
+    .thinking-dots i:nth-child(3){animation-delay:.28s}
+
+    @keyframes thinkingBounce{
+      0%,60%,100%{transform:translateY(0);opacity:.38}
+      30%{transform:translateY(-5px);opacity:1}
+    }
+
+    .voice-row.is-listening{
+      border-color:rgba(140,85,78,.32);
+      box-shadow:
+        0 0 0 4px rgba(140,85,78,.07),
+        0 14px 30px rgba(55,64,47,.08);
+    }
+
+    .voice-row.is-listening::after{
+      content:"";
+      position:absolute;
+      left:18px;
+      right:88px;
+      bottom:18px;
+      height:2px;
+      border-radius:999px;
+      background:
+        linear-gradient(90deg,
+          transparent 0%,
+          rgba(140,85,78,.2) 16%,
+          rgba(140,85,78,.75) 50%,
+          rgba(140,85,78,.2) 84%,
+          transparent 100%);
+      transform-origin:center;
+      animation:listeningLine 1.35s ease-in-out infinite;
+    }
+
+    @keyframes listeningLine{
+      0%,100%{transform:scaleX(.25);opacity:.25}
+      50%{transform:scaleX(1);opacity:1}
+    }
+
+    .mic-btn.listening{
+      transform:translateY(-1px) scale(1.035);
+    }
+
+    .mic-btn.listening::before,
+    .mic-btn.listening::after{
+      display:none;
+    }
+
+    .mic-btn.listening .mic-wave{
+      display:flex;
+    }
+
+    .mic-wave{
+      display:none;
+      align-items:center;
+      justify-content:center;
+      gap:3px;
+      height:22px;
+    }
+
+    .mic-wave i{
+      width:3px;
+      border-radius:999px;
+      background:white;
+      animation:waveBar .85s ease-in-out infinite;
+    }
+
+    .mic-wave i:nth-child(1){height:8px}
+    .mic-wave i:nth-child(2){height:16px;animation-delay:.09s}
+    .mic-wave i:nth-child(3){height:22px;animation-delay:.18s}
+    .mic-wave i:nth-child(4){height:14px;animation-delay:.27s}
+    .mic-wave i:nth-child(5){height:7px;animation-delay:.36s}
+
+    @keyframes waveBar{
+      0%,100%{transform:scaleY(.45);opacity:.55}
+      50%{transform:scaleY(1);opacity:1}
+    }
+
+    .primary{
+      position:relative;
+      overflow:hidden;
+    }
+
+    .primary::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      transform:translateX(-120%);
+      background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.22) 50%,transparent 80%);
+      transition:transform .55s ease;
+    }
+
+    .primary:hover::after{transform:translateX(120%)}
+
+    .online{
+      font-weight:600;
+    }
+
+    .concierge-head{
+      padding-bottom:4px;
+    }
+
+    @media(max-width:620px){
+      .intro{
+        min-height:330px;
+        padding-top:30px;
+        padding-bottom:30px;
+      }
+
+      .concierge{
+        padding:19px;
+      }
+
+      .response-box{
+        min-height:112px;
+      }
+    }
+
+  
+    /* ===== V3 PREMIUM SIGNATURE ===== */
+
+    body{
+      background:
+        radial-gradient(circle at 14% 10%, rgba(173,188,143,.26), transparent 27%),
+        radial-gradient(circle at 86% 12%, rgba(225,202,166,.32), transparent 28%),
+        linear-gradient(180deg,#fbf9f4 0%,#f2ecdf 100%);
+    }
+
+    .page{
+      width:min(1180px,calc(100% - 34px));
+      padding-top:26px;
+    }
+
+    .topbar{
+      margin-bottom:18px;
+      padding:10px 12px 10px 10px;
+      border:1px solid rgba(63,73,51,.08);
+      border-radius:20px;
+      background:rgba(255,253,249,.62);
+      backdrop-filter:blur(18px);
+      box-shadow:0 10px 30px rgba(54,61,45,.05);
+    }
+
+    .brand-mark{
+      width:50px;
+      height:50px;
+      border-radius:17px;
+      box-shadow:0 14px 28px rgba(63,73,51,.24);
+    }
+
+    .brand{
+      font-size:32px;
+    }
+
+    .hero{
+      grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);
+      gap:24px;
+    }
+
+    .intro{
+      min-height:625px;
+      padding:56px 52px 48px;
+      border-radius:36px;
+      background:
+        linear-gradient(155deg,rgba(58,69,45,.995),rgba(83,96,63,.965)),
+        var(--olive-deep);
+      box-shadow:
+        0 34px 90px rgba(54,61,45,.17),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+
+    .intro::before{
+      width:430px;
+      height:430px;
+      right:-150px;
+      top:-135px;
+      box-shadow:
+        0 0 0 54px rgba(255,255,255,.035),
+        0 0 0 108px rgba(255,255,255,.02);
+    }
+
+    .intro::after{
+      width:320px;
+      height:320px;
+      left:-135px;
+      bottom:-150px;
+      background:rgba(236,221,195,.10);
+    }
+
+    .eyebrow{
+      padding:10px 15px;
+      border-radius:999px;
+      background:rgba(255,255,255,.09);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .intro-title{
+      max-width:710px;
+      font-size:clamp(54px,5.5vw,78px);
+      letter-spacing:-.052em;
+    }
+
+    .subtitle{
+      max-width:610px;
+      font-size:18.5px;
+    }
+
+    .promise-row{
+      gap:9px;
+    }
+
+    .promise{
+      padding:11px 13px;
+      border-radius:14px;
+      background:rgba(255,255,255,.09);
+    }
+
+    .concierge{
+      position:relative;
+      overflow:hidden;
+      border-radius:36px;
+      padding:0;
+      background:rgba(255,253,249,.96);
+      border:1px solid rgba(255,255,255,.88);
+      box-shadow:
+        0 34px 90px rgba(54,61,45,.13),
+        0 1px 0 rgba(255,255,255,.75) inset;
+    }
+
+    .concierge::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:150px;
+      background:
+        radial-gradient(circle at 12% 10%,rgba(102,115,75,.10),transparent 38%),
+        linear-gradient(180deg,rgba(245,241,232,.96),rgba(255,253,249,0));
+      pointer-events:none;
+    }
+
+    .concierge-head{
+      position:relative;
+      z-index:1;
+      padding:26px 28px 18px;
+      margin:0;
+      border-bottom:1px solid rgba(63,73,51,.07);
+    }
+
+    .concierge-title h2{
+      font-size:24px;
+      letter-spacing:-.02em;
+    }
+
+    .avatar{
+      width:50px;
+      height:50px;
+      border-radius:17px;
+      background:linear-gradient(145deg,#f4efe5,#dfd2bd);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 8px 18px rgba(70,77,59,.08);
+    }
+
+    .language-row{
+      gap:7px;
+    }
+
+    .lang-btn{
+      min-width:44px;
+      height:38px;
+      border-radius:12px;
+    }
+
+    #accessMessage{
+      margin:0;
+      padding:0 28px;
+    }
+
+    .field{
+      padding:22px 28px 0;
+    }
+
+    .question-label{
+      margin-bottom:11px;
+      font-size:14px;
+    }
+
+    .voice-row{
+      min-height:188px;
+      border-radius:26px;
+      background:
+        linear-gradient(180deg,#fff,#fdfbf7);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.9),
+        0 16px 35px rgba(55,64,47,.075);
+    }
+
+    textarea{
+      min-height:188px;
+      padding:20px 94px 62px 20px;
+      font-size:16px;
+    }
+
+    .mic-btn{
+      right:16px;
+      bottom:16px;
+      width:68px;
+      height:68px;
+      border-radius:23px;
+      background:
+        radial-gradient(circle at 35% 28%,rgba(255,255,255,.22),transparent 26%),
+        linear-gradient(150deg,#718057,#455036);
+      box-shadow:
+        0 18px 34px rgba(63,73,51,.30),
+        inset 0 1px 0 rgba(255,255,255,.20);
+    }
+
+    .mic-btn::before{
+      width:20px;
+      height:27px;
+      border-width:2.3px;
+    }
+
+    .mic-btn::after{
+      width:28px;
+      height:16px;
+      bottom:17px;
+      border-width:2.3px;
+    }
+
+    .mic-btn:hover{
+      transform:translateY(-3px) scale(1.015);
+      box-shadow:
+        0 22px 40px rgba(63,73,51,.34),
+        inset 0 1px 0 rgba(255,255,255,.20);
+    }
+
+    .mic-help{
+      margin-top:11px;
+      padding-left:2px;
+    }
+
+    .example{
+      position:relative;
+      margin-top:16px;
+      padding:14px 16px 14px 40px;
+      border-radius:17px;
+      background:linear-gradient(180deg,#eef1e8,#e8eddf);
+      border:1px solid rgba(102,115,75,.08);
+      color:#58624b;
+    }
+
+    .example::before{
+      content:"✦";
+      position:absolute;
+      left:15px;
+      top:13px;
+      color:#7b8963;
+      font-size:15px;
+    }
+
+    .buttons{
+      padding:0 28px;
+      margin-top:17px;
+    }
+
+    .buttons button{
+      height:52px;
+      border-radius:16px;
+      font-size:14px;
+    }
+
+    .primary{
+      background:linear-gradient(145deg,#76865b,#5d6d45);
+      box-shadow:0 13px 24px rgba(102,115,75,.22);
+    }
+
+    .secondary{
+      min-width:92px;
+      background:#eee9df;
+    }
+
+    .status{
+      padding:0 28px;
+    }
+
+    .response-box{
+      margin:14px 28px 0;
+      min-height:156px;
+      border-radius:23px;
+      padding:22px 22px 22px 24px;
+      background:
+        linear-gradient(180deg,rgba(248,245,238,.97),rgba(242,237,226,.95));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 10px 26px rgba(55,64,47,.05);
+    }
+
+    .response-box::before{
+      width:4px;
+      top:20px;
+      bottom:20px;
+      border-radius:0 5px 5px 0;
+    }
+
+    .response-title{
+      font-size:11px;
+      letter-spacing:.14em;
+      margin-bottom:10px;
+    }
+
+    #reponse{
+      font-size:15.5px;
+      line-height:1.72;
+    }
+
+    .hint{
+      margin:0 28px;
+      padding:18px 0 22px;
+      border-top:1px solid rgba(63,73,51,.06);
+      margin-top:auto;
+    }
+
+    .footer{
+      margin-top:18px;
+      font-size:11px;
+    }
+
+    /* conversational answer bubble */
+    .response-box.response-ready{
+      background:
+        radial-gradient(circle at 100% 0%,rgba(219,225,203,.25),transparent 35%),
+        linear-gradient(180deg,#fbf8f2,#f2eee5);
+      transform-origin:top left;
+    }
+
+    /* subtle premium gleam */
+    .concierge::after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      right:-110px;
+      bottom:-120px;
+      background:radial-gradient(circle,rgba(179,193,148,.11),transparent 68%);
+      pointer-events:none;
+    }
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .intro{min-height:420px}
+      .concierge{min-height:auto}
+    }
+
+    @media(max-width:620px){
+      .page{
+        width:min(100% - 14px,1180px);
+        padding-top:8px;
+      }
+
+      .topbar{
+        padding:8px;
+        margin-bottom:10px;
+        border-radius:16px;
+      }
+
+      .brand{font-size:26px}
+      .brand-mark{width:42px;height:42px;border-radius:14px}
+
+      .hero{gap:10px}
+
+      .intro{
+        min-height:320px;
+        padding:30px 24px;
+        border-radius:26px;
+      }
+
+      .intro-title{
+        font-size:45px;
+      }
+
+      .concierge{
+        border-radius:26px;
+      }
+
+      .concierge-head{
+        padding:20px 18px 16px;
+      }
+
+      #accessMessage{
+        padding:0 18px;
+      }
+
+      .field{
+        padding:18px 18px 0;
+      }
+
+      .voice-row{
+        min-height:158px;
+        border-radius:21px;
+      }
+
+      textarea{
+        min-height:158px;
+        padding:16px 84px 58px 16px;
+      }
+
+      .mic-btn{
+        width:60px;
+        height:60px;
+        right:12px;
+        bottom:12px;
+        border-radius:20px;
+      }
+
+      .buttons{
+        padding:0 18px;
+        flex-direction:column;
+      }
+
+      .response-box{
+        margin:14px 18px 0;
+      }
+
+      .hint{
+        margin-left:18px;
+        margin-right:18px;
+      }
+    }
+
+  
+    /* ===== V4 CONVERSATION PREMIUM ===== */
+
+    .response-box{
+      position:relative;
+      margin-top:18px;
+      padding:0;
+      background:transparent;
+      border:0;
+      box-shadow:none;
+      overflow:visible;
+    }
+
+    .response-box::before{
+      display:none;
+    }
+
+    .response-conversation{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+    }
+
+    .response-avatar{
+      width:42px;
+      height:42px;
+      border-radius:15px;
+      flex:none;
+      display:grid;
+      place-items:center;
+      color:#536144;
+      background:linear-gradient(145deg,#eef1e8,#ddd5c8);
+      border:1px solid rgba(63,73,51,.10);
+      box-shadow:
+        0 8px 18px rgba(58,66,49,.08),
+        inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .response-avatar svg{
+      width:21px;
+      height:21px;
+    }
+
+    .response-content{
+      flex:1;
+      min-width:0;
+    }
+
+    .response-meta{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin:1px 0 7px;
+    }
+
+    .response-name{
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:16px;
+      font-weight:700;
+      color:var(--olive-deep);
+    }
+
+    .response-dot{
+      width:5px;
+      height:5px;
+      border-radius:50%;
+      background:#98a97c;
+      flex:none;
+    }
+
+    .response-time{
+      font-size:11px;
+      color:#999d93;
+    }
+
+    .response-bubble{
+      position:relative;
+      min-height:116px;
+      padding:18px 20px;
+      border-radius:8px 22px 22px 22px;
+      background:
+        radial-gradient(circle at 100% 0%,rgba(205,215,185,.20),transparent 35%),
+        linear-gradient(180deg,#f8f5ee,#f0ebe1);
+      border:1px solid rgba(63,73,51,.10);
+      box-shadow:
+        0 12px 28px rgba(55,64,47,.07),
+        inset 0 1px 0 rgba(255,255,255,.82);
+      overflow:hidden;
+    }
+
+    .response-bubble::before{
+      content:"";
+      position:absolute;
+      left:-1px;
+      top:17px;
+      width:4px;
+      height:42px;
+      border-radius:0 5px 5px 0;
+      background:linear-gradient(180deg,#7b8962,#5e6b49);
+    }
+
+    .response-bubble::after{
+      content:"";
+      position:absolute;
+      width:90px;
+      height:90px;
+      border-radius:50%;
+      right:-42px;
+      bottom:-52px;
+      background:radial-gradient(circle,rgba(176,189,146,.14),transparent 70%);
+      pointer-events:none;
+    }
+
+    .response-title{
+      display:none;
+    }
+
+    #reponse{
+      min-height:74px;
+      color:#354032;
+      font-size:15.5px;
+      line-height:1.72;
+      white-space:pre-wrap;
+    }
+
+    .response-box.response-ready .response-avatar{
+      animation:avatarPop .38s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .response-box.response-ready .response-bubble{
+      animation:bubbleReveal .5s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    @keyframes avatarPop{
+      from{opacity:0;transform:translateY(5px) scale(.88)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    @keyframes bubbleReveal{
+      from{opacity:0;transform:translateY(9px) scale(.985)}
+      to{opacity:1;transform:translateY(0) scale(1)}
+    }
+
+    .response-box.is-thinking .response-bubble{
+      min-height:88px;
+      display:flex;
+      align-items:center;
+    }
+
+    .response-box.is-thinking #reponse{
+      min-height:0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:#66705f;
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .response-box.is-thinking #reponse::after{
+      content:"";
+      width:36px;
+      height:8px;
+      background:
+        radial-gradient(circle,#7d8b66 2.5px,transparent 3px) 0 50%/12px 8px repeat-x;
+      animation:dotsShift .9s linear infinite;
+      opacity:.75;
+    }
+
+    @keyframes dotsShift{
+      from{background-position:0 50%}
+      to{background-position:12px 50%}
+    }
+
+    @media(max-width:620px){
+      .response-conversation{
+        gap:9px;
+      }
+
+      .response-avatar{
+        width:36px;
+        height:36px;
+        border-radius:13px;
+      }
+
+      .response-avatar svg{
+        width:18px;
+        height:18px;
+      }
+
+      .response-name{
+        font-size:15px;
+      }
+
+      .response-bubble{
+        border-radius:8px 18px 18px 18px;
+        padding:16px 16px;
+      }
+
+      #reponse{
+        font-size:14.5px;
+      }
+    }
+
+  
+    /* ===== V4.1 FINITIONS ===== */
+
+    .concierge{
+      min-height:625px;
+    }
+
+    .field{
+      padding-top:18px;
+    }
+
+    .voice-row{
+      min-height:172px;
+    }
+
+    textarea{
+      min-height:172px;
+    }
+
+    .example{
+      margin-top:13px;
+    }
+
+    .buttons{
+      margin-top:14px;
+    }
+
+    .response-box{
+      margin-top:14px;
+    }
+
+    .hint{
+      padding-top:14px;
+      padding-bottom:18px;
+    }
+
+    .response-box.response-ready .response-conversation{
+      align-items:flex-start;
+    }
+
+    .response-box.response-ready .response-content{
+      position:relative;
+    }
+
+    .response-box.response-ready .response-meta{
+      margin-bottom:8px;
+    }
+
+    .response-box.response-ready .response-name{
+      font-size:16.5px;
+    }
+
+    .response-box.response-ready .response-bubble{
+      padding:20px 22px 19px;
+      border-radius:9px 23px 23px 23px;
+      background:
+        radial-gradient(circle at 92% 14%,rgba(195,207,171,.16),transparent 30%),
+        linear-gradient(180deg,#fbf8f1,#eee8dd);
+      box-shadow:
+        0 16px 34px rgba(55,64,47,.085),
+        inset 0 1px 0 rgba(255,255,255,.88);
+    }
+
+    .response-box.response-ready .response-bubble::before{
+      height:52px;
+      top:18px;
+      background:linear-gradient(180deg,#7c8d61,#596848);
+    }
+
+    .response-box.response-ready #reponse{
+      position:relative;
+      z-index:1;
+      font-size:15.7px;
+      line-height:1.76;
+    }
+
+    .response-box.response-ready .response-avatar{
+      box-shadow:
+        0 10px 24px rgba(58,66,49,.10),
+        inset 0 1px 0 rgba(255,255,255,.88);
+    }
+
+    @media(max-width:900px){
+      .concierge{
+        min-height:auto;
+      }
+    }
+
+    @media(max-width:620px){
+      .field{
+        padding-top:16px;
+      }
+
+      .voice-row{
+        min-height:150px;
+      }
+
+      textarea{
+        min-height:150px;
+      }
+
+      .response-box.response-ready .response-bubble{
+        padding:17px 17px 16px;
+      }
+    }
+
+  
+    /* =========================================================
+       GUESTFLOW V23.13 — MOBILE PLEIN ÉCRAN ANDROID + IPHONE
+       Objectif : aucun défilement de la page pour l'usage normal.
+       Une réponse exceptionnellement longue défile uniquement
+       à l'intérieur de sa bulle.
+       ========================================================= */
+    @media (max-width: 900px) {
+      html, body {
+        width: 100%;
+        height: 100%;
+        min-height: 100%;
+        overflow: hidden;
+        overscroll-behavior: none;
+      }
+
+      body {
+        min-height: 100svh;
+        min-height: 100dvh;
+      }
+
+      .page {
+        width: 100%;
+        height: 100svh;
+        height: 100dvh;
+        margin: 0;
+        padding:
+          max(8px, env(safe-area-inset-top))
+          max(10px, env(safe-area-inset-right))
+          max(8px, env(safe-area-inset-bottom))
+          max(10px, env(safe-area-inset-left));
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .topbar {
+        flex: 0 0 auto;
+        min-height: 44px;
+        margin: 0 2px 7px;
+        gap: 8px;
+      }
+
+      .brand-wrap { gap: 9px; }
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+      .brand-mark svg { width: 20px; height: 20px; }
+      .brand { font-size: 25px; }
+      .gite-name {
+        margin-top: 0;
+        font-size: 11px;
+        max-width: 220px;
+      }
+      .sound-btn {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+      }
+
+      .hero {
+        flex: 1 1 auto;
+        min-height: 0;
+        display: block;
+      }
+
+      /* La grande présentation desktop disparaît sur téléphone :
+         le voyageur arrive directement sur le concierge. */
+      .intro { display: none !important; }
+
+      .concierge {
+        height: 100%;
+        min-height: 0 !important;
+        border-radius: 20px;
+        padding: 10px 11px 9px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+      }
+
+      .concierge-head {
+        flex: 0 0 auto;
+        padding-bottom: 7px;
+        margin-bottom: 0;
+        gap: 7px;
+      }
+
+      .concierge-title {
+        min-height: 36px;
+      }
+
+      .avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+      }
+      .avatar svg { width: 18px; height: 18px; }
+      .concierge-title h2 { font-size: 17px; }
+      .online { font-size: 10px; }
+
+      .language-row {
+        gap: 5px;
+        flex-wrap: nowrap;
+        overflow: visible;
+      }
+      .language-label { display: none; }
+      .lang-btn {
+        min-width: 46px;
+        height: 34px;
+        padding: 0 8px;
+        border-radius: 10px;
+        font-size: 12px;
+      }
+
+      #accessMessage:empty,
+      #status:empty { display: none; }
+
+      .field {
+        flex: 0 0 auto;
+        padding-top: 7px !important;
+      }
+
+      .question-label {
+        margin-bottom: 5px;
+      }
+      .question-label label {
+        font-size: 13px;
+      }
+
+      .voice-row {
+        min-height: 76px !important;
+      }
+
+      textarea {
+        min-height: 76px !important;
+        height: 76px;
+        max-height: 76px;
+        padding: 11px 57px 10px 12px !important;
+        border-radius: 15px;
+        font-size: 16px; /* évite le zoom automatique iOS */
+        line-height: 1.28;
+        resize: none;
+      }
+
+      .mic-btn {
+        width: 43px;
+        height: 43px;
+        right: 8px;
+        bottom: 8px;
+      }
+
+      /* Ces textes sont utiles sur desktop mais consomment trop
+         de hauteur sur un téléphone. */
+      .mic-help,
+      .example,
+      #examplesBox {
+        display: none !important;
+      }
+
+      .buttons {
+        flex: 0 0 auto;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 7px;
+        margin-top: 7px;
+      }
+
+      .buttons button {
+        min-height: 40px;
+        height: 40px;
+        padding: 0 13px;
+        border-radius: 12px;
+        font-size: 13px;
+      }
+
+      #status {
+        flex: 0 0 auto;
+        min-height: 0;
+        margin: 4px 0 0;
+        font-size: 11px;
+        line-height: 1.2;
+      }
+
+      .response-box {
+        flex: 1 1 auto;
+        min-height: 92px;
+        margin-top: 7px;
+        padding: 9px 9px 9px 11px !important;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .response-conversation {
+        height: 100%;
+        min-height: 0;
+        gap: 7px !important;
+      }
+
+      .response-avatar {
+        width: 29px !important;
+        height: 29px !important;
+        min-width: 29px;
+        border-radius: 9px !important;
+      }
+
+      .response-content {
+        min-width: 0;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .response-meta {
+        flex: 0 0 auto;
+        margin-bottom: 3px;
+      }
+
+      .response-name { font-size: 11px !important; }
+      .response-time { font-size: 9px !important; }
+
+      .response-bubble,
+      .response-box.response-ready .response-bubble {
+        flex: 1 1 auto;
+        min-height: 0;
+        padding: 10px 11px !important;
+        border-radius: 14px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+      }
+
+      .response-title { display: none !important; }
+
+      #reponse {
+        font-size: 14px !important;
+        line-height: 1.38 !important;
+      }
+
+      .hint,
+      .footer {
+        display: none !important;
+      }
+    }
+
+    /* Très petits téléphones / faible hauteur utile */
+    @media (max-width: 430px) and (max-height: 700px) {
+      .topbar { min-height: 38px; margin-bottom: 5px; }
+      .brand-mark { width: 34px; height: 34px; }
+      .brand { font-size: 23px; }
+      .sound-btn { width: 34px; height: 34px; }
+
+      .concierge { padding: 8px 9px 7px; }
+      .concierge-head { padding-bottom: 5px; }
+      .concierge-title h2 { font-size: 15px; }
+      .avatar { width: 31px; height: 31px; }
+
+      .lang-btn {
+        min-width: 42px;
+        height: 31px;
+        padding: 0 6px;
+      }
+
+      .field { padding-top: 5px !important; }
+      .voice-row,
+      textarea {
+        min-height: 66px !important;
+        height: 66px;
+        max-height: 66px;
+      }
+
+      .mic-btn {
+        width: 39px;
+        height: 39px;
+        bottom: 6px;
+        right: 6px;
+      }
+
+      .buttons { margin-top: 5px; }
+      .buttons button {
+        height: 37px;
+        min-height: 37px;
+      }
+
+      .response-box {
+        margin-top: 5px;
+        min-height: 78px;
+      }
+
+      #reponse {
+        font-size: 13px !important;
+        line-height: 1.32 !important;
+      }
+    }
+
+    /* Paysage Android / iPhone : garde tout utilisable sans
+       transformer la page entière en zone de défilement. */
+    @media (max-width: 900px) and (orientation: landscape) and (max-height: 520px) {
+      .page {
+        padding-top: max(4px, env(safe-area-inset-top));
+        padding-bottom: max(4px, env(safe-area-inset-bottom));
+      }
+      .topbar { display: none; }
+      .concierge {
+        display: grid;
+        grid-template-columns: minmax(230px, .9fr) minmax(280px, 1.1fr);
+        grid-template-rows: auto auto 1fr;
+        column-gap: 10px;
+        row-gap: 4px;
+      }
+      .concierge-head {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .field { grid-column: 1; grid-row: 2 / 4; }
+      .buttons { grid-column: 1; align-self: end; }
+      #status { display: none; }
+      .response-box {
+        grid-column: 2;
+        grid-row: 2 / 4;
+        margin-top: 0;
+      }
+      .voice-row,
+      textarea {
+        min-height: 72px !important;
+        height: 72px;
+        max-height: 72px;
+      }
+    }
+
+  
+    /* V23.15.11 — installation PWA */
+    .pwa-install-wrap {
+      display: none;
+      margin: 8px 0 0;
+    }
+    .pwa-install-btn {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid rgba(89,107,80,.28);
+      border-radius: 12px;
+      background: #eef1e9;
+      color: #344236;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .pwa-install-hint {
+      margin-top: 6px;
+      font-size: 11px;
+      line-height: 1.35;
+      color: #687268;
+      text-align: center;
+    }
+    @media (display-mode: standalone) {
+      .pwa-install-wrap { display: none !important; }
+    }
+
+</style>
+
+  <!-- GUESTFLOW — ACCUEIL INSTALLATION FRANÇAIS -->
+  <style>
+    .guestflow-landing{
+      display:block;
+      min-height:100vh;
+      background:#f4efe5;
+    }
+    .guestflow-landing-inner{
+      position:relative;
+      width:min(100%, 772px);
+      margin:0 auto;
+      line-height:0;
+      background:#f8f4ec;
+      box-shadow:0 18px 60px rgba(37,45,35,.12);
+    }
+    .guestflow-landing-image{
+      display:block;
+      width:100%;
+      height:auto;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+    /* Sélecteur de langue visible : masque la sélection FR intégrée à l'image
+       et affiche réellement la langue choisie. */
+    .guestflow-language-switch{
+      position:absolute;
+      z-index:40;
+      left:3.45%;
+      top:12.45%;
+      width:60.7%;
+      height:4.75%;
+      display:flex;
+      align-items:center;
+      gap:.5%;
+      padding:.35%;
+      border-radius:999px;
+      background:#eeeae2;
+      line-height:1;
+    }
+    .guestflow-language-switch button{
+      flex:1 1 0;
+      height:100%;
+      border:0;
+      border-radius:999px;
+      background:transparent;
+      color:#30382e;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      font:600 clamp(10px,1.8vw,14px)/1 Inter,Arial,sans-serif;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .guestflow-language-switch button.active{
+      background:#66734b;
+      color:#fff;
+      box-shadow:0 2px 8px rgba(63,73,51,.18);
+    }
+    .guestflow-language-switch .landing-flag{font-size:clamp(14px,2.2vw,18px)}
+
+    .guestflow-hotspot{
+      position:absolute;
+      z-index:5;
+      border:0;
+      background:transparent;
+      color:transparent;
+      cursor:pointer;
+      padding:0;
+      margin:0;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .guestflow-hotspot:focus-visible{
+      outline:3px solid rgba(63,73,51,.8);
+      outline-offset:2px;
+      border-radius:14px;
+    }
+    .hot-fr{left:3.7%;top:12.7%;width:15.1%;height:4.2%}
+    .hot-en{left:19.2%;top:12.7%;width:14.8%;height:4.2%}
+    .hot-es{left:34.3%;top:12.7%;width:14.8%;height:4.2%}
+    .hot-de{left:49.3%;top:12.7%;width:14.8%;height:4.2%}
+    .hot-install{left:3.5%;top:68.5%;width:93%;height:9%;z-index:50;background:rgba(0,0,0,.001);display:block}
+
+    .guestflow-toast{
+      position:fixed;
+      z-index:1000;
+      left:50%;
+      bottom:max(20px, env(safe-area-inset-bottom));
+      transform:translate(-50%,18px);
+      width:min(90vw,460px);
+      padding:13px 16px;
+      border-radius:14px;
+      background:rgba(35,47,35,.94);
+      color:#fff;
+      font:600 14px/1.4 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      text-align:center;
+      opacity:0;
+      pointer-events:none;
+      transition:.2s ease;
+      box-shadow:0 12px 34px rgba(0,0,0,.22);
+    }
+    .guestflow-toast.show{opacity:1;transform:translate(-50%,0)}
+
+    .guestflow-install-help{
+      position:fixed;
+      z-index:1200;
+      inset:0;
+      display:none;
+      align-items:flex-end;
+      justify-content:center;
+      padding:18px;
+      background:rgba(24,30,23,.42);
+      backdrop-filter:blur(4px);
+    }
+    .guestflow-install-help.show{display:flex}
+    .guestflow-install-help:target{display:flex}
+    .guestflow-install-card{
+      width:min(100%,520px);
+      border-radius:24px;
+      background:#fffdf8;
+      padding:23px 21px 20px;
+      color:#2f3b2e;
+      font:400 15px/1.5 Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      box-shadow:0 24px 70px rgba(0,0,0,.22);
+    }
+    .guestflow-install-card h2{
+      margin:0 0 10px;
+      font:600 25px/1.15 Georgia,"Times New Roman",serif;
+      color:#3f4933;
+    }
+    .guestflow-install-card p{margin:0 0 12px}
+    .guestflow-install-card ol{margin:10px 0 18px;padding-left:22px}
+    .guestflow-install-card li{margin:7px 0}
+    .guestflow-install-close{
+      width:100%;
+      min-height:48px;
+      border:0;
+      border-radius:15px;
+      background:#4d623a;
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      line-height:1.2;
+    }
+
+    /* Dans le navigateur : page d'accueil. Dans la PWA installée : concierge. */
+    body:not(.guestflow-standalone){
+      min-height:100vh !important;
+      height:auto !important;
+      overflow:auto !important;
+      overscroll-behavior:auto !important;
+      background:#f4efe5 !important;
+    }
+    /* QR / navigateur : accueil toujours visible. */
+    body::before{display:none !important}
+    body > .guestflow-landing{display:block !important}
+    body > .page{display:none !important}
+
+    /* Mode application explicite uniquement : concierge visible. */
+    body.guestflow-app-mode > .guestflow-landing{display:none !important}
+    body.guestflow-app-mode > .page{display:flex !important}
+
+
+    /* =========================================================
+       GUESTFLOW — CONCIERGE V3 / INTERFACE MOBILE PREMIUM
+       Ajout visuel uniquement : moteur, micro, PWA et API conservés.
+       ========================================================= */
+    body.guestflow-app-mode{
+      background:#f4efe5 !important;
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    body.guestflow-app-mode::before{display:none !important}
+    body.guestflow-app-mode .gf-app-shell{
+      width:min(100%,760px);
+      margin:0 auto;
+      padding:0;
+      display:block !important;
+    }
+    body.guestflow-app-mode .gf-app-card{
+      min-height:100vh;
+      background:linear-gradient(180deg,#f8f4eb 0%,#f4efe5 100%);
+      overflow:hidden;
+      position:relative;
+    }
+    .gf-app-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:20px 20px 14px;
+      background:linear-gradient(180deg,#edf4f2 0%,#f6f2e9 100%);
+      border-bottom:1px solid rgba(63,73,51,.08);
+    }
+    .gf-brand-block{display:flex;align-items:center;gap:11px;min-width:0}
+    .gf-leaf-logo{width:46px;height:46px;color:#355b35;flex:none}
+    .gf-leaf-logo svg{width:100%;height:100%}
+    .gf-brand-copy{min-width:0}
+    .gf-brand-name{font:600 32px/1 Georgia,"Times New Roman",serif;color:#152516;letter-spacing:-.035em}
+    .gf-property-name{display:block !important;margin:3px 0 0 !important;max-width:230px;color:#586c43;font-size:14px;letter-spacing:.12em;text-transform:none}
+    .gf-property-name::before{content:"" !important}
+    .gf-brand-subtitle{margin-top:4px;color:#687168;font-size:12px}
+    .gf-header-actions{display:flex;align-items:center;gap:8px}
+    .gf-sound-btn{width:42px;height:42px;border-radius:50%;background:#fffdf8}
+
+    .gf-hero-card{
+      margin:0 14px;
+      padding:26px 24px 24px;
+      min-height:240px;
+      border-radius:0 0 28px 28px;
+      color:#17331e;
+      position:relative;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 86% 22%,rgba(255,255,255,.66),transparent 23%),
+        radial-gradient(circle at 14% 100%,rgba(114,136,82,.20),transparent 34%),
+        linear-gradient(135deg,#edf4f1 0%,#f7f1e4 48%,#dce6d0 100%);
+      box-shadow:0 18px 44px rgba(64,77,55,.11);
+    }
+    .gf-hero-card::after{
+      content:"";position:absolute;width:210px;height:210px;right:-95px;bottom:-115px;border-radius:50%;
+      border:1px solid rgba(60,93,53,.13);box-shadow:0 0 0 34px rgba(60,93,53,.035),0 0 0 68px rgba(60,93,53,.025)
+    }
+    .gf-hero-kicker{font:italic 600 19px/1.1 Georgia,"Times New Roman",serif;color:#45663b;margin-bottom:18px}
+    .gf-hero-card h1{margin:0;font:500 clamp(38px,9vw,56px)/.98 Georgia,"Times New Roman",serif;letter-spacing:-.045em;color:#142416;position:relative;z-index:1}
+    .gf-hero-card h1 span{font-style:italic;color:#4e663f}
+    .gf-hero-card p{margin:17px 0 0;max-width:520px;color:#4f5f53;font-size:15px;line-height:1.55;position:relative;z-index:1}
+    .gf-live-pill{display:inline-flex;align-items:center;gap:9px;margin-top:18px;padding:9px 13px;border-radius:999px;background:rgba(64,90,55,.10);border:1px solid rgba(64,90,55,.12);color:#35543a;font-size:12px;font-weight:800;position:relative;z-index:1}
+    .gf-live-dot{width:8px;height:8px;border-radius:50%;background:#6d9256;box-shadow:0 0 0 4px rgba(109,146,86,.13)}
+
+    .gf-concierge-panel{
+      margin:-2px 14px 88px;
+      padding:22px 18px 24px;
+      border-radius:28px;
+      background:rgba(255,253,248,.96);
+      border:1px solid rgba(255,255,255,.8);
+      box-shadow:0 18px 55px rgba(66,72,57,.12);
+      position:relative;z-index:2;
+    }
+    .gf-panel-topline{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .gf-panel-title{font:600 30px/1 Georgia,"Times New Roman",serif;color:#243226}
+    .gf-panel-subtitle{margin-top:7px;max-width:430px;color:#687168;font-size:13px;line-height:1.5}
+    .gf-languages{max-width:170px;flex:none}
+    .gf-languages .lang-btn{min-width:38px;height:32px;padding:0 8px;border-radius:10px;font-size:11px}
+    .gf-pwa-hidden{display:none !important}
+
+    .gf-mic-zone{text-align:center;padding:20px 0 13px}
+    .gf-main-mic{
+      position:relative !important;inset:auto !important;
+      width:132px !important;height:132px !important;
+      border-radius:50% !important;
+      border:5px solid rgba(255,255,255,.94) !important;
+      background:linear-gradient(145deg,#6d8254,#385334) !important;
+      color:#fff !important;
+      margin:0 auto !important;
+      display:grid !important;place-items:center !important;
+      box-shadow:0 0 0 9px rgba(102,126,81,.12),0 18px 36px rgba(52,73,44,.22) !important;
+      cursor:pointer;overflow:visible !important;
+    }
+    .gf-main-mic:hover{transform:translateY(-2px) scale(1.01)}
+    .gf-main-mic svg{width:54px;height:54px;position:relative;z-index:2}
+    .gf-main-mic .mic-wave{position:absolute;inset:0;display:none;align-items:center;justify-content:center;gap:4px;border-radius:50%;background:rgba(39,69,34,.90)}
+    .gf-main-mic.listening .mic-wave,.gf-main-mic.active .mic-wave{display:flex}
+    .gf-main-mic .mic-wave i{width:4px;border-radius:99px;background:#fff;animation:gfWave .85s infinite ease-in-out}
+    .gf-main-mic .mic-wave i:nth-child(1),.gf-main-mic .mic-wave i:nth-child(5){height:18px}
+    .gf-main-mic .mic-wave i:nth-child(2),.gf-main-mic .mic-wave i:nth-child(4){height:31px;animation-delay:.12s}
+    .gf-main-mic .mic-wave i:nth-child(3){height:44px;animation-delay:.24s}
+    @keyframes gfWave{0%,100%{transform:scaleY(.55)}50%{transform:scaleY(1.15)}}
+    .gf-mic-title{margin-top:14px;font:600 23px/1.1 Georgia,"Times New Roman",serif;color:#263626}
+    .gf-mic-help{display:inline-flex !important;margin:9px auto 0 !important;padding:7px 12px !important;border-radius:999px !important;background:#edf2e7 !important;color:#4f634c !important;font-size:12px !important;line-height:1 !important}
+
+    .gf-question-field{margin-top:10px}
+    .gf-visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .gf-input-row{display:flex;align-items:center;gap:10px;padding:7px 7px 7px 15px;border-radius:20px;background:#fff;border:1px solid rgba(54,75,49,.12);box-shadow:0 8px 22px rgba(54,64,48,.07);overflow:visible}
+    .gf-input-row textarea{min-height:48px;height:48px;padding:13px 4px;border:0;resize:none;font-size:15px;line-height:1.4;overflow:hidden;background:transparent}
+    .gf-send-btn{position:static!important;width:48px!important;height:48px!important;min-width:48px!important;padding:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:linear-gradient(145deg,#70865a,#3d5a37)!important;color:#fff!important;border:0!important;box-shadow:0 8px 18px rgba(56,78,49,.22)!important}
+    .gf-send-btn svg{width:22px;height:22px}
+    .gf-examples{margin-top:10px!important;padding:0!important;background:transparent!important;border:0!important;color:#899087!important;font-size:11px!important;text-align:center}
+    .gf-clear-row{margin-top:4px!important;justify-content:center!important}
+    .gf-clear-btn{padding:7px 10px!important;min-height:auto!important;border:0!important;background:transparent!important;box-shadow:none!important;color:#8b9088!important;font-size:11px!important}
+
+    .gf-quick-section{margin-top:18px;padding-top:8px;border-top:1px solid rgba(63,73,51,.08)}
+    .gf-section-heading{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-top:8px}
+    .gf-section-heading span{height:1px;background:rgba(63,73,51,.22)}
+    .gf-section-heading h2{margin:0;font:600 23px/1 Georgia,"Times New Roman",serif;color:#29372b}
+    .gf-section-subtitle{text-align:center;margin-top:6px;color:#7b837b;font-size:12px}
+    .gf-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:15px}
+    .gf-quick-card{min-height:120px;padding:13px 8px;border-radius:18px;border:1px solid rgba(63,73,51,.09);background:linear-gradient(180deg,#fff,#fbf8f2);color:#29342b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;box-shadow:0 8px 20px rgba(58,65,51,.05);cursor:pointer}
+    .gf-quick-card:active{transform:scale(.98)}
+    .gf-quick-icon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#eef1e9;color:#47613e;font-size:24px;font-weight:900;line-height:1}
+    .gf-quick-icon.gf-wifi{font-size:31px;transform:rotate(180deg)}
+    .gf-quick-icon.gf-emergency{background:#f8e7e2;color:#c94435;font-size:31px}
+    .gf-quick-card strong{font:600 14px/1.08 Georgia,"Times New Roman",serif}
+    .gf-quick-card small{color:#838a82;font-size:10.5px;line-height:1.2}
+
+    .gf-response-box{margin-top:16px!important;padding:14px!important;border-radius:20px!important;background:linear-gradient(180deg,#fffdf9,#f9f5ed)!important;border:1px solid rgba(63,73,51,.09)!important;box-shadow:none!important}
+    .gf-response-avatar{background:#eef1e8!important;color:#45613f!important;border-radius:50%!important}
+    .gf-response-avatar svg{width:27px!important;height:27px!important}
+    .gf-response-bubble{background:#fff!important;border:1px solid rgba(63,73,51,.10)!important;border-radius:16px!important;box-shadow:0 6px 18px rgba(57,66,51,.05)!important}
+    .gf-footer-hint{text-align:center!important;margin-top:13px!important;color:#8a9089!important;font-size:10.5px!important}
+
+    .gf-bottom-nav{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(100%,760px);height:74px;padding:8px 18px calc(8px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:rgba(255,253,249,.96);border-top:1px solid rgba(63,73,51,.10);backdrop-filter:blur(14px);z-index:40;box-shadow:0 -12px 30px rgba(61,67,54,.08)}
+    .gf-bottom-nav button{border:0;background:transparent;color:#808781;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:19px;cursor:pointer}
+    .gf-bottom-nav button strong{font-size:11px;font-weight:700}
+    .gf-bottom-nav button.active{color:#315c38}
+
+    @media (max-width:620px){
+      body.guestflow-app-mode .gf-app-shell{width:100%}
+      .gf-app-header{padding:16px 14px 12px}
+      .gf-brand-name{font-size:29px}
+      .gf-brand-subtitle{display:none}
+      .gf-hero-card{margin:0 8px;padding:22px 18px 22px;min-height:218px}
+      .gf-hero-card h1{font-size:41px}
+      .gf-concierge-panel{margin:0 8px 84px;padding:19px 12px 20px}
+      .gf-panel-topline{display:block}
+      .gf-languages{margin-top:12px;justify-content:flex-start;max-width:none}
+      .gf-main-mic{width:122px!important;height:122px!important}
+      .gf-quick-grid{grid-template-columns:repeat(2,1fr)}
+      .gf-quick-card{min-height:108px}
+    }
+
+    @media (min-width:621px){
+      body.guestflow-app-mode .gf-app-card{border-left:1px solid rgba(63,73,51,.08);border-right:1px solid rgba(63,73,51,.08)}
+    }
+
+  </style>
+
+  <meta name="theme-color" content="#596b50">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Guestflow">
+  <link rel="manifest" id="guestflowManifest" href="./manifest-cacouech.json">
+  <link rel="apple-touch-icon" href="./icône-192.png">
+
+
+  <!-- GUESTFLOW 408000 — capture PWA très précoce -->
+  <script>
+    window.guestflowDeferredInstallPrompt = window.guestflowDeferredInstallPrompt || null;
+
+    window.addEventListener('beforeinstallprompt', function(event) {
+      event.preventDefault();
+      window.guestflowDeferredInstallPrompt = event;
+      try {
+        window.dispatchEvent(new Event('guestflow-install-ready'));
+      } catch (e) {}
+    });
+
+    window.addEventListener('appinstalled', function() {
+      window.guestflowDeferredInstallPrompt = null;
+      try {
+        window.dispatchEvent(new Event('guestflow-install-done'));
+      } catch (e) {}
+    });
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./service-worker.js', {
+        scope: './',
+        updateViaCache: 'none'
+      }).catch(function(){});
+    }
+  </script>
+
+
+  <style id="guestflow-reference-interface">
+    /* =========================================================
+       GUESTFLOW — INTERFACE CONCIERGE CALÉE SUR LA MAQUETTE VALIDÉE
+       La mécanique existante reste intacte dans .gf-app-shell.
+       ========================================================= */
+    .gf-reference-screen{display:none}
+    body.guestflow-app-mode .gf-reference-screen{
+      display:block;
+      width:min(100%,760px);
+      margin:0 auto;
+      min-height:100vh;
+      background:#f7f2e8;
+      position:relative;
+      z-index:20;
+    }
+    body.guestflow-app-mode .gf-reference-wrap{
+      position:relative;
+      width:100%;
+      line-height:0;
+      background:#f7f2e8;
+    }
+    body.guestflow-app-mode .gf-reference-img{
+      display:block;
+      width:100%;
+      height:auto;
+      user-select:none;
+      -webkit-user-drag:none;
+    }
+
+    /* Le moteur historique reste vivant mais hors écran. */
+    body.guestflow-app-mode .gf-app-shell{
+      position:absolute !important;
+      left:-100000px !important;
+      top:0 !important;
+      width:760px !important;
+      opacity:0 !important;
+      pointer-events:none !important;
+    }
+
+    .gf-ref-hit{
+      position:absolute;
+      border:0;
+      padding:0;
+      margin:0;
+      background:transparent;
+      cursor:pointer;
+      z-index:25;
+      -webkit-tap-highlight-color:transparent;
+      touch-action:manipulation;
+    }
+    .gf-ref-mic{
+      left:35.5%;
+      top:43.1%;
+      width:29%;
+      height:17%;
+      border-radius:50%;
+    }
+    .gf-ref-input{
+      position:absolute;
+      z-index:26;
+      left:14.5%;
+      top:61.0%;
+      width:68.5%;
+      height:4.9%;
+      min-height:4.9% !important;
+      max-height:10.5%;
+      box-sizing:border-box;
+      border:0;
+      outline:0;
+      resize:none;
+      padding:.55% 1.5%;
+      text-indent:0;
+      background:rgba(255,255,255,.96);
+      color:#34443d;
+      font:500 clamp(12px,2.8vw,17px)/1.18 Inter,Arial,sans-serif;
+      border-radius:22px;
+      box-shadow:0 4px 14px rgba(52,68,54,.08);
+      overflow-y:hidden;
+      overflow-x:hidden;
+      transform-origin:left bottom;
+    }
+    .gf-ref-input::placeholder{color:#7f8ca5;opacity:.9}
+    .gf-ref-send{
+      left:84.1%;
+      top:60.6%;
+      width:9.1%;
+      height:5.5%;
+      border-radius:50%;
+    }
+
+    .gf-ref-quick-1{left:3.4%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-2{left:26.1%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-3{left:49.0%; top:72.0%; width:22.5%; height:10.6%}
+    .gf-ref-quick-4{left:72.0%; top:72.0%; width:24.0%; height:10.6%}
+
+    .gf-ref-nav-home{left:7%; top:91.2%; width:25%; height:7.2%}
+    .gf-ref-nav-history{left:37%; top:91.2%; width:25%; height:7.2%}
+    .gf-ref-nav-settings{left:68%; top:91.2%; width:25%; height:7.2%}
+
+    .gf-ref-answer{
+      display:none;
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform:translateX(-50%);
+      width:min(calc(100% - 26px),700px);
+      z-index:80;
+      background:#fffdf8;
+      border:1px solid rgba(63,73,51,.14);
+      border-radius:24px;
+      padding:18px 18px 16px;
+      box-shadow:0 22px 70px rgba(35,46,32,.28);
+      color:#253326;
+      font:400 15px/1.5 Inter,Arial,sans-serif;
+    }
+    .gf-ref-answer.show{display:block}
+    .gf-ref-answer-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:9px;
+    }
+    .gf-ref-answer-head strong{
+      font:600 20px/1.1 Georgia,"Times New Roman",serif;
+      color:#254128;
+    }
+    .gf-ref-answer-stop{
+      border:0;
+      border-radius:999px;
+      padding:8px 12px;
+      background:#274b25;
+      color:#fff;
+      font-weight:700;
+      cursor:pointer;
+      margin-left:auto;
+      margin-right:8px;
+    }
+    .gf-ref-answer-stop:active{transform:scale(.97)}
+
+    .gf-ref-answer-close{
+      width:36px;height:36px;border:0;border-radius:50%;
+      background:#eef1e9;color:#40543d;font-size:22px;cursor:pointer;
+    }
+    .gf-ref-answer-text{white-space:pre-wrap}
+    .gf-ref-listening{
+      display:none;
+      position:absolute;
+      left:50%;
+      top:52.9%;
+      transform:translateX(-50%);
+      z-index:30;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(38,67,33,.90);
+      color:#fff;
+      font:700 12px/1 Inter,Arial,sans-serif;
+      box-shadow:0 8px 22px rgba(0,0,0,.18);
+    }
+    .gf-ref-listening.show{display:block}
+
+    @media (max-width:520px){
+      body.guestflow-app-mode .gf-reference-screen{width:100%}
+      .gf-ref-answer{bottom:10px;width:calc(100% - 18px)}
+    }
+  </style>
+
+</head>
+
+<body>
+  <script>
+    // Guestflow — mode d'ouverture déterministe.
+    // Le QR code (sans ?mode=app) affiche TOUJOURS l'écran d'accueil.
+    // Seule une URL contenant ?mode=app ouvre directement le concierge.
+    (function(){
+      var isAppMode = new URLSearchParams(window.location.search).get('mode') === 'app';
+      if (isAppMode) document.body.classList.add('guestflow-app-mode');
+    })();
+  </script>
+
+  <section class="guestflow-landing" id="guestflowLanding" aria-label="Installer Guestflow">
+    <div class="guestflow-landing-inner">
+      <img class="guestflow-landing-image" src="./accueil-guestflow-fr.png" alt="Guestflow Les Oliviers — installer votre concierge de séjour">
+
+      <div class="guestflow-language-switch" aria-label="Choix de la langue">
+        <button type="button" class="active" data-landing-lang="fr" aria-label="Français" aria-pressed="true"><span class="landing-flag" aria-hidden="true">🇫🇷</span><span>FR</span></button>
+        <button type="button" data-landing-lang="en" aria-label="English" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇬🇧</span><span>EN</span></button>
+        <button type="button" data-landing-lang="es" aria-label="Español" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇪🇸</span><span>ES</span></button>
+        <button type="button" data-landing-lang="de" aria-label="Deutsch" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇩🇪</span><span>DE</span></button>
+      </div>
+      <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
+    </div>
+  </section>
+
+  <div class="guestflow-toast" id="guestflowLandingToast" role="status" aria-live="polite"></div>
+
+  <div class="guestflow-install-help" id="guestflowInstallHelp" aria-hidden="true">
+    <div class="guestflow-install-card" role="dialog" aria-modal="true" aria-labelledby="guestflowInstallTitle">
+      <h2 id="guestflowInstallTitle">Installer Guestflow</h2>
+      <div id="guestflowInstallInstructions">
+          <p><strong>Sur Android :</strong></p>
+          <ol>
+            <li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>
+            <li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>
+            <li>Confirmez avec <strong>Installer</strong> ou <strong>Ajouter</strong>.</li>
+          </ol>
+          <p><strong>Sur iPhone :</strong></p>
+          <ol>
+            <li>Touchez <strong>Partager</strong>.</li>
+            <li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>
+            <li>Touchez <strong>Ajouter</strong>.</li>
+          </ol>
+        </div>
+      <a class="guestflow-install-close" id="guestflowInstallClose" href="#">J’ai compris</a>
+    </div>
+  </div>
+
+  
+  <!-- GUESTFLOW — interface visuelle de référence validée -->
+  <section class="gf-reference-screen" id="gfReferenceScreen" aria-label="Concierge Guestflow">
+    <div class="gf-reference-wrap">
+      <img class="gf-reference-img" src="./guestflow-concierge-final.png"
+           alt="Guestflow Les Oliviers — concierge numérique 24h/24">
+
+      <button class="gf-ref-hit gf-ref-mic" id="gfRefMic" type="button"
+              aria-label="Parler à Guestflow"></button>
+
+      <textarea class="gf-ref-input" id="gfRefQuestion"
+                placeholder=""
+                aria-label="Posez votre question"></textarea>
+
+      <button class="gf-ref-hit gf-ref-send" id="gfRefSend" type="button"
+              aria-label="Envoyer la question"></button>
+
+      <button class="gf-ref-hit gf-ref-quick-1" type="button"
+              data-gf-question="Quels sont les horaires d’arrivée et de départ ?"
+              aria-label="Arrivée et départ"></button>
+      <button class="gf-ref-hit gf-ref-quick-2" type="button"
+              data-gf-question="Quel est le mot de passe Wi-Fi ?"
+              aria-label="Wi-Fi"></button>
+      <button class="gf-ref-hit gf-ref-quick-3" type="button"
+              data-gf-question="Que dois-je faire en cas d’urgence ?"
+              aria-label="Urgence"></button>
+      <button class="gf-ref-hit gf-ref-quick-4" type="button"
+              data-gf-question="Quel est le numéro du propriétaire ?"
+              aria-label="Numéro du propriétaire"></button>
+
+      <button class="gf-ref-hit gf-ref-nav-home" type="button" aria-label="Accueil"></button>
+      <button class="gf-ref-hit gf-ref-nav-history" type="button" aria-label="Historique"></button>
+      <button class="gf-ref-hit gf-ref-nav-settings" type="button" aria-label="Paramètres"></button>
+
+      <div class="gf-ref-listening" id="gfRefListening">Je vous écoute…</div>
+    </div>
+  </section>
+
+  <aside class="gf-ref-answer" id="gfRefAnswer" aria-live="polite">
+    <div class="gf-ref-answer-head">
+      <strong>Guestflow</strong>
+      <button class="gf-ref-answer-stop" id="gfRefAnswerStop" type="button" aria-label="Arrêter la réponse vocale">■ Stop</button>
+      <button class="gf-ref-answer-close" id="gfRefAnswerClose" type="button" aria-label="Fermer">×</button>
+    </div>
+    <div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
+  </aside>
+
+
+  <main class="page gf-app-shell">
+
+    <section class="gf-app-card" aria-label="Concierge Guestflow">
+      <header class="gf-app-header">
+        <div class="gf-brand-block">
+          <div class="gf-leaf-logo" aria-hidden="true">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M23 42C22 27 28 14 42 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M28 27C34 25 39 20 41 14C35 14 30 18 28 27Z" fill="currentColor" opacity=".95"/>
+              <path d="M22 33C16 31 11 26 9 20C15 20 20 24 22 33Z" fill="currentColor" opacity=".82"/>
+              <path d="M31 17C28 12 29 7 33 3C37 8 36 13 31 17Z" fill="currentColor" opacity=".72"/>
+            </svg>
+          </div>
+          <div class="gf-brand-copy">
+            <div class="gf-brand-name">Guestflow</div>
+            <div id="giteName" class="gite-name gf-property-name">Cacouech</div>
+            <div class="gf-brand-subtitle">Votre concierge de séjour</div>
+          </div>
+        </div>
+
+        <div class="gf-header-actions">
+          <button id="btnSound" class="sound-btn gf-sound-btn" type="button" onclick="basculerVoix()" aria-label="Couper la réponse vocale" title="Couper la réponse vocale">
+            <svg id="soundIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/>
+              <path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <section class="gf-hero-card">
+        <div class="gf-hero-kicker">Bien plus qu’un séjour</div>
+        <h1>Votre concierge<br><span>numérique 24h/24</span></h1>
+        <p id="pageSubtitle">Une question ? Posez-la naturellement, Guestflow vous répond immédiatement.</p>
+        <div class="gf-live-pill">
+          <span class="gf-live-dot"></span>
+          Réponse immédiate · 24h/24, 7j/7
+        </div>
+      </section>
+
+      <section class="gf-concierge-panel">
+        <div class="gf-panel-topline">
+          <div>
+            <div id="conciergeTitle" class="gf-panel-title">Bonjour !</div>
+            <div id="onlineNow" class="gf-panel-subtitle">Je suis Guestflow, votre concierge numérique. Posez-moi votre question par écrit ou à l’oral.</div>
+          </div>
+
+          <div class="language-row gf-languages" aria-label="Choix de la langue">
+            <span class="language-label" id="labelLangue">Langue :</span>
+            <button type="button" class="lang-btn active" data-lang="fr"><span aria-hidden="true">🇫🇷</span><span class="lang-code">FR</span></button>
+            <button type="button" class="lang-btn" data-lang="en"><span aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
+            <button type="button" class="lang-btn" data-lang="es"><span aria-hidden="true">🇪🇸</span><span class="lang-code">ES</span></button>
+            <button type="button" class="lang-btn" data-lang="de"><span aria-hidden="true">🇩🇪</span><span class="lang-code">DE</span></button>
+          </div>
+        </div>
+
+        <div id="pwaInstallWrap" class="pwa-install-wrap gf-pwa-hidden">
+          <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Ajouter Guestflow à mon téléphone</button>
+          <div id="pwaInstallHint" class="pwa-install-hint"></div>
+        </div>
+
+        <div id="accessMessage" class="status"></div>
+
+        <div class="gf-mic-zone">
+          <button id="btnMic" class="mic-btn gf-main-mic" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">
+            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
+              <rect x="23" y="9" width="18" height="31" rx="9" stroke="currentColor" stroke-width="4"/>
+              <path d="M16 30c0 9 7 16 16 16s16-7 16-16M32 46v9M23 55h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+          </button>
+          <div class="gf-mic-title">Parlez à Guestflow</div>
+          <div id="micHelp" class="mic-help gf-mic-help">Vous pouvez parler naturellement.</div>
+        </div>
+
+        <div class="field gf-question-field">
+          <div class="question-label gf-visually-hidden">
+            <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
+          </div>
+          <div class="voice-row gf-input-row">
+            <textarea id="question" placeholder=""></textarea>
+            <button id="btnAsk" class="primary gf-send-btn" type="button" onclick="envoyerQuestion()" aria-label="Envoyer ma question" title="Envoyer ma question">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12 20 4l-5 16-3-6-8-2Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="m12 14 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div id="examplesBox" class="example gf-examples">Exemples : Wi‑Fi · horaires · restaurants · consignes du séjour</div>
+        </div>
+
+        <div class="buttons gf-clear-row">
+          <button id="btnClear" class="secondary gf-clear-btn" type="button" onclick="vider()">Effacer la question</button>
+        </div>
+        <div id="status" class="status"></div>
+
+        <section class="gf-quick-section" aria-label="Accès rapides">
+          <div class="gf-section-heading">
+            <span></span><h2>Accès rapides</h2><span></span>
+          </div>
+          <div class="gf-section-subtitle">Les informations les plus demandées</div>
+
+          <div class="gf-quick-grid">
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quels sont les horaires d’arrivée et de départ ?';envoyerQuestion();">
+              <span class="gf-quick-icon" aria-hidden="true">▣</span>
+              <strong>Arrivée / départ</strong>
+              <small>Horaires et consignes</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le mot de passe Wi-Fi ?';envoyerQuestion();">
+              <span class="gf-quick-icon gf-wifi" aria-hidden="true">⌁</span>
+              <strong>Wi‑Fi</strong>
+              <small>Réseau et accès</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Que dois-je faire en cas d’urgence ?';envoyerQuestion();">
+              <span class="gf-quick-icon gf-emergency" aria-hidden="true">+</span>
+              <strong>Urgence</strong>
+              <small>Contacts utiles</small>
+            </button>
+            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le numéro du propriétaire ?';envoyerQuestion();">
+              <span class="gf-quick-icon" aria-hidden="true">☎</span>
+              <strong>Numéro du propriétaire</strong>
+              <small>Contact direct</small>
+            </button>
+          </div>
+        </section>
+
+        <section class="response-box gf-response-box" aria-live="polite">
+          <div class="response-conversation">
+            <div class="response-avatar gf-response-avatar" aria-hidden="true">
+              <svg viewBox="0 0 48 48" fill="none"><path d="M24 43C23 29 28 16 41 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 28c6-2 10-7 12-13-6 0-11 5-12 13Z" fill="currentColor"/><path d="M22 34c-6-2-10-7-12-13 6 0 11 5 12 13Z" fill="currentColor" opacity=".75"/></svg>
+            </div>
+            <div class="response-content">
+              <div class="response-meta">
+                <span class="response-name">Guestflow</span>
+                <span class="response-dot"></span>
+                <span class="response-time" id="responseTime">À l’instant</span>
+              </div>
+              <div class="response-bubble gf-response-bubble">
+                <h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
+                <div id="reponse">La réponse de Guestflow apparaîtra ici.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <div class="hint gf-footer-hint" id="footerText">Guestflow répond à partir des informations fournies par votre hébergement.</div>
+      </section>
+
+      <nav class="gf-bottom-nav" aria-label="Navigation Guestflow">
+        <button type="button" class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+          <span aria-hidden="true">⌂</span><strong>Accueil</strong>
+        </button>
+        <button type="button" onclick="document.querySelector('.gf-response-box').scrollIntoView({behavior:'smooth',block:'center'})">
+          <span aria-hidden="true">◷</span><strong>Historique</strong>
+        </button>
+        <button type="button" onclick="document.querySelector('.gf-languages').scrollIntoView({behavior:'smooth',block:'center'})">
+          <span aria-hidden="true">⚙</span><strong>Paramètres</strong>
+        </button>
+      </nav>
+    </section>
+
+  </main>
+
+  <script>
+  const GUESTFLOW_BUILD = "GF-FR-ACCUEIL-1";
+
+    let langueSelectionnee = 'fr';
+    let voixActive = true;
+    // V23.9 : le nom du gîte est visible, l'ID technique reste masqué.
+    // idGuestflow ne sert plus que pour la compatibilité avec les anciens liens.
+    let idGuestflow = '';
+    let nomGiteVoyageur = '';
+    let tokenVoyageur = '';
+
+    let reconnaissanceVocale = null;
+    let microEnEcoute = false;
+    let questionVocaleAEnvoyer = false;
+
+    const languesReconnaissance = {
+      fr: 'fr-FR',
+      en: 'en-GB',
+      es: 'es-ES',
+      de: 'de-DE'
+    };
+
+    const traductionsInterface = {
+      fr: {
+        langue: 'Langue :',
+        subtitle: 'Votre concierge numérique pendant votre séjour',
+        question: 'Comment puis-je vous aider ?',
+        placeholder: 'Ex. À quelle heure dois-je quitter le gîte ?',
+        examples: 'Exemples : « Les animaux sont-ils acceptés ? » — « Quel est le mot de passe Wi-Fi ? » — « Où est la pharmacie la plus proche ? »',
+        ask: 'Poser ma question',
+        clear: 'Effacer',
+        responseTitle: 'Réponse Guestflow',
+        empty: 'Votre réponse apparaîtra ici.',
+        loading: 'Guestflow prépare votre réponse…',
+        footer: 'Guestflow vous répond à partir des informations fournies par votre hébergement.',
+        badLink: 'Ce lien Guestflow est incomplet. Contactez votre hébergeur pour obtenir le lien correct.',
+        micHelp: 'Touchez le micro, posez votre question : Guestflow l’envoie automatiquement et vous répond.',
+        micTitle: 'Parler à Guestflow',
+        micListening: 'Je vous écoute…',
+        micUnsupported: 'La dictée vocale n’est pas disponible sur ce navigateur.',
+        installApp: 'Ajouter Guestflow à mon téléphone',
+        iosInstall: 'Sur iPhone : touchez Partager puis « Sur l’écran d’accueil ».',
+        conciergeTitle: 'Votre concierge',
+        onlineNow: 'En ligne maintenant',
+        answerPlaceholder: 'La réponse de Guestflow apparaîtra ici.',
+        justNow: 'À l’instant'
+
+      },
+      en: {
+        langue: 'Language:',
+        subtitle: 'Your digital concierge during your stay',
+        question: 'How can I help you?',
+        placeholder: 'E.g. What time do I need to check out?',
+        examples: 'Examples: “Are pets allowed?” — “What is the Wi-Fi password?” — “Where is the nearest pharmacy?”',
+        ask: 'Ask my question',
+        clear: 'Clear',
+        responseTitle: 'Guestflow answer',
+        empty: 'Your answer will appear here.',
+        loading: 'Guestflow is preparing your answer…',
+        footer: 'Guestflow answers using information provided by your accommodation.',
+        badLink: 'This Guestflow link is incomplete. Please contact your host for the correct link.',
+        micHelp: 'You can type your question or tap the microphone: voice questions are sent automatically.',
+        micTitle: 'Speak to Guestflow',
+        micListening: 'Listening…',
+        micUnsupported: 'Voice dictation is not available in this browser.',
+        installApp: 'Add Guestflow to my phone',
+        iosInstall: 'On iPhone: tap Share, then “Add to Home Screen”.',
+        conciergeTitle: 'Your concierge',
+        onlineNow: 'Online now',
+        answerPlaceholder: 'Guestflow’s answer will appear here.',
+        justNow: 'Just now'
+
+      },
+      es: {
+        langue: 'Idioma:',
+        subtitle: 'Tu conserje digital durante tu estancia',
+        question: '¿En qué puedo ayudarte?',
+        placeholder: 'Ej. ¿A qué hora tengo que salir del alojamiento?',
+        examples: 'Ejemplos: « ¿Se admiten mascotas? » — « ¿Cuál es la contraseña del Wi-Fi? » — « ¿Dónde está la farmacia más cercana? »',
+        ask: 'Hacer mi pregunta',
+        clear: 'Borrar',
+        responseTitle: 'Respuesta Guestflow',
+        empty: 'Tu respuesta aparecerá aquí.',
+        loading: 'Guestflow está preparando tu respuesta…',
+        footer: 'Guestflow responde con la información proporcionada por tu alojamiento.',
+        badLink: 'Este enlace de Guestflow está incompleto. Contacta con tu anfitrión para obtener el enlace correcto.',
+        micHelp: 'Puedes escribir tu pregunta o tocar el micrófono: las preguntas por voz se envían automáticamente.',
+        micTitle: 'Hablar con Guestflow',
+        micListening: 'Te escucho…',
+        micUnsupported: 'El dictado por voz no está disponible en este navegador.',
+        installApp: 'Añadir Guestflow a mi teléfono',
+        iosInstall: 'En iPhone: toca Compartir y luego «Añadir a pantalla de inicio».',
+        conciergeTitle: 'Tu conserje',
+        onlineNow: 'En línea ahora',
+        answerPlaceholder: 'La respuesta de Guestflow aparecerá aquí.',
+        justNow: 'Ahora mismo'
+
+      },
+      de: {
+        langue: 'Sprache:',
+        subtitle: 'Ihr digitaler Concierge während Ihres Aufenthalts',
+        question: 'Wie kann ich Ihnen helfen?',
+        placeholder: 'Z. B. Um wie viel Uhr muss ich auschecken?',
+        examples: 'Beispiele: „Sind Haustiere erlaubt?“ — „Wie lautet das WLAN-Passwort?“ — „Wo ist die nächste Apotheke?“',
+        ask: 'Meine Frage stellen',
+        clear: 'Löschen',
+        responseTitle: 'Guestflow-Antwort',
+        empty: 'Ihre Antwort erscheint hier.',
+        loading: 'Guestflow bereitet Ihre Antwort vor…',
+        footer: 'Guestflow antwortet auf Grundlage der Informationen Ihrer Unterkunft.',
+        badLink: 'Dieser Guestflow-Link ist unvollständig. Bitte wenden Sie sich an Ihren Gastgeber, um den richtigen Link zu erhalten.',
+        micHelp: 'Sie können Ihre Frage schreiben oder auf das Mikrofon tippen: Sprachfragen werden automatisch gesendet.',
+        micTitle: 'Mit Guestflow sprechen',
+        micListening: 'Ich höre zu…',
+        micUnsupported: 'Die Spracheingabe ist in diesem Browser nicht verfügbar.',
+        installApp: 'Guestflow zu meinem Telefon hinzufügen',
+        iosInstall: 'Auf dem iPhone: Teilen antippen und dann „Zum Home-Bildschirm“.',
+        conciergeTitle: 'Ihr Concierge',
+        onlineNow: 'Jetzt online',
+        answerPlaceholder: 'Die Antwort von Guestflow erscheint hier.',
+        justNow: 'Gerade eben'
+
+      }
+    };
+
+    function mettreAJourInterface(langue) {
+      const t = traductionsInterface[langue] || traductionsInterface.fr;
+
+      document.documentElement.lang = langue;
+
+      document.getElementById('labelLangue').textContent = t.langue;
+      document.getElementById('pageSubtitle').textContent = t.subtitle;
+      document.getElementById('labelQuestion').textContent = t.question;
+      document.getElementById('question').placeholder = t.placeholder;
+      document.getElementById('examplesBox').textContent = t.examples;
+
+      const btnAsk = document.getElementById('btnAsk');
+      if (btnAsk) btnAsk.textContent = t.ask;
+
+      const btnClear = document.getElementById('btnClear');
+      if (btnClear) btnClear.textContent = t.clear;
+
+      const responseTitle = document.getElementById('responseTitle');
+      if (responseTitle) responseTitle.textContent = t.responseTitle;
+
+      const footer = document.getElementById('footerText');
+      if (footer) footer.textContent = t.footer;
+
+      const micHelp = document.getElementById('micHelp');
+      if (micHelp && !microEnEcoute) micHelp.textContent = t.micHelp;
+
+      const conciergeTitle = document.getElementById('conciergeTitle');
+      if (conciergeTitle) conciergeTitle.textContent = t.conciergeTitle;
+
+      const onlineNow = document.getElementById('onlineNow');
+      if (onlineNow) onlineNow.textContent = t.onlineNow;
+
+      const responseTime = document.getElementById('responseTime');
+      if (responseTime) responseTime.textContent = t.justNow;
+
+      const reponsePlaceholder = document.getElementById('reponse');
+      if (reponsePlaceholder) {
+        const texteActuel = String(reponsePlaceholder.textContent || '').trim();
+        const textesVides = [
+          'La réponse du concierge apparaîtra ici.',
+          traductionsInterface.fr.answerPlaceholder,
+          traductionsInterface.en.answerPlaceholder,
+          traductionsInterface.es.answerPlaceholder,
+          traductionsInterface.de.answerPlaceholder,
+          traductionsInterface.fr.empty,
+          traductionsInterface.en.empty,
+          traductionsInterface.es.empty,
+          traductionsInterface.de.empty
+        ];
+        if (!texteActuel || textesVides.includes(texteActuel)) {
+          reponsePlaceholder.textContent = t.answerPlaceholder;
+        }
+      }
+
+      const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+      if (pwaInstallBtn) pwaInstallBtn.textContent = t.installApp;
+
+      const pwaInstallHint = document.getElementById('pwaInstallHint');
+      if (pwaInstallHint && estIOSGuestflow_() && !estStandaloneGuestflow_()) {
+        pwaInstallHint.textContent = t.iosInstall;
+      }
+
+      const btnMic = document.getElementById('btnMic');
+      if (btnMic) {
+        btnMic.title = t.micTitle;
+        btnMic.setAttribute('aria-label', t.micTitle);
+      }
+
+      mettreAJourBoutonVoix();
+
+      const accessMessage = document.getElementById('accessMessage');
+      if (accessMessage && (!tokenVoyageur || (!nomGiteVoyageur && !idGuestflow))) accessMessage.textContent = t.badLink;
+
+      // Le texte d'attente est déjà géré plus haut avec answerPlaceholder.
+    }
+
+    function choisirLangue(langue) {
+      langue = String(langue || '').toLowerCase();
+      if (!['fr','en','es','de'].includes(langue)) langue = 'fr';
+
+      if (microEnEcoute && reconnaissanceVocale) {
+        try { reconnaissanceVocale.stop(); } catch (e) {}
+      }
+
+      langueSelectionnee = langue;
+
+      try {
+        localStorage.setItem('guestflow_langue', langue);
+      } catch (e) {}
+
+      document
+        .querySelectorAll('.lang-btn')
+        .forEach(function(bouton) {
+          const active = bouton.dataset.lang === langue;
+          bouton.classList.toggle('active', active);
+          bouton.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+      mettreAJourInterface(langue);
+    }
+
+    // V12 — Français premium universel : aucun lieu touristique précis codé en dur.
+    // Objectifs :
+    // - transformer les réponses « étiquette + donnée » en vraies phrases ;
+    // - varier les formules de politesse sans les répéter mécaniquement ;
+    // - adapter le ton au contexte : pratique, recommandation, culture, patrimoine, nature, ville, urgence ;
+    // - appliquer les mêmes formulations à n’importe quelle destination, sans cas spécial Carcassonne/Paris/Rouen ;
+    // - ne jamais inventer une information absente de la réponse du moteur.
+    let gfIndexFormuleFr = 0;
+    let gfIndexVariationFr = 0;
+
+    function gfChoisir_(liste, decalage) {
+      if (!liste || !liste.length) return '';
+      const i = (gfIndexVariationFr + (decalage || 0)) % liste.length;
+      gfIndexVariationFr += 1;
+      return liste[i];
+    }
+
+    function gfAjoutePhraseSiAbsente_(source, phrase, test) {
+      if (!phrase) return source;
+      if (test && test.test(source)) return source;
+      return source.replace(/[\s.!?]+$/, '') + '. ' + phrase;
+    }
+
+    function embellirFrancaisGuestflow_(texte, question) {
+      let source = String(texte || '').trim();
+      if (!source || langueSelectionnee !== 'fr') return source;
+
+      // Protéger les URL pour ne jamais casser un lien Google Maps.
+      const urls = [];
+      source = source.replace(/https?:\/\/[^\s]+/gi, function(url) {
+        const cle = '___GFURL' + urls.length + '___';
+        urls.push(url);
+        return cle;
+      });
+
+      source = source
+        .replace(/[ \t]{2,}/g, ' ')
+        .replace(/\s+([,.;!?])/g, '$1')
+        .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
+        .replace(/\s*:\s*/g, ' : ')
+        .trim();
+
+      const q = String(question || '').toLowerCase();
+      const ensemble = (q + ' ' + source).toLowerCase();
+
+      const urgence = /\b(urgence|urgent|danger|accident|samu|pompiers?|police|112|15|17|18)\b/i.test(ensemble);
+      const contactProprietaire = /\b(propriétaire|hôte|contact|numéro|téléphone|joindre|appeler|souci|problème dans le logement)\b/i.test(q);
+      const arriveeTardive = /\b(?:puis[- ]?je|peut[- ]?on|est[- ]?ce que je peux|je peux|arriver|arrivée)[^?!.]{0,70}\b(?:en retard|plus tard|tard)\b|\b(?:en retard|plus tard|tard)[^?!.]{0,70}\barriv/iu.test(q);
+      // Catégories universelles : aucun lieu précis n'est codé en dur.
+      // Le nom réel du lieu doit venir des données du gîte / du moteur.
+      const musee = /\b(mus[eé]e(?:s)?|galerie(?:s)?|exposition(?:s)?|centre culturel|centre d[’']art)\b/i.test(q);
+      const patrimoine = /\b(ch[aâ]teau(?:x)?|citadelle(?:s)?|fort(?:s)?|forteresse(?:s)?|abbaye(?:s)?|monast[eè]re(?:s)?|cath[eé]drale(?:s)?|basilique(?:s)?|[eé]glise(?:s)?|chapelle(?:s)?|monument(?:s)?|patrimoine|site historique|quartier historique|vieille ville|centre historique)\b/i.test(q);
+      const eauPromenade = /\b(canal|rivi[eè]re|fleuve|lac|port|quai|berge|front de mer|bord de mer|promenade au bord de l[’']eau)\b/i.test(q);
+      const visiteVille = /\b(visiter|visite|d[eé]couvrir|promener|promenade)[^?!.]{0,55}\b(ville|centre[- ]ville|village|quartier)\b|\b(ville|centre[- ]ville|village|quartier)[^?!.]{0,55}\b(visiter|visite|d[eé]couvrir|promener)\b/i.test(q);
+      const jardin = /\b(jardin(?:s)?|parc(?:s)?|espace vert|jardin botanique|arboretum)\b/i.test(q);
+      const rando = /\b(randonn[eé]e|rando|sentier|marche|balade|promenade|circuit p[eé]destre|voie verte)\b/i.test(q);
+      const panoramaNature = /\b(point de vue|belv[eé]d[eè]re|panorama|cascade|gorge(?:s)?|for[eê]t|bois|plage|site naturel|r[eé]serve naturelle)\b/i.test(q);
+      const loisirFamille = /\b(zoo|aquarium|parc animalier|parc d[’']attractions|activit[eé] familiale|avec des enfants)\b/i.test(q);
+      const restaurant = /\b(restaurants?|d[iî]ner|d[eé]jeuner|manger)\b/i.test(q);
+      const santeLieu = /\b(h[oô]pital|clinique|pharmacie|m[eé]decin)\b/i.test(q);
+      const wifi = /\bwi-?fi|wifi\b/i.test(q);
+      const depart = /\b(d[eé]part|quitter|lib[eé]rer le logement)\b/i.test(q);
+      const lieuTouristiqueGenerique = musee || patrimoine || eauPromenade || visiteVille || jardin || rando || panoramaNature || loisirFamille || /\b(site touristique|lieu touristique|lieu [àa] visiter|visite culturelle|curiosit[eé]|attraction touristique)\b/i.test(q);
+      const lieuPhysique = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|mus[eé]es?|galeries?|ch[aâ]teaux?|citadelles?|forteresses?|abbayes?|cath[eé]drales?|basiliques?|[eé]glises?|monuments?|sites? touristiques?|sites? historiques?|jardins?|parcs?|randonn[eé]es?|balades?|promenades?|canaux?|rivi[eè]res?|lacs?|ports?|plages?|belv[eé]d[eè]res?|panoramas?|gares?|a[eé]roports?|office de tourisme)\b/i.test(q);
+
+      // Réécritures ciblées : supprimer le ton « fiche technique ».
+      const reformulations = [
+        [/\bLe départ doit être effectué avant\s+/gi, 'Le départ est prévu avant '],
+        [/\bLe départ doit avoir lieu avant\s+/gi, 'Le départ est prévu avant '],
+        [/\bL[’']arrivée est possible à partir de\s+/gi, 'L’arrivée est prévue à partir de '],
+        [/\bVous pouvez vous y rendre en cliquant sur (?:le bouton )?Google Maps\.?/gi, 'Vous pouvez ouvrir l’itinéraire avec Google Maps.'],
+        [/\bVous pouvez cliquer sur (?:le bouton )?Google Maps pour vous y rendre\.?/gi, 'Vous pouvez ouvrir l’itinéraire avec Google Maps.'],
+        [/\bLe restaurant le plus proche est\s+/gi, 'Le restaurant le plus proche, c’est '],
+        [/\bL[’']hôtel le plus proche est\s+/gi, 'L’hôtel le plus proche, c’est '],
+        [/\bL[’']hôpital le plus proche est\s+/gi, 'L’hôpital le plus proche, c’est '],
+        [/\bLa pharmacie la plus proche est\s+/gi, 'La pharmacie la plus proche, c’est '],
+        [/\bLe site touristique le plus proche est\s+/gi, 'Le site touristique le plus proche, c’est '],
+        [/\bLe mot de passe Wi-?Fi est\s+/gi, 'Pour le Wi-Fi, le mot de passe est '],
+        [/\bLe réseau Wi-?Fi est\s+/gi, 'Le réseau Wi-Fi s’appelle ']
+      ];
+      reformulations.forEach(function(regle) { source = source.replace(regle[0], regle[1]); });
+
+      // Correctif ciblé V12 : convertir les libellés horaires bruts en phrases naturelles,
+      // quel que soit le chemin par lequel le moteur les a produits.
+      source = source
+        .replace(/\bArriv[eé]e\s*:\s*([^.!?\n]+)/gi, function(_, valeur) {
+          return 'L’arrivée est prévue à ' + String(valeur).trim();
+        })
+        .replace(/\bD[eé]part\s*:\s*([^.!?\n]+)/gi, function(_, valeur) {
+          return 'Le départ est prévu à ' + String(valeur).trim();
+        });
+
+      // Correctif ciblé V12 : pour une demande de balade/parc/jardin/randonnée,
+      // supprimer uniquement les phrases manifestement hors sujet sur le tabac en extérieur.
+      // On ne touche pas aux formulations premium ni aux réponses pluie/enfants déjà validées.
+      const demandeSortieNature = jardin || rando || eauPromenade || panoramaNature || visiteVille;
+      if (demandeSortieNature) {
+        source = source
+          .replace(/(?:^|\s)(?:Oui,?\s*)?(?:le\s+)?tabac\s+est\s+autoris[eé][^.?!]*(?:[.?!]|$)/gi, ' ')
+          .replace(/(?:^|\s)(?:Il\s+reste\s+)?interdit\s+à\s+l[’']int[eé]rieur\s+du\s+logement[^.?!]*(?:[.?!]|$)/gi, ' ')
+          .replace(/\s{2,}/g, ' ')
+          .trim();
+      }
+
+      // Cas propriétaire : remplacer les libellés secs par une phrase réellement parlée.
+      if (contactProprietaire && !urgence) {
+        const mTel = source.match(/(?:t[eé]l[eé]phone(?: de contact)?|num[eé]ro(?: du propri[eé]taire)?|contact)\s*:\s*([^\n.]+)/i);
+        if (mTel) {
+          const numero = mTel[1].trim();
+          source = source.replace(mTel[0], 'En cas de souci dans le logement, n’hésitez pas à contacter le propriétaire au ' + numero);
+        }
+      }
+
+      // Arrivée tardive : répondre vraiment à la demande, sans inventer une autorisation.
+      if (arriveeTardive) {
+        const parleDeProprietaire = /\b(propriétaire|hôte|contact|prévenir|prévenez|confirmer)\b/i.test(source);
+        if (!parleDeProprietaire) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous pensez arriver plus tard, le mieux est de prévenir le propriétaire afin qu’il puisse s’organiser.',
+            /prévenir le propriétaire|confirmer votre heure d’arrivée/i);
+        }
+      }
+
+      // Enrichissements contextuels premium. Ils n'ajoutent aucun fait concret :
+      // ils donnent uniquement un ton de concierge et proposent d'affiner la demande.
+      if (!urgence) {
+        if (musee) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous me dites le temps dont vous disposez, je peux aussi vous orienter vers une visite plus courte ou plus complète.',
+              'Si vous souhaitez une autre idée culturelle dans les environs, je peux aussi vous proposer une alternative.'
+            ]), /temps dont vous disposez|autre idée culturelle/i);
+        } else if (patrimoine) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous aimez le patrimoine, je peux aussi vous proposer une autre visite dans les environs.',
+              'Si vous me dites combien de temps vous avez, je peux vous orienter vers une visite adaptée.'
+            ]), /autre visite|combien de temps/i);
+        } else if (eauPromenade) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            gfChoisir_([
+              'Si vous me dites combien de temps vous souhaitez marcher, je peux vous aider à choisir une promenade adaptée.',
+              'Si vous préférez une balade courte ou une sortie plus longue, je peux affiner la suggestion.'
+            ]), /combien de temps.*marcher|balade courte|sortie plus longue/i);
+        } else if (visiteVille) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous préférez une promenade tranquille ou plutôt une visite axée sur le patrimoine, je peux affiner la suggestion.',
+            /promenade tranquille.*patrimoine/i);
+        } else if (jardin) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous cherchez plutôt une sortie courte et tranquille, je peux aussi vous proposer une autre option.',
+            /sortie courte et tranquille/i);
+        } else if (rando) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me précisez la durée souhaitée et le niveau de difficulté, je peux mieux vous orienter.',
+            /durée souhaitée.*niveau de difficulté/i);
+        } else if (panoramaNature) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me dites si vous cherchez surtout un beau point de vue, une balade facile ou une sortie plus nature, je peux affiner la suggestion.',
+            /beau point de vue|balade facile|sortie plus nature/i);
+        } else if (loisirFamille) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me précisez l’âge des enfants et le temps dont vous disposez, je peux vous orienter vers une sortie plus adaptée.',
+            /âge des enfants|sortie plus adaptée/i);
+        } else if (lieuTouristiqueGenerique) {
+          source = gfAjoutePhraseSiAbsente_(source,
+            'Si vous me dites ce que vous aimez et le temps dont vous disposez, je peux vous proposer une visite plus adaptée.',
+            /ce que vous aimez.*temps dont vous disposez|visite plus adaptée/i);
+        }
+      }
+
+      // Politesse : visible mais non mécanique. On choisit selon le contexte et on
+      // évite toute formule décorative dans une urgence.
+      const dejaPoli = /^(bien sûr|bien entendu|avec plaisir|volontiers|certainement|sans problème)[\s,.!]/i.test(source);
+      if (!urgence && !dejaPoli) {
+        let formules;
+        if (lieuPhysique || lieuTouristiqueGenerique || restaurant) {
+          formules = ['Avec plaisir. ', 'Bien sûr. ', 'Volontiers. ', 'Bien entendu. '];
+        } else if (contactProprietaire || arriveeTardive || wifi || depart) {
+          formules = ['Bien sûr. ', 'Avec plaisir. ', 'Bien entendu. ', 'Sans problème. '];
+        } else {
+          formules = ['Bien sûr. ', 'Avec plaisir. ', 'Volontiers. ', 'Bien entendu. '];
+        }
+
+        // Deux réponses sur trois reçoivent une formule explicite. La troisième
+        // reste directe pour éviter l'effet robotique et répétitif.
+        const cycle = gfIndexFormuleFr % 3;
+        if (cycle !== 2) {
+          source = formules[gfIndexFormuleFr % formules.length] + source;
+        }
+        gfIndexFormuleFr += 1;
+      }
+
+      // Pour une question de santé/localisation, rester bref et factuel : pas de
+      // phrase touristique ou décorative supplémentaire.
+      if (santeLieu && !urgence) {
+        source = source.replace(/\s+(Si vous aimez le patrimoine|Si vous souhaitez une autre idée culturelle)[^.]*\.?/gi, '');
+      }
+
+      // Nettoyage final pensé pour la synthèse vocale : phrases courtes et espaces propres.
+      source = source
+        .replace(/\s{2,}/g, ' ')
+        .replace(/\.\s*\./g, '.')
+        .replace(/([!?])\s*\./g, '$1')
+        .trim();
+
+      // Restaurer les URL à l'identique.
+      source = source.replace(/___GFURL(\d+)___/g, function(_, i) {
+        return urls[Number(i)] || '';
+      });
+
+      return source.trim();
+    }
+
+    function afficherReponseGuestflow(texte) {
+      const zone = document.getElementById('reponse');
+      const boiteReponse = zone ? zone.closest('.response-box') : null;
+
+      if (boiteReponse) {
+        boiteReponse.classList.remove('response-ready');
+        boiteReponse.classList.remove('is-thinking');
+      }
+
+      mettreAJourHeureReponse();
+      zone.innerHTML = '';
+
+      const contenu = String(texte || '');
+
+      // Détecte le lien Google Maps généré par le moteur et masque l'URL brute.
+      const regexMaps = /(Ouvrir dans Google Maps\s*:|Open in Google Maps\s*:|Abrir en Google Maps\s*:|In Google Maps öffnen\s*:)?\s*(https:\/\/(?:www\.)?google\.com\/maps\/[^\s]+)/gi;
+
+      let position = 0;
+      let match;
+      let lienTrouve = false;
+
+      while ((match = regexMaps.exec(contenu)) !== null) {
+        lienTrouve = true;
+
+        const avant = contenu.slice(position, match.index).replace(/\s+$/, '');
+        if (avant) {
+          zone.appendChild(document.createTextNode(avant));
+        }
+
+        let url = match[2];
+        let ponctuationFinale = '';
+
+        // Le moteur termine parfois la réponse par un point : ne pas l'inclure dans l'URL.
+        while (/[.,;!?)]$/.test(url)) {
+          ponctuationFinale = url.slice(-1) + ponctuationFinale;
+          url = url.slice(0, -1);
+        }
+
+        if (zone.childNodes.length) {
+          zone.appendChild(document.createElement('br'));
+        }
+
+        const lien = document.createElement('a');
+        lien.className = 'maps-link';
+        lien.href = url;
+        lien.target = '_blank';
+        lien.rel = 'noopener noreferrer';
+
+        const libelles = {
+          fr: 'Ouvrir dans Google Maps',
+          en: 'Open in Google Maps',
+          es: 'Abrir en Google Maps',
+          de: 'In Google Maps öffnen'
+        };
+
+        lien.textContent = libelles[langueSelectionnee] || libelles.fr;
+        zone.appendChild(lien);
+
+        if (ponctuationFinale && ponctuationFinale !== '.') {
+          zone.appendChild(document.createTextNode(ponctuationFinale));
+        }
+
+        position = regexMaps.lastIndex;
+      }
+
+      const apres = contenu.slice(position).replace(/^\s+/, '');
+
+      if (apres) {
+        if (lienTrouve && zone.childNodes.length) {
+          zone.appendChild(document.createElement('br'));
+        }
+        zone.appendChild(document.createTextNode(apres));
+      }
+
+      // Si le moteur n'a pas fourni de lien Maps, on en crée un automatiquement
+      // dès que la question/réponse concerne un lieu physique identifiable.
+      if (!lienTrouve && contenu) {
+        const questionCourante = String(
+          (document.getElementById('gfRefQuestion') && document.getElementById('gfRefQuestion').value) ||
+          (document.getElementById('question') && document.getElementById('question').value) ||
+          ''
+        ).toLowerCase();
+
+        const texteAnalyse = (questionCourante + ' ' + contenu.toLowerCase());
+
+        // Une demande d'urgence générique (ex. « Que faire en cas d'urgence ? »)
+        // ne doit PAS déclencher Google Maps simplement parce que le mot « urgence »
+        // apparaît dans la question ou la réponse. Maps n'est proposé que si la
+        // demande concerne réellement un lieu où se rendre.
+        const urgenceGenerique = /\b(urgence|urgent|danger|accident|112|15|17|18|samu|pompiers?|police)\b/i.test(questionCourante);
+        const lieuUrgenceExplicite = /\b(h[oô]pitaux?|cliniques?|pharmacies?|commissariats?|gendarmeries?|casernes?|centres? m[eé]dicaux?|m[eé]decins?|urgences? hospitali[eè]res?|adresse|itin[eé]raire|o[uù] se trouve|comment (?:aller|se rendre)|le plus proche|la plus proche)\b/i.test(texteAnalyse);
+
+        const motsLieu = /\b(restaurants?|h[oô]tels?|h[oô]pitaux?|cliniques?|pharmacies?|m[eé]decins?|commissariats?|gendarmeries?|balades?|randonn[eé]es?|promenades?|sites? touristiques?|monuments?|mus[eé]es?|ch[aâ]teaux?|plages?|parcs?|jardins?|commerces?|magasins?|boulangeries?|supermarch[eé]s?|march[eé]s?|activit[eé]s?|gare|a[eé]roport|office de tourisme|adresse|itin[eé]raire|o[uù] se trouve|le plus proche|la plus proche)\b/i;
+
+        const autoriserMaps = (!urgenceGenerique || lieuUrgenceExplicite) && motsLieu.test(texteAnalyse);
+
+        if (autoriserMaps) {
+          // Pour une recherche Maps, une phrase courte contenant le nom/adresse est plus robuste
+          // qu'une réponse complète. On privilégie la première phrase utile de la réponse.
+          let requeteMaps = contenu
+            .replace(/https?:\/\/\S+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+          const premierePhrase = requeteMaps.split(/(?<=[.!?])\s+/)[0];
+          if (premierePhrase && premierePhrase.length >= 4) requeteMaps = premierePhrase;
+          if (requeteMaps.length > 180) requeteMaps = requeteMaps.slice(0, 180);
+
+          if (requeteMaps) {
+            const urlMaps = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(requeteMaps);
+            if (zone.childNodes.length) zone.appendChild(document.createElement('br'));
+
+            const lienAuto = document.createElement('a');
+            lienAuto.className = 'maps-link';
+            lienAuto.href = urlMaps;
+            lienAuto.target = '_blank';
+            lienAuto.rel = 'noopener noreferrer';
+
+            const libellesAuto = {
+              fr: 'Ouvrir dans Google Maps',
+              en: 'Open in Google Maps',
+              es: 'Abrir en Google Maps',
+              de: 'In Google Maps öffnen'
+            };
+            lienAuto.textContent = libellesAuto[langueSelectionnee] || libellesAuto.fr;
+            zone.appendChild(lienAuto);
+            lienTrouve = true;
+          }
+        }
+      }
+
+      if (!contenu) {
+        zone.textContent =
+          (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
+      }
+
+      if (boiteReponse) {
+        void boiteReponse.offsetWidth;
+        boiteReponse.classList.add('response-ready');
+      }
+    }
+
+
+    function obtenirClasseReconnaissanceVocale() {
+      return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    }
+
+    function mettreEtatMicro(enEcoute) {
+      microEnEcoute = !!enEcoute;
+
+      const btn = document.getElementById('btnMic');
+      const aide = document.getElementById('micHelp');
+      const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
+
+      if (btn) {
+        btn.classList.toggle('listening', microEnEcoute);
+        btn.title = microEnEcoute ? t.micListening : t.micTitle;
+        btn.setAttribute('aria-label', microEnEcoute ? t.micListening : t.micTitle);
+
+        const voiceRow = btn.closest('.voice-row');
+        if (voiceRow) {
+          voiceRow.classList.toggle('is-listening', microEnEcoute);
+        }
+      }
+
+      if (aide) {
+        aide.textContent = microEnEcoute ? t.micListening : t.micHelp;
+      }
+    }
+
+    async function basculerMicro() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      const t = traductionsInterface[langueSelectionnee] || traductionsInterface.fr;
+      const aide = document.getElementById('micHelp');
+      const btn = document.getElementById('btnMic');
+
+      if (microEnEcoute && reconnaissanceVocale) {
+        try {
+          reconnaissanceVocale.stop();
+        } catch (e) {}
+        return;
+      }
+
+      if (aide) {
+        aide.textContent =
+          langueSelectionnee === 'en' ? 'Activating microphone…' :
+          langueSelectionnee === 'es' ? 'Activando el micrófono…' :
+          langueSelectionnee === 'de' ? 'Mikrofon wird aktiviert…' :
+          'Activation du micro…';
+      }
+
+      if (btn) {
+        btn.classList.add('listening');
+        const voiceRow = btn.closest('.voice-row');
+        if (voiceRow) {
+          voiceRow.classList.add('is-listening');
+        }
+      }
+
+      // Demande d'abord explicitement l'autorisation micro au navigateur.
+      // Cela rend le comportement plus fiable sur Chrome / Edge en HTTPS.
+      try {
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+          const flux = await navigator.mediaDevices.getUserMedia({ audio: true });
+          flux.getTracks().forEach(function(track) {
+            track.stop();
+          });
+        }
+      } catch (permissionError) {
+        mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent =
+            langueSelectionnee === 'en' ? 'Microphone access was refused by the browser.' :
+            langueSelectionnee === 'es' ? 'El navegador ha rechazado el acceso al micrófono.' :
+            langueSelectionnee === 'de' ? 'Der Browser hat den Mikrofonzugriff verweigert.' :
+            'L’accès au micro a été refusé par le navigateur.';
+        }
+        return;
+      }
+
+      const SpeechRecognitionClass = obtenirClasseReconnaissanceVocale();
+
+      if (!SpeechRecognitionClass) {
+        mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent = t.micUnsupported;
+        }
+        return;
+      }
+
+      reconnaissanceVocale = new SpeechRecognitionClass();
+      reconnaissanceVocale.lang = languesReconnaissance[langueSelectionnee] || 'fr-FR';
+      reconnaissanceVocale.interimResults = false;
+      reconnaissanceVocale.continuous = false;
+      reconnaissanceVocale.maxAlternatives = 1;
+
+      reconnaissanceVocale.onstart = function() {
+        questionVocaleAEnvoyer = false;
+
+        // V23.16 : une nouvelle question vocale doit toujours repartir proprement.
+        // On efface l'ancienne question (raccourci ou saisie précédente) dans
+        // le champ moteur ET dans le champ visuel de la maquette.
+        const champ = document.getElementById('question');
+        if (champ) champ.value = '';
+
+        const champVisuel = document.getElementById('gfRefQuestion');
+        if (champVisuel) {
+          champVisuel.value = '';
+          champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+
+        mettreEtatMicro(true);
+      };
+
+      reconnaissanceVocale.onspeechstart = function() {
+        if (aide) {
+          aide.textContent = t.micListening;
+        }
+      };
+
+      reconnaissanceVocale.onresult = function(event) {
+        const texte =
+          event &&
+          event.results &&
+          event.results[0] &&
+          event.results[0][0]
+            ? String(event.results[0][0].transcript || '').trim()
+            : '';
+
+        if (texte) {
+          const champ = document.getElementById('question');
+
+          // V23.16 : la dictée courante remplace l'ancienne question.
+          // Cela évite qu'un raccourci précédent reste affiché ou soit concaténé.
+          champ.value = texte;
+
+          const champVisuel = document.getElementById('gfRefQuestion');
+          if (champVisuel) {
+            champVisuel.value = texte;
+            champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
+            // Force le rafraîchissement visuel sur Android/PWA avant l'envoi.
+            requestAnimationFrame(function(){
+              try { resizeVisualQuestion(); } catch (e) {}
+            });
+          }
+
+          // On mémorise qu'une vraie question vocale a été reconnue.
+          // L'envoi sera déclenché dans onend, c'est-à-dire une fois
+          // la reconnaissance vocale réellement terminée.
+          questionVocaleAEnvoyer = true;
+        }
+      };
+
+      reconnaissanceVocale.onerror = function(event) {
+        questionVocaleAEnvoyer = false;
+        mettreEtatMicro(false);
+
+        if (!aide) return;
+
+        const code = event && event.error ? String(event.error) : '';
+
+        aide.textContent =
+          code === 'not-allowed' || code === 'service-not-allowed'
+            ? (
+                langueSelectionnee === 'en' ? 'Microphone permission is blocked in the browser.' :
+                langueSelectionnee === 'es' ? 'El permiso del micrófono está bloqueado en el navegador.' :
+                langueSelectionnee === 'de' ? 'Die Mikrofonberechtigung ist im Browser blockiert.' :
+                'L’autorisation du micro est bloquée dans le navigateur.'
+              )
+            : (
+                langueSelectionnee === 'en' ? 'Voice recognition could not start. Please try again.' :
+                langueSelectionnee === 'es' ? 'No se pudo iniciar el reconocimiento de voz. Inténtalo de nuevo.' :
+                langueSelectionnee === 'de' ? 'Die Spracherkennung konnte nicht gestartet werden. Bitte versuchen Sie es erneut.' :
+                'La reconnaissance vocale n’a pas pu démarrer. Réessayez.'
+              );
+      };
+
+      reconnaissanceVocale.onend = function() {
+        mettreEtatMicro(false);
+        reconnaissanceVocale = null;
+
+        if (questionVocaleAEnvoyer) {
+          questionVocaleAEnvoyer = false;
+
+          const champ = document.getElementById('question');
+          if (champ && champ.value.trim()) {
+            // Léger délai uniquement pour laisser le navigateur finaliser
+            // la mise à jour du champ avant l'appel au moteur Guestflow.
+            setTimeout(function() {
+              envoyerQuestion();
+            }, 80);
+          }
+        }
+      };
+
+      try {
+        reconnaissanceVocale.start();
+      } catch (e) {
+        mettreEtatMicro(false);
+
+        if (aide) {
+          aide.textContent =
+            langueSelectionnee === 'en' ? 'Unable to start the microphone. Please try again.' :
+            langueSelectionnee === 'es' ? 'No se puede iniciar el micrófono. Inténtalo de nuevo.' :
+            langueSelectionnee === 'de' ? 'Das Mikrofon konnte nicht gestartet werden. Bitte versuchen Sie es erneut.' :
+            'Impossible de démarrer le micro. Réessayez.';
+        }
+      }
+    }
+
+
+    function libelleVoix(active) {
+      const textes = {
+        fr: active ? 'Couper la réponse vocale' : 'Activer la réponse vocale',
+        en: active ? 'Mute spoken replies' : 'Enable spoken replies',
+        es: active ? 'Silenciar las respuestas de voz' : 'Activar las respuestas de voz',
+        de: active ? 'Sprachausgabe ausschalten' : 'Sprachausgabe einschalten'
+      };
+      return textes[langueSelectionnee] || textes.fr;
+    }
+
+    function mettreAJourBoutonVoix() {
+      const btn = document.getElementById('btnSound');
+      const icon = document.getElementById('soundIcon');
+      if (!btn || !icon) return;
+
+      btn.classList.toggle('off', !voixActive);
+      const libelle = libelleVoix(voixActive);
+      btn.title = libelle;
+      btn.setAttribute('aria-label', libelle);
+
+      icon.innerHTML = voixActive
+        ? '<path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/><path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>'
+        : '<path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/><path d="m17 10 4 4m0-4-4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>';
+    }
+
+    function arreterReponseVocale() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function basculerVoix() {
+      voixActive = !voixActive;
+      if (!voixActive && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      mettreAJourBoutonVoix();
+    }
+
+
+    function viderQuestionApresReponse() {
+      const champ = document.getElementById('question');
+      if (champ) {
+        champ.value = '';
+      }
+
+      const champVisuel = document.getElementById('gfRefQuestion');
+      if (champVisuel) {
+        champVisuel.value = '';
+        champVisuel.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }
+
+    // =========================================================
+    // GUESTFLOW V23.12 — VOIX PLUS FLUIDE FR / EN / ES / DE
+    // =========================================================
+
+    function nettoyerTextePourLecture(texte) {
+      return String(texte || '')
+        // Les URL et libellés de carte ne doivent pas être épelés par la voix.
+        .replace(/https?:\/\/\S+/gi, '')
+        .replace(/Ouvrir dans Google Maps\s*:?/gi, '')
+        .replace(/Open in Google Maps\s*:?/gi, '')
+        .replace(/Abrir en Google Maps\s*:?/gi, '')
+        .replace(/In Google Maps öffnen\s*:?/gi, '')
+        // Rend les séparateurs plus naturels à l'oral.
+        .replace(/\s*[•·|]\s*/g, '. ')
+        .replace(/\s*[-–—]\s*/g, ', ')
+        .replace(/\s*:\s*/g, ': ')
+        .replace(/\.{2,}/g, '.')
+        .replace(/,{2,}/g, ',')
+        .replace(/\s+([,.!?;:])/g, '$1')
+        .replace(/([,.!?;:])([^\s])/g, '$1 $2')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function scoreVoixGuestflow_(voix, langue) {
+      const nom = String(voix && voix.name || '').toLowerCase();
+      const code = String(voix && voix.lang || '').toLowerCase();
+      const cible = {
+        fr: 'fr-fr',
+        en: 'en-gb',
+        es: 'es-es',
+        de: 'de-de'
+      }[langue] || 'fr-fr';
+      const racine = cible.split('-')[0];
+
+      if (!code.startsWith(racine)) return -10000;
+
+      // Pour le français, on refuse explicitement les variantes canadiennes :
+      // l'utilisateur doit entendre une voix française de France.
+      if (langue === 'fr' && (code === 'fr-ca' || /canad|québec|quebec/.test(nom))) {
+        return -10000;
+      }
+
+      let score = 0;
+
+      // Priorité très forte à la variante exacte du pays souhaité.
+      if (code === cible) score += 1000;
+      else score += 50;
+
+      if (nom.includes('natural')) score += 220;
+      if (nom.includes('neural')) score += 200;
+      if (nom.includes('online')) score += 160;
+      if (nom.includes('google')) score += 120;
+      if (nom.includes('microsoft')) score += 100;
+      if (nom.includes('france') || nom.includes('français') || nom.includes('francais')) score += 120;
+
+      const priorites = {
+        fr: ['denise', 'hortense', 'julie', 'audrey', 'paul', 'henri'],
+        en: ['sonia', 'ryan', 'libby', 'george', 'hazel'],
+        es: ['elvira', 'alvaro', 'helena', 'dalia', 'pablo'],
+        de: ['katja', 'conrad', 'hedda', 'stefan']
+      };
+
+      (priorites[langue] || []).forEach(function(nomPrefere, index) {
+        if (nom.includes(nomPrefere)) score += 120 - (index * 10);
+      });
+
+      if (voix && voix.default) score += 10;
+      if (voix && voix.localService === false) score += 20;
+      return score;
+    }
+
+    function choisirMeilleureVoixGuestflow_(langue) {
+      const voix = window.speechSynthesis.getVoices() || [];
+      if (!voix.length) return null;
+
+      const cible = { fr: 'fr-fr', en: 'en-gb', es: 'es-es', de: 'de-de' }[langue] || 'fr-fr';
+
+      // En français, utiliser uniquement une voix fr-FR si l'appareil en propose une.
+      // S'il n'y en a pas, ne jamais forcer fr-CA : on laisse le moteur système
+      // choisir avec message.lang='fr-FR'.
+      if (langue === 'fr') {
+        const frFrance = voix.filter(function(v) {
+          const code = String(v.lang || '').toLowerCase();
+          const nom = String(v.name || '').toLowerCase();
+          return code === 'fr-fr' && !/canad|québec|quebec/.test(nom);
+        });
+        if (!frFrance.length) return null;
+        frFrance.sort(function(a, b) {
+          return scoreVoixGuestflow_(b, langue) - scoreVoixGuestflow_(a, langue);
+        });
+        return frFrance[0] || null;
+      }
+
+      const compatibles = voix.filter(function(v) {
+        return String(v.lang || '').toLowerCase().startsWith(cible.split('-')[0]);
+      });
+      if (!compatibles.length) return null;
+      compatibles.sort(function(a, b) {
+        return scoreVoixGuestflow_(b, langue) - scoreVoixGuestflow_(a, langue);
+      });
+      return compatibles[0] || null;
+    }
+
+    function reglagesVoixGuestflow_(langue) {
+      // Vitesse volontairement légèrement inférieure à 1 : la diction est plus liée
+      // et moins mécanique sur les voix système Windows.
+      const reglages = {
+        fr: { lang: 'fr-FR', rate: 0.97, pitch: 1.00 },
+        en: { lang: 'en-GB', rate: 0.97, pitch: 1.00 },
+        es: { lang: 'es-ES', rate: 0.95, pitch: 1.00 },
+        de: { lang: 'de-DE', rate: 0.94, pitch: 0.99 }
+      };
+
+      return reglages[langue] || reglages.fr;
+    }
+
+
+    function estAndroidGuestflow_() {
+      return /Android/i.test(navigator.userAgent || '');
+    }
+
+    function choisirVoixGuestflowV23_14_(langue) {
+      // Sur Android, ne pas forcer une voix précise :
+      // laisser le moteur système/Chrome choisir sa meilleure voix native.
+      if (estAndroidGuestflow_()) {
+        return null;
+      }
+
+      const voices = window.speechSynthesis
+        ? window.speechSynthesis.getVoices()
+        : [];
+
+      if (!voices || !voices.length) {
+        return null;
+      }
+
+      const langueCible =
+        langue === 'en' ? 'en' :
+        langue === 'es' ? 'es' :
+        langue === 'de' ? 'de' :
+        'fr';
+
+      const compatibles = voices.filter(function(v) {
+        return String(v.lang || '').toLowerCase().startsWith(langueCible);
+      });
+
+      if (!compatibles.length) {
+        return null;
+      }
+
+      const score = function(v) {
+        const nom = String(v.name || '').toLowerCase();
+        let s = 0;
+        if (/natural|neural|online/.test(nom)) s += 50;
+        if (/google|microsoft|apple/.test(nom)) s += 25;
+        if (v.localService) s += 10;
+        if (String(v.lang || '').toLowerCase().startsWith(langueCible)) s += 20;
+        return s;
+      };
+
+      compatibles.sort(function(a, b) {
+        return score(b) - score(a);
+      });
+
+      return compatibles[0] || null;
+    }
+
+    function parlerReponseGuestflow(texte) {
+      if (!voixActive) return;
+      if (!('speechSynthesis' in window)) return;
+
+      let contenu = nettoyerTextePourLecture(texte);
+      // V9 — ponctuation orale légère : on évite les successions sèches et les
+      // espaces irréguliers qui rendent certaines voix système saccadées.
+      contenu = String(contenu || '')
+        .replace(/\s+/g, ' ')
+        .replace(/\s+([,.;!?])/g, '$1')
+        .replace(/([,;:])(?=\S)/g, '$1 ')
+        .replace(/([.!?])(?=[A-ZÀ-ÖØ-Þ])/g, '$1 ')
+        .trim();
+      if (!contenu) {
+        viderQuestionApresReponse();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const reglages = reglagesVoixGuestflow_(langueSelectionnee);
+      const message = new SpeechSynthesisUtterance(contenu);
+
+      message.lang = reglages.lang;
+      message.rate = reglages.rate;
+      message.pitch = reglages.pitch;
+      message.volume = 1;
+
+      const voixChoisie = choisirMeilleureVoixGuestflow_(langueSelectionnee);
+      if (voixChoisie) {
+        message.voice = voixChoisie;
+        // La langue réelle de la voix choisie évite certains changements de prosodie.
+        if (voixChoisie.lang) {
+          message.lang = voixChoisie.lang;
+        }
+      }
+
+      message.onend = function() {
+        viderQuestionApresReponse();
+      };
+
+      message.onerror = function() {
+        viderQuestionApresReponse();
+      };
+
+      // Petit délai après cancel() : évite sur certains Chrome/Windows le démarrage
+      // brutal de la première syllabe et rend l'enchaînement plus propre.
+      setTimeout(function() {
+        if (voixActive) {
+          window.speechSynthesis.speak(message);
+        }
+      }, 90);
+    }
+
+
+
+
+    function mettreAJourHeureReponse() {
+      const el = document.getElementById('responseTime');
+      if (!el) return;
+
+      const labels = {
+        fr: 'À l’instant',
+        en: 'Just now',
+        es: 'Ahora mismo',
+        de: 'Gerade eben'
+      };
+
+      el.textContent = labels[langueSelectionnee] || labels.fr;
+    }
+
+    function afficherEtatReflexion() {
+      const status = document.getElementById('status');
+      if (!status) return;
+
+      const labels = {
+        fr: 'Guestflow réfléchit',
+        en: 'Guestflow is thinking',
+        es: 'Guestflow está pensando',
+        de: 'Guestflow denkt nach'
+      };
+
+      status.classList.add('thinking');
+      status.innerHTML =
+        '<span class="thinking-label">' +
+        (labels[langueSelectionnee] || labels.fr) +
+        '</span><span class="thinking-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+
+      const box = document.querySelector('.response-box');
+      const reponse = document.getElementById('reponse');
+
+      if (box) {
+        box.classList.remove('response-ready');
+        box.classList.add('is-thinking');
+      }
+
+      if (reponse) {
+        reponse.textContent = labels[langueSelectionnee] || labels.fr;
+      }
+    }
+
+    function effacerEtatReflexion() {
+      const status = document.getElementById('status');
+      if (!status) return;
+      status.classList.remove('thinking');
+      status.textContent = '';
+
+      const box = document.querySelector('.response-box');
+      if (box) {
+        box.classList.remove('is-thinking');
+      }
+    }
+
+    function envoyerQuestion() {
+
+      const question =
+        document.getElementById('question').value.trim();
+
+      const status =
+        document.getElementById('status');
+
+      const reponse =
+        document.getElementById('reponse');
+
+      const bouton =
+        document.getElementById('btnAsk');
+
+      if (!tokenVoyageur || (!nomGiteVoyageur && !idGuestflow)) {
+        status.textContent =
+          (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).badLink;
+        return;
+      }
+
+      if (!question) {
+        status.textContent =
+          langueSelectionnee === 'en' ? 'Please write a question.' :
+          langueSelectionnee === 'es' ? 'Escribe una pregunta.' :
+          langueSelectionnee === 'de' ? 'Bitte schreiben Sie eine Frage.' :
+          'Écrivez une question.';
+        return;
+      }
+
+      // V23.13 mobile : ferme le clavier virtuel après l'envoi pour
+      // rendre immédiatement la réponse visible sur Android et iPhone.
+      const champQuestionMobile = document.getElementById('question');
+      if (champQuestionMobile && typeof champQuestionMobile.blur === 'function') {
+        champQuestionMobile.blur();
+      }
+
+      afficherEtatReflexion();
+
+      // V23.14 : retour visuel immédiat, sans délai artificiel côté interface.
+      const zoneReponseV2314 = document.getElementById('reponse');
+      if (zoneReponseV2314) {
+        zoneReponseV2314.setAttribute('aria-busy', 'true');
+      }
+      reponse.textContent = '';
+
+      const boiteReponse = reponse.closest('.response-box');
+      if (boiteReponse) {
+        boiteReponse.classList.remove('response-ready');
+      }
+
+      bouton.disabled = true;
+
+      const callbackName =
+        'guestflowCallback_' +
+        Date.now() +
+        '_' +
+        Math.floor(Math.random() * 1000000);
+
+      const script = document.createElement('script');
+
+      const nettoyer = function() {
+        try {
+          delete window[callbackName];
+        } catch (e) {
+          window[callbackName] = undefined;
+        }
+
+        if (script.parentNode) {
+          script.parentNode.removeChild(script);
+        }
+      };
+
+      const timeout = setTimeout(function() {
+        nettoyer();
+        bouton.disabled = false;
+        status.classList.remove('thinking');
+        status.textContent = 'Erreur';
+        reponse.textContent =
+          langueSelectionnee === 'en' ? 'Guestflow did not respond. Please try again.' :
+          langueSelectionnee === 'es' ? 'Guestflow no ha respondido. Inténtalo de nuevo.' :
+          langueSelectionnee === 'de' ? 'Guestflow hat nicht geantwortet. Bitte versuchen Sie es erneut.' :
+          'Guestflow n’a pas répondu. Merci de réessayer.';
+      }, 15000);
+
+      window[callbackName] = function(payload) {
+        clearTimeout(timeout);
+        nettoyer();
+
+        bouton.disabled = false;
+        effacerEtatReflexion();
+
+        if (!payload || payload.ok !== true) {
+          reponse.textContent =
+            payload && payload.erreur
+              ? payload.erreur
+              : (
+                  langueSelectionnee === 'en' ? 'An error occurred.' :
+                  langueSelectionnee === 'es' ? 'Se ha producido un error.' :
+                  langueSelectionnee === 'de' ? 'Ein Fehler ist aufgetreten.' :
+                  'Une erreur est survenue.'
+                );
+          return;
+        }
+
+        const zoneReponseV2314 = document.getElementById('reponse');
+        if (zoneReponseV2314) zoneReponseV2314.setAttribute('aria-busy', 'false');
+
+        const questionPourStyleFr = String(
+          (document.getElementById('gfRefQuestion') && document.getElementById('gfRefQuestion').value) ||
+          (document.getElementById('question') && document.getElementById('question').value) ||
+          question ||
+          ''
+        );
+        const reponseFinale = embellirFrancaisGuestflow_(payload.reponse, questionPourStyleFr);
+
+        afficherReponseGuestflow(reponseFinale);
+
+        if (voixActive) {
+          parlerReponseGuestflow(reponseFinale);
+        } else {
+          viderQuestionApresReponse();
+        }
+      };
+
+      script.onerror = function() {
+        clearTimeout(timeout);
+        nettoyer();
+        bouton.disabled = false;
+        status.classList.remove('thinking');
+        status.textContent = 'Erreur';
+        reponse.textContent =
+          langueSelectionnee === 'en' ? 'Unable to reach Guestflow.' :
+          langueSelectionnee === 'es' ? 'No se puede contactar con Guestflow.' :
+          langueSelectionnee === 'de' ? 'Guestflow ist nicht erreichbar.' :
+          'Impossible de joindre Guestflow.';
+      };
+
+      const paramIdLegacy = idGuestflow
+        ? '&id=' + encodeURIComponent(idGuestflow)
+        : '';
+
+      script.src =
+        'https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec' +
+        '?api=ask' +
+        paramIdLegacy +
+        '&token=' + encodeURIComponent(tokenVoyageur) +
+        '&q=' + encodeURIComponent(question) +
+        '&lang=' + encodeURIComponent(langueSelectionnee) +
+        '&callback=' + encodeURIComponent(callbackName) +
+        '&t=' + Date.now();
+
+      document.body.appendChild(script);
+    }
+
+
+    function vider() {
+
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+
+      document.getElementById('question').value = '';
+
+      document.getElementById('status').textContent = '';
+
+      document.getElementById('reponse').textContent =
+        (traductionsInterface[langueSelectionnee] || traductionsInterface.fr).empty;
+    }
+
+
+
+    // V23.9 — Nouveau format sécurisé :
+    // ?gite=Les-Oliviers&token=TOKEN_OPAQUE
+    // L'ID GF-XXXXX-001 n'apparaît plus dans l'URL.
+    function initialiserAccesVoyageur() {
+      const p = new URLSearchParams(window.location.search);
+
+      // Compatibilité avec les anciens liens seulement.
+      idGuestflow = String(
+        p.get('idGuestflow') || p.get('id') || ''
+      ).trim();
+
+      nomGiteVoyageur = String(p.get('gite') || '').trim();
+      tokenVoyageur = String(p.get('token') || '').trim();
+
+      // L'installation PWA peut redémarrer sans la query string.
+      // On conserve donc localement le gîte et le token du lien sécurisé.
+      try {
+        if (nomGiteVoyageur) {
+          localStorage.setItem('guestflow_gite', nomGiteVoyageur);
+        } else {
+          nomGiteVoyageur = String(localStorage.getItem('guestflow_gite') || '').trim();
+        }
+
+        if (tokenVoyageur) {
+          localStorage.setItem('guestflow_token', tokenVoyageur);
+        } else {
+          tokenVoyageur = String(localStorage.getItem('guestflow_token') || '').trim();
+        }
+
+        const langUrl = String(p.get('lang') || '').toLowerCase();
+        const langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase();
+        const langFinale = ['fr','en','es','de'].includes(langUrl)
+          ? langUrl
+          : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
+        localStorage.setItem('guestflow_langue', langFinale);
+      } catch (e) {}
+
+      const langUrl = String(p.get('lang') || '').toLowerCase();
+      let langSauvee = '';
+      try { langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase(); } catch (e) {}
+      langueSelectionnee = ['fr','en','es','de'].includes(langUrl)
+        ? langUrl
+        : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
+
+      const giteName = document.getElementById('giteName');
+
+      if (giteName && nomGiteVoyageur) {
+        const nomAffiche = nomGiteVoyageur
+          .replace(/-+/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+
+        giteName.textContent = nomAffiche;
+        giteName.hidden = false;
+        document.title = nomAffiche + ' — Guestflow';
+      }
+
+      mettreAJourInterface(langueSelectionnee);
+    }
+
+    const boutonMicro = document.getElementById('btnMic');
+    if (boutonMicro) {
+      boutonMicro.addEventListener('click', function(e) {
+        e.preventDefault();
+        basculerMicro();
+      });
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = function() {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    mettreAJourBoutonVoix();
+    initialiserAccesVoyageur();
+
+    document
+      .getElementById('question')
+      .addEventListener('keydown', function(e) {
+
+        if (e.ctrlKey && e.key === 'Enter') {
+          envoyerQuestion();
+        }
+      });
+  
+
+    // =========================================================
+    // GUESTFLOW V23.15.11 — PWA Android / iPhone
+    // =========================================================
+    /* Le prompt est capturé très tôt dans <head>. */
+
+    function estIOSGuestflow_() {
+      return /iphone|ipad|ipod/i.test(navigator.userAgent || '');
+    }
+
+    function estStandaloneGuestflow_() {
+      return window.matchMedia('(display-mode: standalone)').matches ||
+             window.navigator.standalone === true;
+    }
+
+    function majInstallationGuestflow_() {
+      const wrap = document.getElementById('pwaInstallWrap');
+      const btn = document.getElementById('pwaInstallBtn');
+      const hint = document.getElementById('pwaInstallHint');
+      if (!wrap || !btn || !hint) return;
+
+      if (estStandaloneGuestflow_()) {
+        wrap.style.display = 'none';
+        return;
+      }
+
+      const t =
+        traductionsInterface[langueSelectionnee] ||
+        traductionsInterface.fr;
+
+      if (window.guestflowDeferredInstallPrompt) {
+        wrap.style.display = 'block';
+        btn.style.display = 'block';
+        btn.textContent = t.installApp;
+        hint.textContent = '';
+        return;
+      }
+
+      if (estIOSGuestflow_()) {
+        wrap.style.display = 'block';
+        btn.style.display = 'none';
+        hint.textContent = t.iosInstall;
+        return;
+      }
+
+      wrap.style.display = 'none';
+    }
+
+    window.addEventListener('guestflow-install-ready', function() {
+      majInstallationGuestflow_();
+    });
+
+    window.addEventListener('guestflow-install-done', function() {
+      majInstallationGuestflow_();
+    });
+
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+    if (pwaInstallBtn) {
+      pwaInstallBtn.addEventListener('click', async function() {
+        if (!window.guestflowDeferredInstallPrompt) return;
+        window.guestflowDeferredInstallPrompt.prompt();
+        try {
+          await window.guestflowDeferredInstallPrompt.userChoice;
+        } catch (e) {}
+        window.guestflowDeferredInstallPrompt = null;
+        majInstallationGuestflow_();
+      });
+    }
+
+
+    // =========================================================
+    // ACCUEIL D'INSTALLATION — PHASE 1 : FRANÇAIS UNIQUEMENT
+    // =========================================================
+    function toastAccueilGuestflow_(message) {
+      const toast = document.getElementById('guestflowLandingToast');
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(function(){ toast.classList.remove('show'); }, 2600);
+    }
+
+    function fermerAideInstallationGuestflow_() {
+      const help = document.getElementById('guestflowInstallHelp');
+      if (!help) return;
+      help.classList.remove('show');
+      help.setAttribute('aria-hidden', 'true');
+      if (window.location.hash === '#guestflowInstallHelp') {
+        try {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        } catch (e) {
+          window.location.hash = '';
+        }
+      }
+    }
+
+    function ouvrirAideInstallationGuestflow_(messageSupplementaire) {
+      const help = document.getElementById('guestflowInstallHelp');
+      const zone = document.getElementById('guestflowInstallInstructions');
+      if (!help || !zone) return;
+
+      let html = '';
+
+      if (messageSupplementaire) {
+        html += '<p><strong>' + messageSupplementaire + '</strong></p>';
+      }
+
+      if (estIOSGuestflow_()) {
+        html += '<p>Pour installer Guestflow sur iPhone :</p>' +
+          '<ol><li>Touchez <strong>Partager</strong>.</li>' +
+          '<li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>' +
+          '<li>Touchez <strong>Ajouter</strong>.</li></ol>';
+      } else {
+        html += '<p>Pour installer Guestflow sur Android :</p>' +
+          '<ol><li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>' +
+          '<li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>' +
+          '<li>Confirmez l’installation.</li></ol>';
+      }
+
+      zone.innerHTML = html;
+      help.classList.add('show');
+      help.setAttribute('aria-hidden', 'false');
+    }
+
+    function appliquerLangueInstallationGuestflow_(lang) {
+      const supportees = ['fr','en','es','de'];
+      const choisie = supportees.includes(lang) ? lang : 'fr';
+      langueSelectionnee = choisie;
+      try { localStorage.setItem('guestflow_langue', choisie); } catch (e) {}
+
+      // Synchronise immédiatement l'indicateur visuel de langue sur l'écran d'installation.
+      document.querySelectorAll('[data-landing-lang]').forEach(function(bouton){
+        const actif = String(bouton.dataset.landingLang || '').toLowerCase() === choisie;
+        bouton.classList.toggle('active', actif);
+        bouton.setAttribute('aria-pressed', actif ? 'true' : 'false');
+      });
+
+      const manifest = document.getElementById('guestflowManifest');
+      if (manifest) {
+        const manifests = {
+          fr: './manifest-cacouech.json',
+          en: './manifest-cacouech-en.json',
+          es: './manifest-cacouech-es.json',
+          de: './manifest-cacouech-de.json'
+        };
+        manifest.setAttribute('href', manifests[choisie] || manifests.fr);
+      }
+      return choisie;
+    }
+
+    document.querySelectorAll('[data-landing-lang]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const lang = appliquerLangueInstallationGuestflow_(String(btn.dataset.landingLang || 'fr'));
+        const messages = {
+          fr: 'Version française sélectionnée.',
+          en: 'English version selected.',
+          es: 'Versión española seleccionada.',
+          de: 'Deutsche Version ausgewählt.'
+        };
+        toastAccueilGuestflow_(messages[lang] || messages.fr);
+      });
+    });
+
+    // Si le QR contient ?lang=fr/en/es/de, la langue est sélectionnée avant l’installation.
+    (function(){
+      const p = new URLSearchParams(window.location.search);
+      const langUrl = String(p.get('lang') || '').toLowerCase();
+      if (['fr','en','es','de'].includes(langUrl)) appliquerLangueInstallationGuestflow_(langUrl);
+    })();
+
+    const landingInstallBtn = document.getElementById('landingInstallBtn');
+    if (landingInstallBtn) {
+      landingInstallBtn.addEventListener('click', async function(){
+        appliquerLangueInstallationGuestflow_(langueSelectionnee);
+
+        if (estStandaloneGuestflow_()) {
+          toastAccueilGuestflow_('Guestflow est déjà installé.');
+          return;
+        }
+
+        const promptEvent = window.guestflowDeferredInstallPrompt;
+
+        // CAS NORMAL ANDROID / CHROME :
+        // un clic sur le bouton ouvre directement la boîte native d'installation.
+        if (promptEvent) {
+          window.guestflowDeferredInstallPrompt = null;
+
+          try {
+            await promptEvent.prompt();
+            const choix = await promptEvent.userChoice;
+
+            if (choix && choix.outcome === 'accepted') {
+              fermerAideInstallationGuestflow_();
+              toastAccueilGuestflow_('Installation de Guestflow lancée.');
+            } else {
+              // Si l'utilisateur annule, on ne le force pas vers un menu navigateur.
+              toastAccueilGuestflow_('Installation annulée.');
+            }
+          } catch (e) {
+            ouvrirAideInstallationGuestflow_(
+              'Chrome n’a pas pu ouvrir la fenêtre d’installation automatiquement.'
+            );
+          }
+
+          majInstallationGuestflow_();
+          return;
+        }
+
+        // iPhone : iOS ne fournit pas beforeinstallprompt.
+        if (estIOSGuestflow_()) {
+          ouvrirAideInstallationGuestflow_();
+          return;
+        }
+
+        // Android : le navigateur n'a pas encore déclaré la PWA installable.
+        // On ne renvoie PAS immédiatement vers le menu ⋮.
+        // On tente d'abord de laisser quelques instants au SW/manifest de devenir prêts.
+        toastAccueilGuestflow_('Préparation de l’installation…');
+
+        const debut = Date.now();
+        const limite = 2500;
+
+        const attendrePrompt = function() {
+          if (window.guestflowDeferredInstallPrompt) {
+            const evt = window.guestflowDeferredInstallPrompt;
+            window.guestflowDeferredInstallPrompt = null;
+
+            evt.prompt().then(function() {
+              return evt.userChoice;
+            }).then(function(choix) {
+              if (choix && choix.outcome === 'accepted') {
+                fermerAideInstallationGuestflow_();
+                toastAccueilGuestflow_('Installation de Guestflow lancée.');
+              } else {
+                toastAccueilGuestflow_('Installation annulée.');
+              }
+              majInstallationGuestflow_();
+            }).catch(function() {
+              ouvrirAideInstallationGuestflow_(
+                'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+              );
+            });
+            return;
+          }
+
+          if (Date.now() - debut < limite) {
+            setTimeout(attendrePrompt, 150);
+            return;
+          }
+
+          ouvrirAideInstallationGuestflow_(
+            'Chrome ne propose pas encore l’installation automatique sur cet appareil.'
+          );
+        };
+
+        attendrePrompt();
+      });
+    }
+
+    const landingCloseBtn = document.getElementById('guestflowInstallClose');
+    if (landingCloseBtn) {
+      landingCloseBtn.addEventListener('click', function(){
+        fermerAideInstallationGuestflow_();
+      });
+    }
+
+    const landingHelp = document.getElementById('guestflowInstallHelp');
+    if (landingHelp) {
+      landingHelp.addEventListener('click', function(e){
+        if (e.target === landingHelp) fermerAideInstallationGuestflow_();
+      });
+    }
+
+    // V23.15.11 — langue fiable + mémorisée dans la PWA.
+    function initialiserLanguesGuestflow_() {
+      langueSelectionnee = 'fr';
+      try { localStorage.setItem('guestflow_langue', 'fr'); } catch (e) {}
+      document.querySelectorAll('.lang-btn[data-lang]').forEach(function(btn) {
+        btn.addEventListener('click', function(event) {
+          event.preventDefault();
+          // Phase de validation : seule la version française est active.
+          choisirLangue('fr');
+        });
+      });
+      choisirLangue('fr');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialiserLanguesGuestflow_);
+    } else {
+      initialiserLanguesGuestflow_();
+    }
+
+    // =========================================================
+    // GUESTFLOW — MISE À JOUR STABLE PAR build.txt
+    // =========================================================
+    async function guestflowFetchNoCache_(url) {
+      const sep = url.includes('?') ? '&' : '?';
+      return fetch(url + sep + '_ts=' + Date.now(), {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+    }
+
+    async function verifierBuildGuestflow_() {
+      try {
+        const rBuild = await guestflowFetchNoCache_('./build.txt');
+        if (!rBuild.ok) return;
+
+        const buildDistant = String(await rBuild.text()).trim();
+        if (!buildDistant || buildDistant === GUESTFLOW_BUILD) return;
+
+        const rIndex = await guestflowFetchNoCache_(
+          './index.html?candidate=' + encodeURIComponent(buildDistant)
+        );
+        if (!rIndex.ok) return;
+
+        const candidate = await rIndex.text();
+        const marqueur = 'const GUESTFLOW_BUILD = "' + buildDistant + '"';
+
+        if (!candidate.includes(marqueur)) {
+          setTimeout(verifierBuildGuestflow_, 3000);
+          return;
+        }
+
+        // Conserve gîte + token + autres paramètres existants.
+        const nouvelleUrl = new URL(window.location.href);
+        nouvelleUrl.searchParams.set('build', buildDistant);
+        nouvelleUrl.searchParams.set('_ts', Date.now().toString());
+        window.location.replace(nouvelleUrl.toString());
+
+      } catch (e) {
+        console.warn('Contrôle de mise à jour Guestflow indisponible :', e);
+      }
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', async function() {
+        try {
+          await navigator.serviceWorker.register('./service-worker.js', {
+            scope: './',
+            updateViaCache: 'none'
+          });
+        } catch (err) {
+          console.warn('Service worker Guestflow non enregistré :', err);
+        }
+
+        verifierBuildGuestflow_();
+      });
+
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'visible') {
+          verifierBuildGuestflow_();
+        }
+      });
+    }
+
+    majInstallationGuestflow_();
+
+
+
+</script>
+
+
+<script id="guestflow-reference-bridge">
 (function(){
- const p=new URLSearchParams(location.search);
- const lang=['fr','en','es','de'].includes(p.get('lang'))?p.get('lang'):'fr';
- document.documentElement.lang=lang;
- const href={fr:'./manifest-cacouech.json',en:'./manifest-cacouech-en.json',es:'./manifest-cacouech-es.json',de:'./manifest-cacouech-de.json'}[lang];
- const l=document.createElement('link'); l.rel='manifest'; l.href=href; document.head.appendChild(l);
+  function byId(id){ return document.getElementById(id); }
+
+  function resizeVisualQuestion(){
+    var visual = byId('gfRefQuestion');
+    var wrap = document.querySelector('.gf-reference-wrap');
+    if (!visual || !wrap) return;
+
+    // Le cadre d'origine fait 4,9 % de la hauteur de la maquette.
+    // On garde son bord inférieur fixe et on l'agrandit vers le haut
+    // afin qu'une question sur 2 ou 3 lignes ne recouvre jamais
+    // la zone « Accès rapides ».
+    var base = wrap.clientHeight * 0.049;
+    var maxH = wrap.clientHeight * 0.105;
+
+    visual.style.height = base + 'px';
+    visual.style.transform = 'translateY(0)';
+
+    var wanted = Math.max(base, Math.min(maxH, visual.scrollHeight));
+    var delta = wanted - base;
+
+    visual.style.height = wanted + 'px';
+    visual.style.transform = 'translateY(-' + delta + 'px)';
+  }
+
+  function syncToEngine(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    if (visual && engine) engine.value = visual.value;
+  }
+
+  function sendVisualQuestion(){
+    syncToEngine();
+    var ask = byId('btnAsk');
+    if (ask) ask.click();
+  }
+
+  function initReferenceInterface(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    var mic = byId('gfRefMic');
+    var engineMic = byId('btnMic');
+    var send = byId('gfRefSend');
+    var answerBox = byId('gfRefAnswer');
+    var answerText = byId('gfRefAnswerText');
+    var engineAnswer = byId('reponse');
+    var listening = byId('gfRefListening');
+
+    if (visual && engine) {
+      visual.addEventListener('input', function(){
+        engine.value = visual.value;
+        resizeVisualQuestion();
+      });
+      visual.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendVisualQuestion();
+        }
+      });
+    }
+
+    if (send) send.addEventListener('click', sendVisualQuestion);
+
+    if (mic && engineMic) {
+      mic.addEventListener('click', function(){ engineMic.click(); });
+    }
+
+    document.querySelectorAll('[data-gf-question]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var q = btn.getAttribute('data-gf-question') || '';
+        if (visual) visual.value = q;
+        if (engine) engine.value = q;
+        resizeVisualQuestion();
+        sendVisualQuestion();
+      });
+    });
+
+    var stop = byId('gfRefAnswerStop');
+    if (stop) stop.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+    });
+
+    var close = byId('gfRefAnswerClose');
+    if (close && answerBox) close.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+      answerBox.classList.remove('show');
+    });
+
+    if (engineAnswer && answerText && answerBox) {
+      var updateAnswer = function(){
+        var txt = (engineAnswer.textContent || '').trim();
+        if (!txt) return;
+        var low = txt.toLowerCase();
+        var placeholders = [
+          'la réponse de guestflow apparaîtra ici.',
+          'guestflow prépare votre réponse…',
+          'guestflow prépare votre réponse...'
+        ];
+        // V23.17 : conserver le HTML sûr construit par afficherReponseGuestflow(),
+        // notamment le bouton/lien Google Maps. L'ancienne copie via textContent
+        // transformait le lien en simple texte dans l'interface visible.
+        answerText.innerHTML = engineAnswer.innerHTML;
+        if (!placeholders.includes(low)) answerBox.classList.add('show');
+      };
+      new MutationObserver(updateAnswer).observe(engineAnswer, {
+        subtree:true, childList:true, characterData:true
+      });
+    }
+
+    if (engineMic && listening) {
+      var updateMic = function(){
+        var active = engineMic.classList.contains('listening') ||
+                     engineMic.classList.contains('active') ||
+                     engineMic.getAttribute('aria-pressed') === 'true';
+        listening.classList.toggle('show', active);
+      };
+      new MutationObserver(updateMic).observe(engineMic, {
+        attributes:true, attributeFilter:['class','aria-pressed']
+      });
+    }
+
+    resizeVisualQuestion();
+    window.addEventListener('resize', resizeVisualQuestion);
+
+    var hist = document.querySelector('.gf-ref-nav-history');
+    if (hist) hist.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'L’historique sera ajouté dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+    var settings = document.querySelector('.gf-ref-nav-settings');
+    if (settings) settings.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'Les paramètres seront ajoutés dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReferenceInterface);
+  } else {
+    initReferenceInterface();
+  }
 })();
 </script>
-<style>
-:root{--green:#4f6941;--deep:#17351e;--cream:#f2efe4;--ink:#122015;--gold:#a58a3a}
-*{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f2efe4}
-body{font-family:Arial,Helvetica,sans-serif}
-#stage{position:fixed;inset:0;overflow:hidden;background:#f2efe4}
-#design{position:absolute;width:941px;height:1672px;transform-origin:0 0}
-#design>img{position:absolute;inset:0;width:941px;height:1672px;display:block;user-select:none;-webkit-user-drag:none}
-.overlay{position:absolute;z-index:2;color:var(--ink)}
-.brand{left:145px;top:132px;width:370px}
-.brand .name{font-family:Didot,"Bodoni MT",Georgia,serif;font-size:62px;line-height:.9;letter-spacing:-2px;font-weight:600}
-.brand .sub{margin-left:52px;margin-top:10px;font-size:19px;letter-spacing:7px;text-transform:uppercase}
-.slogan{left:595px;top:116px;width:250px;font-family:"Segoe Script","Brush Script MT",cursive;font-size:38px;line-height:1.0;font-style:italic;text-align:center;color:#16411e;transform:rotate(-6deg)}
-.langbar{left:54px;top:246px;width:510px;height:70px;padding:7px;border-radius:35px;background:rgba(244,241,231,.96);display:grid;grid-template-columns:repeat(4,1fr);gap:3px;box-shadow:0 2px 8px rgba(0,0,0,.06);z-index:5}
-.lang{border:0;background:transparent;border-radius:28px;font-size:20px;display:flex;align-items:center;justify-content:center;gap:8px;color:#111;cursor:pointer}
-.lang.active{background:#607650;color:#fff}.flag{font-size:29px}
-.hero-title{left:60px;top:353px;width:505px;height:120px;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:51px;line-height:.98;font-weight:600;letter-spacing:-1.7px;display:flex;align-items:center}
-.intro{left:60px;top:486px;width:385px;height:115px;font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.25;display:flex;align-items:center}
-.step{left:244px;width:255px;font-family:Georgia,"Times New Roman",serif;font-size:24px;line-height:1.05;display:flex;align-items:center;height:88px}
-.s1{top:785px}.s2{top:900px}.s3{top:1014px}
-.badge{top:1165px;height:58px;font-family:Georgia,"Times New Roman",serif;font-size:20px;display:flex;align-items:center;text-align:left}
-.b1{left:145px;width:165px}.b2{left:430px;width:155px}.b3{left:705px;width:145px}
-.install{left:52px;top:1240px;width:824px;height:88px;border:0;background:transparent;color:#fff;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:34px;cursor:pointer;z-index:6;padding:0;display:flex;align-items:center;justify-content:center;text-align:center}
-.install .install-label{display:block;width:100%;text-align:center;line-height:1;transform:translate(24px,4px)}
-.avail{left:270px;top:1412px;width:400px;text-align:center;font-size:17px;line-height:1.15;color:#121712;white-space:nowrap}
-.values{left:248px;top:1470px;width:460px;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:12.5px;letter-spacing:3px;color:#29472e;white-space:nowrap}
-.closing{left:676px;top:1345px;width:220px;font-family:"Segoe Script","Brush Script MT",cursive;font-size:28px;line-height:1.03;font-style:italic;text-align:center;color:#17411f;transform:rotate(-6deg)}
-/* text-only layer inside the already drawn phone */
-.phone{left:585px;top:535px;width:254px;height:470px;transform:rotate(5deg);transform-origin:0 0;color:#152017;z-index:4}
-.phone .pbrand{position:absolute;top:0;left:54px;width:165px;text-align:left;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:27px;font-weight:600}
-.phone .psub{position:absolute;top:31px;left:88px;width:125px;text-align:left;font-size:8px;letter-spacing:2.2px;text-transform:uppercase}
-.phone .hello{position:absolute;top:70px;left:8px;width:220px;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:27px}
-.phone .help{position:absolute;top:108px;left:9px;width:205px;font-size:13px;line-height:1.2}
-.phone .placeholder{position:absolute;top:190px;left:38px;width:150px;height:20px;display:flex;align-items:center;font-size:10px;line-height:1;color:#747474;white-space:nowrap;overflow:hidden}
-.phone .lab{position:absolute;width:70px;text-align:center;font-size:8.2px;color:#1d261d;line-height:1.05}
-.phone .l1{left:0;top:288px}.phone .l2{left:86px;top:288px}.phone .l3{left:172px;top:288px}
-.phone .l4{left:0;top:374px}.phone .l5{left:86px;top:374px}.phone .l6{left:172px;top:374px}
-.phone .tag{position:absolute;left:24px;top:438px;width:200px;text-align:center;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:9px;color:#555}
-.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(15px);opacity:0;z-index:20;background:#173d21;color:white;border-radius:12px;padding:10px 15px;max-width:90vw;text-align:center;font-size:14px;transition:.2s}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-</style>
-</head>
-<body>
-<div id="stage"><div id="design">
-<img src="./accueil-guestflow-premium.png" alt="">
-<div class="overlay brand"><div class="name">Guestflow</div><div class="sub">Les Oliviers</div></div>
-<div class="overlay slogan" data-k="slogan"></div>
-<div class="overlay langbar">
-<button class="lang" data-lang="fr"><span class="flag">🇫🇷</span>FR</button>
-<button class="lang" data-lang="en"><span class="flag">🇬🇧</span>EN</button>
-<button class="lang" data-lang="es"><span class="flag">🇪🇸</span>ES</button>
-<button class="lang" data-lang="de"><span class="flag">🇩🇪</span>DE</button>
-</div>
-<div class="overlay hero-title" data-k="title"></div>
-<div class="overlay intro" data-k="intro"></div>
-<div class="overlay step s1" data-k="step1"></div>
-<div class="overlay step s2" data-k="step2"></div>
-<div class="overlay step s3" data-k="step3"></div>
-<div class="overlay badge b1" data-k="badge1"></div><div class="overlay badge b2" data-k="badge2"></div><div class="overlay badge b3" data-k="badge3"></div>
-<button class="overlay install" id="install" aria-label="Installer Guestflow"><span class="install-label" data-k="install"></span></button>
-<div class="overlay avail" data-k="availability"></div>
-<div class="overlay values" data-k="values"></div>
-<div class="overlay closing" data-k="closing"></div>
-<div class="overlay phone">
-<div class="pbrand">Guestflow</div><div class="psub">Les Oliviers</div><div class="hello" data-k="phoneHello"></div><div class="help" data-k="phoneCopy"></div><div class="placeholder" data-k="phoneInput"></div>
-<div class="tag" data-k="phoneTag"></div>
-</div>
-</div></div>
-<div class="toast" id="toast"></div>
-<script>
-const TXT={
-fr:{slogan:'Bien plus<br>qu’un séjour',title:'Ajoutez Guestflow<br>à votre téléphone',intro:'Installez votre concierge de séjour en quelques secondes et profitez d’un accompagnement personnalisé tout au long de votre séjour.',step1:'Installez<br>Guestflow',step2:'Ajoutez-le à votre<br>écran d’accueil',step3:'Ouvrez Guestflow<br>et posez vos questions',badge1:'Sans compte',badge2:'Réponse rapide',badge3:'Données sécurisées',install:'Installer Guestflow',availability:'Disponible sur iPhone et Android',values:'NATURE · PARTAGE · AUTHENTICITÉ',closing:'Profitez de<br>chaque instant !',phoneHello:'Bonjour !',phoneCopy:'Comment puis-je vous aider ?',phoneInput:'Posez votre question…',p1:'Activités',p2:'Restaurants',p3:'À proximité',p4:'Transport',p5:'Animaux',p6:'Urgence',phoneTag:'Des lieux qui ont du sens',ios:'Sur iPhone : Partager puis « Sur l’écran d’accueil ».',wait:'Votre navigateur proposera l’installation lorsque Guestflow sera installable.'},
-en:{slogan:'More than<br>just a stay',title:'Add Guestflow<br>to your phone',intro:'Install your stay concierge in just a few seconds and enjoy personalised assistance throughout your stay.',step1:'Install<br>Guestflow',step2:'Add it to your<br>Home Screen',step3:'Open Guestflow<br>and ask your questions',badge1:'No account',badge2:'Fast response',badge3:'Secure data',install:'Install Guestflow',availability:'Available on iPhone and Android',values:'NATURE · SHARING · AUTHENTICITY',closing:'Enjoy every<br>moment!',phoneHello:'Hello!',phoneCopy:'How can I help you?',phoneInput:'Ask your question…',p1:'Activities',p2:'Restaurants',p3:'Nearby',p4:'Transport',p5:'Pets',p6:'Emergency',phoneTag:'Places that matter',ios:'On iPhone: Share, then “Add to Home Screen”.',wait:'Your browser will offer installation when Guestflow is installable.'},
-es:{slogan:'Mucho más<br>que una estancia',title:'Añade Guestflow<br>a tu teléfono',intro:'Instala tu conserje de estancia en solo unos segundos y disfruta de una asistencia personalizada durante toda tu estancia.',step1:'Instala<br>Guestflow',step2:'Añádelo a tu<br>pantalla de inicio',step3:'Abre Guestflow<br>y haz tus preguntas',badge1:'Sin cuenta',badge2:'Respuesta rápida',badge3:'Datos seguros',install:'Instalar Guestflow',availability:'Disponible en iPhone y Android',values:'NATURALEZA · COMPARTIR · AUTENTICIDAD',closing:'¡Disfruta de<br>cada instante!',phoneHello:'¡Hola!',phoneCopy:'¿Cómo puedo ayudarte?',phoneInput:'Haz tu pregunta…',p1:'Actividades',p2:'Restaurantes',p3:'Cerca',p4:'Transporte',p5:'Animales',p6:'Urgencia',phoneTag:'Lugares con sentido',ios:'En iPhone: Compartir y «Añadir a pantalla de inicio».',wait:'El navegador ofrecerá la instalación cuando Guestflow esté disponible.'},
-de:{slogan:'Mehr als nur<br>ein Aufenthalt',title:'Guestflow auf<br>Ihr Smartphone',intro:'Installieren Sie Ihren Aufenthalts-Concierge in nur wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.',step1:'Guestflow<br>installieren',step2:'Zum Startbildschirm<br>hinzufügen',step3:'Guestflow öffnen<br>und Fragen stellen',badge1:'Ohne Konto',badge2:'Schnelle Antwort',badge3:'Sichere Daten',install:'Guestflow installieren',availability:'Verfügbar auf iPhone und Android',values:'NATUR · TEILEN · AUTHENTIZITÄT',closing:'Genießen Sie<br>jeden Augenblick!',phoneHello:'Hallo!',phoneCopy:'Wie kann ich Ihnen helfen?',phoneInput:'Stellen Sie Ihre Frage…',p1:'Aktivitäten',p2:'Restaurants',p3:'In der Nähe',p4:'Transport',p5:'Tiere',p6:'Notfall',phoneTag:'Orte mit Bedeutung',ios:'Auf dem iPhone: Teilen, dann „Zum Home-Bildschirm“.',wait:'Ihr Browser bietet die Installation an, sobald Guestflow installierbar ist.'}}
-const qs=new URLSearchParams(location.search);let lang=['fr','en','es','de'].includes(qs.get('lang'))?qs.get('lang'):'fr';
-function render(){document.documentElement.lang=lang;document.querySelectorAll('[data-k]').forEach(e=>e.innerHTML=TXT[lang][e.dataset.k]||'');document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));}
-document.querySelectorAll('.lang').forEach(b=>b.onclick=()=>{const next=b.dataset.lang;if(!['fr','en','es','de'].includes(next))return;lang=next;render();const u=new URL(location.href);u.searchParams.set('lang',lang);history.replaceState(null,'',u.toString());});
-function fit(){const W=innerWidth,H=innerHeight,s=Math.max(W/941,H/1672),x=(W-941*s)/2,y=(H-1672*s)/2;const d=document.getElementById('design');d.style.left=x+'px';d.style.top=y+'px';d.style.transform=`scale(${s})`;}
-addEventListener('resize',fit);fit();render();
-let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});const t=document.getElementById('toast');function toast(m){t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),4000)}
-document.getElementById('install').onclick=async()=>{if(/iphone|ipad|ipod/i.test(navigator.userAgent)){toast(TXT[lang].ios);return}if(deferred){deferred.prompt();await deferred.userChoice;deferred=null}else toast(TXT[lang].wait)};
-</script>
-</body></html>
+
+</body>
+</html>
