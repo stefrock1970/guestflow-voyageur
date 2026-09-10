@@ -2252,7 +2252,7 @@
       document.write('<link rel="manifest" id="guestflowManifest" href="' + manifests[lang] + '">');
     })();
   </script>
-<link href="./icône-192.png" rel="apple-touch-icon"/>
+<link href="./gf192.png" rel="apple-touch-icon"/>
 <!-- GUESTFLOW 408000 — capture PWA très précoce -->
 <script>
     window.guestflowDeferredInstallPrompt = window.guestflowDeferredInstallPrompt || null;
@@ -2580,6 +2580,26 @@
     -webkit-user-drag:none;
   }
 
+  /* Nom du gîte injecté par l'URL sécurisée (?gite=Nom-du-gite).
+     Il reste en HTML afin que les quatre images demeurent génériques. */
+  .gfp-property-name{
+    position:absolute;
+    z-index:25;
+    left:19%;
+    top:10.45%;
+    width:35%;
+    color:#111b18;
+    text-align:center;
+    font:600 clamp(12px,2.05cqw,18px)/1.1 Inter,Arial,sans-serif;
+    letter-spacing:.22em;
+    text-transform:none;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    pointer-events:none;
+  }
+  .gfp-property-name:empty{display:none}
+
   /* Hotspots langues : ils sont au-dessus des boutons déjà dessinés dans l'image. */
   .gfp-lang-hot{
     position:absolute;top:13.15%;height:3.8%;
@@ -2804,6 +2824,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 <section aria-label="Installer Guestflow" class="guestflow-landing" id="guestflowLanding"><div class="gfp-page" data-lang="fr" id="guestflowPremiumPage">
 <!-- VISUELS PREMIUM DÉFINITIFS FR / EN / ES / DE -->
 <img alt="Guestflow — installer votre concierge de séjour" class="gfp-base" id="guestflowPremiumImage" src="./accueil-guestflow-fr.png"/>
+<div aria-live="polite" class="gfp-property-name" id="guestflowPropertyName"></div>
 <button aria-label="Français" class="gfp-lang-hot gfp-fr" data-landing-lang="fr" data-lang="fr"></button>
 <button aria-label="English" class="gfp-lang-hot gfp-en" data-landing-lang="en" data-lang="en"></button>
 <button aria-label="Español" class="gfp-lang-hot gfp-es" data-landing-lang="es" data-lang="es"></button>
@@ -2937,7 +2958,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 <!-- GUESTFLOW — interface visuelle de référence validée -->
 <section aria-label="Concierge Guestflow" class="gf-reference-screen" id="gfReferenceScreen">
 <div class="gf-reference-wrap">
-<img alt="Guestflow Les Oliviers — concierge numérique 24h/24" class="gf-reference-img" id="gfReferenceImage" src="./guestflow-concierge-final.png"/>
 <div aria-hidden="true" class="gf-app-i18n" id="gfAppI18n">
 <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
 <div class="gf-i18n-box gf-i18n-title gf-app-title" data-gfa="title"></div>
@@ -4674,15 +4694,22 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
 
       const giteName = document.getElementById('giteName');
+      const landingGiteName = document.getElementById('guestflowPropertyName');
 
-      if (giteName && nomGiteVoyageur) {
+      if (nomGiteVoyageur) {
         const nomAffiche = nomGiteVoyageur
           .replace(/-+/g, ' ')
           .replace(/\s+/g, ' ')
           .trim();
 
-        giteName.textContent = nomAffiche;
-        giteName.hidden = false;
+        if (giteName) {
+          giteName.textContent = nomAffiche;
+          giteName.hidden = false;
+        }
+        if (landingGiteName) {
+          landingGiteName.textContent = nomAffiche;
+          landingGiteName.setAttribute('aria-label', 'Établissement : ' + nomAffiche);
+        }
         document.title = nomAffiche + ' — Guestflow';
       }
 
@@ -4820,8 +4847,9 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
           android:'Pour installer Guestflow sur Android :',
           androidSteps:['Ouvrez le menu <strong>⋮</strong> de votre navigateur.','Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.','Confirmez l’installation.'],
           already:'Guestflow est déjà installé.', started:'Installation de Guestflow lancée.', cancelled:'Installation annulée.',
-          preparing:'Préparation de l’installation…', chromeAuto:texteInstallationGuestflow_().chromeAuto,
-          chromeWait:texteInstallationGuestflow_().chromeWait,
+          preparing:'Préparation de l’installation…',
+          chromeAuto:'Chrome n’a pas pu ouvrir automatiquement la fenêtre d’installation.',
+          chromeWait:'Chrome ne propose pas encore l’installation automatique sur cet appareil.',
           title:'Installer Guestflow', close:'J’ai compris'
         },
         en:{
