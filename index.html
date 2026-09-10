@@ -2570,6 +2570,27 @@
     }
   </style>
 
+
+  <style id="guestflow-no-beige-fallback">
+    /* Sécurité absolue : si le PNG de référence ne charge pas,
+       on affiche l'interface HTML Guestflow complète au lieu d'un écran beige vide. */
+    body.guestflow-app-mode.guestflow-image-fallback > .gf-reference-screen{
+      display:none !important;
+    }
+    body.guestflow-app-mode.guestflow-image-fallback > .page.gf-app-shell{
+      display:block !important;
+      position:relative !important;
+      left:auto !important;
+      top:auto !important;
+      width:min(100%,760px) !important;
+      margin:0 auto !important;
+      opacity:1 !important;
+      pointer-events:auto !important;
+      min-height:100vh !important;
+      z-index:30 !important;
+    }
+  </style>
+
 </head>
 
 <body>
@@ -2648,8 +2669,11 @@
   <!-- GUESTFLOW — interface visuelle de référence validée -->
   <section class="gf-reference-screen" id="gfReferenceScreen" aria-label="Concierge Guestflow">
     <div class="gf-reference-wrap">
-      <img class="gf-reference-img" src="./guestflow-concierge-final.png"
-           alt="Guestflow Les Oliviers — concierge numérique 24h/24">
+      <img class="gf-reference-img" id="gfReferenceImage"
+           src="./guestflow-concierge-final.png"
+           alt="Guestflow Les Oliviers — concierge numérique 24h/24"
+           onload="document.body.classList.remove('guestflow-image-fallback')"
+           onerror="document.body.classList.add('guestflow-image-fallback')">
 
       <div class="gf-app-i18n" id="gfAppI18n" aria-hidden="true">
         <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
@@ -5054,6 +5078,30 @@
   }
 })();
 </script>
+
+
+  <script id="guestflow-image-fallback-check">
+    (function () {
+      function verifierImageGuestflow() {
+        if (!document.body.classList.contains('guestflow-app-mode')) return;
+        var img = document.getElementById('gfReferenceImage');
+        if (!img) {
+          document.body.classList.add('guestflow-image-fallback');
+          return;
+        }
+        if (img.complete && img.naturalWidth === 0) {
+          document.body.classList.add('guestflow-image-fallback');
+        }
+      }
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', verifierImageGuestflow);
+      } else {
+        verifierImageGuestflow();
+      }
+      window.addEventListener('load', verifierImageGuestflow);
+      setTimeout(verifierImageGuestflow, 2500);
+    })();
+  </script>
 
 </body>
 </html>
