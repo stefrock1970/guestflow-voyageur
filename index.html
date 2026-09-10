@@ -36,17 +36,21 @@ body{font-family:Arial,Helvetica,sans-serif}
 .s1{top:785px}.s2{top:900px}.s3{top:1014px}
 .badge{top:1165px;height:58px;font-family:Georgia,"Times New Roman",serif;font-size:20px;display:flex;align-items:center;text-align:left}
 .b1{left:145px;width:165px}.b2{left:430px;width:155px}.b3{left:705px;width:145px}
-.install{left:52px;top:1240px;width:824px;height:88px;border:0;background:transparent;color:#fff;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:34px;cursor:pointer;z-index:6}
-.avail{left:290px;top:1406px;width:360px;text-align:center;font-size:18px;color:#121712}
-.values{left:278px;top:1462px;width:400px;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:14px;letter-spacing:4px;color:#29472e}
-.closing{left:676px;top:1362px;width:220px;font-family:"Segoe Script","Brush Script MT",cursive;font-size:30px;line-height:1.05;font-style:italic;text-align:center;color:#17411f;transform:rotate(-6deg)}
+.install{left:52px;top:1240px;width:824px;height:88px;border:0;background:transparent;color:#fff;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:34px;cursor:pointer;z-index:6;padding:0;display:flex;align-items:center;justify-content:center;text-align:center}
+.install .install-label{display:block;width:100%;text-align:center;line-height:1}
+.install .install-left,.install .install-right{position:absolute;top:50%;transform:translateY(-50%);pointer-events:none;line-height:1}
+.install .install-left{left:205px;font-size:38px}
+.install .install-right{right:32px;font-family:Arial,sans-serif;font-size:48px}
+.avail{left:290px;top:1390px;width:360px;text-align:center;font-size:18px;line-height:1.12;color:#121712}
+.values{left:258px;top:1448px;width:440px;text-align:center;font-family:Georgia,"Times New Roman",serif;font-size:13px;letter-spacing:3.2px;color:#29472e;white-space:nowrap}
+.closing{left:676px;top:1345px;width:220px;font-family:"Segoe Script","Brush Script MT",cursive;font-size:28px;line-height:1.03;font-style:italic;text-align:center;color:#17411f;transform:rotate(-6deg)}
 /* text-only layer inside the already drawn phone */
 .phone{left:585px;top:535px;width:254px;height:470px;transform:rotate(3.7deg);transform-origin:0 0;color:#152017;z-index:4}
 .phone .pbrand{position:absolute;top:0;left:54px;width:165px;text-align:left;font-family:Didot,"Bodoni MT",Georgia,serif;font-size:27px;font-weight:600}
 .phone .psub{position:absolute;top:31px;left:88px;width:125px;text-align:left;font-size:8px;letter-spacing:2.2px;text-transform:uppercase}
 .phone .hello{position:absolute;top:70px;left:8px;width:220px;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-weight:700;font-size:27px}
 .phone .help{position:absolute;top:108px;left:9px;width:205px;font-size:13px;line-height:1.2}
-.phone .placeholder{position:absolute;top:183px;left:37px;width:155px;font-size:10px;color:#747474;white-space:nowrap}
+.phone .placeholder{position:absolute;top:190px;left:38px;width:150px;height:20px;display:flex;align-items:center;font-size:10px;line-height:1;color:#747474;white-space:nowrap;overflow:hidden}
 .phone .lab{position:absolute;width:70px;text-align:center;font-size:8.2px;color:#1d261d;line-height:1.05}
 .phone .l1{left:0;top:288px}.phone .l2{left:86px;top:288px}.phone .l3{left:172px;top:288px}
 .phone .l4{left:0;top:374px}.phone .l5{left:86px;top:374px}.phone .l6{left:172px;top:374px}
@@ -71,7 +75,7 @@ body{font-family:Arial,Helvetica,sans-serif}
 <div class="overlay step s2" data-k="step2"></div>
 <div class="overlay step s3" data-k="step3"></div>
 <div class="overlay badge b1" data-k="badge1"></div><div class="overlay badge b2" data-k="badge2"></div><div class="overlay badge b3" data-k="badge3"></div>
-<button class="overlay install" id="install" data-k="install"></button>
+<button class="overlay install" id="install" aria-label="Installer Guestflow"><span class="install-left" aria-hidden="true">⇩</span><span class="install-label" data-k="install"></span><span class="install-right" aria-hidden="true">›</span></button>
 <div class="overlay avail" data-k="availability"></div>
 <div class="overlay values" data-k="values"></div>
 <div class="overlay closing" data-k="closing"></div>
@@ -89,7 +93,7 @@ es:{slogan:'Mucho más<br>que una estancia',title:'Añade Guestflow<br>a tu tel�
 de:{slogan:'Mehr als nur<br>ein Aufenthalt',title:'Guestflow auf<br>Ihr Smartphone',intro:'Installieren Sie Ihren Aufenthalts-Concierge in nur wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.',step1:'Guestflow<br>installieren',step2:'Zum Startbildschirm<br>hinzufügen',step3:'Guestflow öffnen<br>und Fragen stellen',badge1:'Ohne Konto',badge2:'Schnelle Antwort',badge3:'Sichere Daten',install:'Guestflow installieren',availability:'Verfügbar auf iPhone und Android',values:'NATUR · TEILEN · AUTHENTIZITÄT',closing:'Genießen Sie<br>jeden Augenblick!',phoneHello:'Hallo!',phoneCopy:'Wie kann ich Ihnen helfen?',phoneInput:'Stellen Sie Ihre Frage…',p1:'Aktivitäten',p2:'Restaurants',p3:'In der Nähe',p4:'Transport',p5:'Tiere',p6:'Notfall',phoneTag:'Orte mit Bedeutung',ios:'Auf dem iPhone: Teilen, dann „Zum Home-Bildschirm“.',wait:'Ihr Browser bietet die Installation an, sobald Guestflow installierbar ist.'}}
 const qs=new URLSearchParams(location.search);let lang=['fr','en','es','de'].includes(qs.get('lang'))?qs.get('lang'):'fr';
 function render(){document.documentElement.lang=lang;document.querySelectorAll('[data-k]').forEach(e=>e.innerHTML=TXT[lang][e.dataset.k]||'');document.querySelectorAll('.lang').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));}
-document.querySelectorAll('.lang').forEach(b=>b.onclick=()=>{if(b.dataset.lang===lang)return;const u=new URL(location.href);u.searchParams.set('lang',b.dataset.lang);location.href=u.toString();});
+document.querySelectorAll('.lang').forEach(b=>b.onclick=()=>{const next=b.dataset.lang;if(!['fr','en','es','de'].includes(next))return;lang=next;render();const u=new URL(location.href);u.searchParams.set('lang',lang);history.replaceState(null,'',u.toString());});
 function fit(){const W=innerWidth,H=innerHeight,s=Math.max(W/941,H/1672),x=(W-941*s)/2,y=(H-1672*s)/2;const d=document.getElementById('design');d.style.left=x+'px';d.style.top=y+'px';d.style.transform=`scale(${s})`;}
 addEventListener('resize',fit);fit();render();
 let deferred=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferred=e});const t=document.getElementById('toast');function toast(m){t.textContent=m;t.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('show'),4000)}
