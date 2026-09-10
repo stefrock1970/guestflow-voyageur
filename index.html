@@ -3,342 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#66724f">
+<meta name="theme-color" content="#65754b">
 <title>Guestflow — Les Oliviers</title>
 <style>
-  *{box-sizing:border-box}
-  html,body{margin:0;background:#dcded4}
-  body{font-family:Arial,Helvetica,sans-serif}
-  .page{
-    width:min(100vw,841px);
-    margin:0 auto;
-    position:relative;
-    container-type:inline-size;
-    background:#f7f4e9;
-    overflow:hidden;
-  }
-  .base{
-    display:block;
-    width:100%;
-    height:auto;
-    user-select:none;
-    -webkit-user-drag:none;
-  }
+*{box-sizing:border-box}
+html,body{margin:0;background:#dcded4}
+body{font-family:Arial,Helvetica,sans-serif}
+.page{position:relative;width:min(100vw,841px);margin:0 auto;overflow:hidden;background:#f7f4e9;container-type:inline-size}
+.base{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
 
-  /* Hotspots langues : ils sont au-dessus des boutons déjà dessinés dans l'image. */
-  .lang-hot{
-    position:absolute;top:13.15%;height:3.8%;
-    border:0;background:transparent;cursor:pointer;z-index:20;
-  }
-  .fr{left:6.1%;width:14.5%}
-  .en{left:20.7%;width:13.3%}
-  .es{left:34.1%;width:13.3%}
-  .de{left:47.7%;width:13.0%}
+/* VRAI sélecteur de langues : recouvre complètement le sélecteur imprimé dans le PNG.
+   Les quatre zones sont de vrais liens, pas des hotspots invisibles. */
+.langbar{position:absolute;z-index:80;left:5.7%;top:13.37%;width:53.4%;height:3.55%;display:grid;grid-template-columns:repeat(4,1fr);gap:.35cqw;padding:.28cqw;background:rgba(245,243,234,.98);border-radius:999px;box-shadow:0 .3cqw 1cqw rgba(0,0,0,.05)}
+.langbar a{display:flex;align-items:center;justify-content:center;gap:.55cqw;text-decoration:none;color:#152019;border-radius:999px;font:500 2.15cqw/1 Arial,sans-serif;min-width:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.langbar a.active{background:#7f8f68;color:white;box-shadow:inset 0 0 0 .12cqw rgba(255,255,255,.45)}
+.flag{font-size:2.9cqw;line-height:1}
 
-  /* Une traduction n'existe que quand sa langue est active. */
-  .translation{display:none}
-  .page[data-lang="en"] .translation.en-layer,
-  .page[data-lang="es"] .translation.es-layer,
-  .page[data-lang="de"] .translation.de-layer{display:block}
+/* Les traductions sont cachées en FR. */
+.translation{display:none}
+.page[data-lang="en"] .en-layer,.page[data-lang="es"] .es-layer,.page[data-lang="de"] .de-layer{display:block}
 
-  /* Masques : opaques. Aucun français ne peut passer au travers. */
-  .mask{
-    position:absolute;z-index:12;
-    display:flex;align-items:flex-start;justify-content:flex-start;
-    color:#18251e;
-    overflow:hidden;
-  }
+/* Zones de remplacement totalement opaques : elles débordent volontairement de quelques pixels
+   autour des textes français afin qu'aucune lettre française ne reste visible. */
+.block{position:absolute;z-index:40;color:#19251e;overflow:hidden}
+.script{font-family:"Segoe Print","Bradley Hand",cursive;font-weight:600}
+.serif{font-family:Georgia,"Times New Roman",serif}
 
-  /* Haut : slogan */
-  .slogan{
-    left:59.2%;top:4.5%;width:25%;height:8.7%;
-    background:linear-gradient(135deg,#fbfaf4 0%,#f7f6ef 42%,#eef5f6 100%);
-    padding:1.2cqw 1.1cqw;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:"Segoe Print","Bradley Hand",cursive;
-    font-size:3.3cqw;line-height:1.08;font-weight:600;
-    transform:rotate(-4deg);
-  }
+/* slogan haut */
+.top-script{left:57.0%;top:4.15%;width:28.5%;height:8.8%;background:linear-gradient(135deg,#fbfaf4 0%,#f7f6ef 48%,#eef5f6 100%);display:flex;align-items:center;justify-content:center;text-align:center;font-size:3.2cqw;line-height:1.08;transform:rotate(-3deg)}
+/* bloc titre + intro + phrase manuscrite : un seul grand cache pour éviter les raccords qui bavent */
+.hero-copy{left:5.6%;top:18.15%;width:47.5%;height:28.9%;background:linear-gradient(90deg,#fbfaf4 0%,#fbfaf4 70%,rgba(251,250,244,.98) 100%);padding:.6cqw .8cqw 0 .2cqw}
+.hero-title{font:700 5.55cqw/1.03 Georgia,"Times New Roman",serif;letter-spacing:-.15cqw;margin:0 0 2.1cqw}
+.goldline{width:9.5cqw;height:.35cqw;background:#b79a45;margin:0 0 1.8cqw}
+.hero-lead{font:400 3.15cqw/1.28 Georgia,"Times New Roman",serif;margin:0;width:86%}
+.hero-script{position:absolute;left:1%;bottom:.3cqw;width:77%;text-align:center;font:600 3.15cqw/1.08 "Segoe Print","Bradley Hand",cursive;transform:rotate(-4deg)}
 
-  /* Grand titre */
-  .title{
-    left:6.4%;top:18.3%;width:56%;height:8.2%;
-    background:#fbfaf4;
-    padding:.4cqw 0 0;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:5.8cqw;line-height:1.02;font-weight:700;letter-spacing:-.15cqw;
-  }
+/* étapes : le cache commence après les numéros/icônes, sans toucher à leur graphisme */
+.step{left:27.2%;width:28.9%;background:#fffefa;display:flex;align-items:center;padding:.55cqw .65cqw;font:400 2.55cqw/1.08 Georgia,"Times New Roman",serif}
+.step1{top:48.25%;height:4.9%}.step2{top:53.9%;height:5.9%}.step3{top:59.9%;height:5.15%}
 
-  /* Intro */
-  .lead{
-    left:6.4%;top:27.0%;width:45%;height:12.3%;
-    background:#fbfaf4;
-    padding:.2cqw .8cqw .2cqw 0;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:3.0cqw;line-height:1.26;
-  }
+/* badges */
+.badge{top:65.85%;height:3.95%;background:#f1f0e7;display:flex;align-items:center;justify-content:center;padding-left:3.1cqw;text-align:center;font:400 1.95cqw/1.05 Georgia,"Times New Roman",serif;border-radius:999px}
+.badge1{left:10.0%;width:21.9%}.badge2{left:35.2%;width:22.4%}.badge3{left:64.2%;width:29.5%}
 
-  /* Phrase manuscrite milieu */
-  .mid{
-    left:6.2%;top:39.7%;width:40%;height:7.8%;
-    background:#faf8ef;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:"Segoe Print","Bradley Hand",cursive;
-    font-size:3.2cqw;line-height:1.08;
-    transform:rotate(-4deg);
-  }
+/* bouton install : couvre uniquement le texte imprimé, pas la forme du bouton */
+.install-copy{left:31.5%;top:70.1%;width:50.5%;height:4.45%;background:#50663e;color:white;display:flex;align-items:center;justify-content:center;text-align:center;font:400 3.15cqw/1 Georgia,"Times New Roman",serif}
+.compat{left:31%;top:76.0%;width:38%;height:2.5%;background:#fbfaf4;display:flex;align-items:center;justify-content:center;text-align:center;font:400 1.65cqw/1.1 Arial,sans-serif}
+.bottom-script{left:71.5%;top:75.1%;width:25.5%;height:7.8%;background:#fbfaf4;display:flex;align-items:center;justify-content:center;text-align:center;font:600 2.65cqw/1.05 "Segoe Print","Bradley Hand",cursive;transform:rotate(-5deg)}
 
-  /* Étapes - on recouvre tout le contenu texte de la moitié droite des cartes,
-     en gardant les numéros et icônes originaux parfaitement intacts. */
-  .step{
-    left:27.8%;width:28.6%;
-    background:#fffefa;
-    padding:1.1cqw 1.0cqw;
-    align-items:center;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:2.65cqw;line-height:1.06;
-  }
-  .step1{top:48.75%;height:4.5%}
-  .step2{top:54.5%;height:5.6%}
-  .step3{top:60.6%;height:4.8%}
+/* écran du téléphone : grand panneau opaque unique, à l'intérieur du téléphone.
+   On élimine ainsi toutes les petites zones qui se chevauchaient auparavant. */
+.phone-panel{left:60.2%;top:34.5%;width:25.6%;height:24.5%;background:rgba(253,252,247,.985);padding:1.0cqw 1.0cqw .8cqw;border-radius:1.2cqw;transform:rotate(5.7deg);transform-origin:center;color:#172119}
+.phone-panel h3{margin:0 0 .7cqw;font:700 2.6cqw/1 Georgia,"Times New Roman",serif}
+.phone-panel p{margin:0 0 1.0cqw;font:400 1.45cqw/1.18 Arial,sans-serif}
+.phone-q{height:2.7cqw;border:.1cqw solid #e6e3d9;border-radius:999px;background:#fff;color:#777;display:flex;align-items:center;padding:0 .8cqw;margin-bottom:1cqw;font-size:1.05cqw}
+.phone-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.55cqw}.phone-grid span{height:4.2cqw;border-radius:.75cqw;background:#f7f5ee;display:flex;align-items:center;justify-content:center;text-align:center;padding:.25cqw;font-size:.92cqw;line-height:1.05}
+.phone-foot{margin-top:1cqw;text-align:center;font:italic .95cqw/1.1 Georgia,"Times New Roman",serif}
 
-  /* Badges : chaque badge est masqué séparément, l'icône d'origine reste visible. */
-  .badge{
-    top:66.6%;height:3.4%;
-    background:#f1f0e7;
-    align-items:center;justify-content:center;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:2.0cqw;line-height:1;text-align:center;
-    padding-left:3.0cqw;
-  }
-  .badge1{left:10.5%;width:21.0%}
-  .badge2{left:35.8%;width:20.7%}
-  .badge3{left:64.8%;width:27.0%}
-
-  /* Bouton d'installation : texte seulement, icônes/forme verte originelles conservées. */
-  .install-text{
-    left:35%;top:71.0%;width:47%;height:3.2%;
-    background:#50663e;color:white;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:3.2cqw;line-height:1;
-  }
-
-  /* Compatibilité */
-  .compat{
-    left:34%;top:76.4%;width:33%;height:2.0%;
-    background:#fbfaf4;
-    align-items:center;justify-content:center;text-align:center;
-    font-size:1.65cqw;line-height:1.1;
-  }
-
-  /* Bas : slogan manuscrit. */
-  .bottom-script{
-    left:73.2%;top:75.7%;width:22%;height:6.7%;
-    background:#fbfaf4;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:"Segoe Print","Bradley Hand",cursive;
-    font-size:2.7cqw;line-height:1.05;
-    transform:rotate(-5deg);
-  }
-
-  /* Petit texte dans le téléphone : on couvre uniquement les zones textuelles,
-     pas le smartphone ni le décor. */
-  .phone-hello{
-    left:62.0%;top:35.2%;width:20.5%;height:2.4%;
-    background:#fdfcf7;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:2.45cqw;font-weight:700;align-items:center;
-  }
-  .phone-copy{
-    left:61.8%;top:37.5%;width:22.3%;height:4.6%;
-    background:#fdfcf7;
-    font-size:1.48cqw;line-height:1.17;padding:.2cqw .3cqw 0 0;
-  }
-  .phone-input{
-    left:61.4%;top:43.2%;width:20.2%;height:2.0%;
-    background:#fff;border-radius:999px;
-    font-size:1.25cqw;color:#777;align-items:center;padding-left:1.1cqw;
-  }
-  .phone-label{
-    background:#fbfaf5;
-    align-items:center;justify-content:center;text-align:center;
-    font-size:1.0cqw;line-height:1.1;
-  }
-  .p1{left:58.8%;top:47.8%;width:8.3%;height:1.6%}
-  .p2{left:68.0%;top:47.8%;width:9.0%;height:1.6%}
-  .p3{left:78.0%;top:47.8%;width:9.0%;height:1.6%}
-  .p4{left:58.5%;top:53.1%;width:8.6%;height:1.6%}
-  .p5{left:68.0%;top:53.1%;width:9.0%;height:1.6%}
-  .p6{left:78.0%;top:53.1%;width:9.0%;height:1.6%}
-
-  .phone-foot{
-    left:61.5%;top:57.0%;width:23%;height:1.5%;
-    background:#faf8f0;
-    align-items:center;justify-content:center;text-align:center;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:.95cqw;font-style:italic;
-  }
-
-  /* Message court de sélection */
-  .toast{
-    position:fixed;left:50%;bottom:16px;transform:translate(-50%,18px);
-    z-index:99;background:#243225;color:#fff;border-radius:13px;
-    padding:10px 14px;font-size:14px;opacity:0;pointer-events:none;
-    transition:.18s ease;box-shadow:0 8px 24px rgba(0,0,0,.22)
-  }
-  .toast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:420px){.langbar{height:3.7%}.langbar a{font-size:2.35cqw}.flag{font-size:3.1cqw}}
 </style>
 </head>
 <body>
 <div class="page" id="page" data-lang="fr">
-  <!-- IMAGE PREMIUM EXACTE : aucune régénération, aucune modification -->
-  <img class="base" src="./accueil-guestflow-premium.png" alt="Guestflow — Les Oliviers">
+  <img class="base" src="./accueil-guestflow-premium.png?v=20260910-0021" alt="Guestflow — Les Oliviers">
 
-  <button class="lang-hot fr" data-lang="fr" aria-label="Français"></button>
-  <button class="lang-hot en" data-lang="en" aria-label="English"></button>
-  <button class="lang-hot es" data-lang="es" aria-label="Español"></button>
-  <button class="lang-hot de" data-lang="de" aria-label="Deutsch"></button>
+  <nav class="langbar" aria-label="Choix de la langue">
+    <a id="lf-fr" data-lang="fr" href="?lang=fr"><span class="flag">🇫🇷</span><span>FR</span></a>
+    <a id="lf-en" data-lang="en" href="?lang=en"><span class="flag">🇬🇧</span><span>EN</span></a>
+    <a id="lf-es" data-lang="es" href="?lang=es"><span class="flag">🇪🇸</span><span>ES</span></a>
+    <a id="lf-de" data-lang="de" href="?lang=de"><span class="flag">🇩🇪</span><span>DE</span></a>
+  </nav>
 
-  <!-- ENGLISH -->
-  <div class="translation en-layer" lang="en">
-    <div class="mask slogan">More than<br>just a stay</div>
-    <div class="mask title">Add Guestflow<br>to your phone</div>
-    <div class="mask lead">Install your stay concierge in just a few seconds and enjoy personalised assistance throughout your stay.</div>
-    <div class="mask mid">Your experience,<br>made beautifully simple</div>
-    <div class="mask step step1">Install<br>Guestflow</div>
-    <div class="mask step step2">Add it to your<br>Home Screen</div>
-    <div class="mask step step3">Open Guestflow<br>and ask your questions</div>
-    <div class="mask badge badge1">No account</div>
-    <div class="mask badge badge2">Fast answers</div>
-    <div class="mask badge badge3">Secure data</div>
-    <div class="mask install-text">Install Guestflow</div>
-    <div class="mask compat">Available on iPhone and Android</div>
-    <div class="mask bottom-script">Enjoy<br>every moment!</div>
-    <div class="mask phone-hello">Hello!</div>
-    <div class="mask phone-copy">How can we make your stay even more beautiful?</div>
-    <div class="mask phone-input">Ask your question…</div>
-    <div class="mask phone-label p1">Activities</div>
-    <div class="mask phone-label p2">Restaurants</div>
-    <div class="mask phone-label p3">Nearby</div>
-    <div class="mask phone-label p4">Transport</div>
-    <div class="mask phone-label p5">Pets</div>
-    <div class="mask phone-label p6">Emergency</div>
-    <div class="mask phone-foot">Places that truly matter</div>
-  </div>
+  <section class="translation en-layer" lang="en">
+    <div class="block top-script script">More than<br>just a stay</div>
+    <div class="block hero-copy"><h1 class="hero-title">Add Guestflow<br>to your phone</h1><div class="goldline"></div><p class="hero-lead">Install your stay concierge in just a few seconds and enjoy personalised assistance throughout your stay.</p><div class="hero-script">Your experience,<br>made beautifully simple</div></div>
+    <div class="block step step1">Install<br>Guestflow</div><div class="block step step2">Add it to your<br>Home Screen</div><div class="block step step3">Open Guestflow<br>and ask your questions</div>
+    <div class="block badge badge1">No account</div><div class="block badge badge2">Fast answers</div><div class="block badge badge3">Secure data</div>
+    <div class="block install-copy">Install Guestflow</div><div class="block compat">Available on iPhone and Android</div><div class="block bottom-script">Enjoy<br>every moment!</div>
+    <div class="block phone-panel"><h3>Hello!</h3><p>How can we make your stay even more beautiful?</p><div class="phone-q">Ask your question…</div><div class="phone-grid"><span>Activities</span><span>Restaurants</span><span>Nearby</span><span>Transport</span><span>Pets</span><span>Emergency</span></div><div class="phone-foot">Places that truly matter</div></div>
+  </section>
 
-  <!-- ESPAÑOL -->
-  <div class="translation es-layer" lang="es">
-    <div class="mask slogan">Mucho más<br>que una estancia</div>
-    <div class="mask title">Añade Guestflow<br>a tu teléfono</div>
-    <div class="mask lead">Instala tu conserje de estancia en pocos segundos y disfruta de una asistencia personalizada durante toda tu estancia.</div>
-    <div class="mask mid">Tu experiencia,<br>con total sencillez</div>
-    <div class="mask step step1">Instala<br>Guestflow</div>
-    <div class="mask step step2">Añádelo a tu<br>pantalla de inicio</div>
-    <div class="mask step step3">Abre Guestflow<br>y haz tus preguntas</div>
-    <div class="mask badge badge1">Sin cuenta</div>
-    <div class="mask badge badge2">Respuesta rápida</div>
-    <div class="mask badge badge3">Datos seguros</div>
-    <div class="mask install-text">Instalar Guestflow</div>
-    <div class="mask compat">Disponible en iPhone y Android</div>
-    <div class="mask bottom-script">¡Disfruta de<br>cada momento!</div>
-    <div class="mask phone-hello">¡Hola!</div>
-    <div class="mask phone-copy">¿Cómo podemos hacer que tu estancia sea aún más especial?</div>
-    <div class="mask phone-input">Haz tu pregunta…</div>
-    <div class="mask phone-label p1">Actividades</div>
-    <div class="mask phone-label p2">Restaurantes</div>
-    <div class="mask phone-label p3">Cerca</div>
-    <div class="mask phone-label p4">Transporte</div>
-    <div class="mask phone-label p5">Mascotas</div>
-    <div class="mask phone-label p6">Urgencia</div>
-    <div class="mask phone-foot">Lugares con sentido</div>
-  </div>
+  <section class="translation es-layer" lang="es">
+    <div class="block top-script script">Mucho más<br>que una estancia</div>
+    <div class="block hero-copy"><h1 class="hero-title">Añade Guestflow<br>a tu teléfono</h1><div class="goldline"></div><p class="hero-lead">Instala tu conserje de estancia en pocos segundos y disfruta de una asistencia personalizada durante toda tu estancia.</p><div class="hero-script">Tu experiencia,<br>con total sencillez</div></div>
+    <div class="block step step1">Instala<br>Guestflow</div><div class="block step step2">Añádelo a tu<br>pantalla de inicio</div><div class="block step step3">Abre Guestflow<br>y haz tus preguntas</div>
+    <div class="block badge badge1">Sin cuenta</div><div class="block badge badge2">Respuesta rápida</div><div class="block badge badge3">Datos seguros</div>
+    <div class="block install-copy">Instalar Guestflow</div><div class="block compat">Disponible en iPhone y Android</div><div class="block bottom-script">¡Disfruta de<br>cada momento!</div>
+    <div class="block phone-panel"><h3>¡Hola!</h3><p>¿Cómo podemos hacer que tu estancia sea aún más especial?</p><div class="phone-q">Haz tu pregunta…</div><div class="phone-grid"><span>Actividades</span><span>Restaurantes</span><span>Cerca</span><span>Transporte</span><span>Mascotas</span><span>Urgencia</span></div><div class="phone-foot">Lugares con sentido</div></div>
+  </section>
 
-  <!-- DEUTSCH -->
-  <div class="translation de-layer" lang="de">
-    <div class="mask slogan">Mehr als<br>nur ein Aufenthalt</div>
-    <div class="mask title">Guestflow auf<br>Ihrem Smartphone</div>
-    <div class="mask lead">Installieren Sie Ihren Aufenthalts-Concierge in wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.</div>
-    <div class="mask mid">Ihr Aufenthalt,<br>ganz unkompliziert</div>
-    <div class="mask step step1">Guestflow<br>installieren</div>
-    <div class="mask step step2">Zum Startbildschirm<br>hinzufügen</div>
-    <div class="mask step step3">Guestflow öffnen<br>und Fragen stellen</div>
-    <div class="mask badge badge1">Ohne Konto</div>
-    <div class="mask badge badge2">Schnelle Antwort</div>
-    <div class="mask badge badge3">Sichere Daten</div>
-    <div class="mask install-text">Guestflow installieren</div>
-    <div class="mask compat">Für iPhone und Android</div>
-    <div class="mask bottom-script">Genießen Sie<br>jeden Augenblick!</div>
-    <div class="mask phone-hello">Hallo!</div>
-    <div class="mask phone-copy">Wie können wir Ihren Aufenthalt noch schöner machen?</div>
-    <div class="mask phone-input">Stellen Sie Ihre Frage…</div>
-    <div class="mask phone-label p1">Aktivitäten</div>
-    <div class="mask phone-label p2">Restaurants</div>
-    <div class="mask phone-label p3">In der Nähe</div>
-    <div class="mask phone-label p4">Transport</div>
-    <div class="mask phone-label p5">Haustiere</div>
-    <div class="mask phone-label p6">Notfall</div>
-    <div class="mask phone-foot">Orte mit Bedeutung</div>
-  </div>
+  <section class="translation de-layer" lang="de">
+    <div class="block top-script script">Mehr als<br>nur ein Aufenthalt</div>
+    <div class="block hero-copy"><h1 class="hero-title">Guestflow auf<br>Ihrem Smartphone</h1><div class="goldline"></div><p class="hero-lead">Installieren Sie Ihren Aufenthalts-Concierge in wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.</p><div class="hero-script">Ihr Aufenthalt,<br>ganz unkompliziert</div></div>
+    <div class="block step step1">Guestflow<br>installieren</div><div class="block step step2">Zum Startbildschirm<br>hinzufügen</div><div class="block step step3">Guestflow öffnen<br>und Fragen stellen</div>
+    <div class="block badge badge1">Ohne Konto</div><div class="block badge badge2">Schnelle Antwort</div><div class="block badge badge3">Sichere Daten</div>
+    <div class="block install-copy">Guestflow installieren</div><div class="block compat">Für iPhone und Android</div><div class="block bottom-script">Genießen Sie<br>jeden Augenblick!</div>
+    <div class="block phone-panel"><h3>Hallo!</h3><p>Wie können wir Ihren Aufenthalt noch schöner machen?</p><div class="phone-q">Stellen Sie Ihre Frage…</div><div class="phone-grid"><span>Aktivitäten</span><span>Restaurants</span><span>In der Nähe</span><span>Transport</span><span>Haustiere</span><span>Notfall</span></div><div class="phone-foot">Orte mit Bedeutung</div></div>
+  </section>
 </div>
-
-<div class="toast" id="toast"></div>
-
 <script>
 (function(){
-  const page=document.getElementById('page');
-  const toast=document.getElementById('toast');
   const allowed=['fr','en','es','de'];
-  const names={
-    fr:'Français',
-    en:'English',
-    es:'Español',
-    de:'Deutsch'
-  };
-  const manifests={
-    fr:'./manifest-cacouech.json',
-    en:'./manifest-cacouech-en.json',
-    es:'./manifest-cacouech-es.json',
-    de:'./manifest-cacouech-de.json'
-  };
+  const manifests={fr:'./manifest-cacouech.json',en:'./manifest-cacouech-en.json',es:'./manifest-cacouech-es.json',de:'./manifest-cacouech-de.json'};
+  const params=new URLSearchParams(location.search);
+  let lang=(params.get('lang')||'fr').toLowerCase();
+  if(!allowed.includes(lang)) lang='fr';
+  const page=document.getElementById('page');
+  page.dataset.lang=lang;
+  document.documentElement.lang=lang;
 
-  function setManifest(lang){
-    let link=document.querySelector('link[rel="manifest"]');
-    if(!link){
-      link=document.createElement('link');
-      link.rel='manifest';
-      document.head.appendChild(link);
-    }
-    link.href=manifests[lang] || manifests.fr;
-  }
+  let manifest=document.querySelector('link[rel="manifest"]');
+  if(!manifest){manifest=document.createElement('link');manifest.rel='manifest';document.head.appendChild(manifest)}
+  manifest.href=manifests[lang];
 
-  function showToast(text){
-    toast.textContent=text;
-    toast.classList.add('show');
-    clearTimeout(showToast.timer);
-    showToast.timer=setTimeout(()=>toast.classList.remove('show'),1400);
-  }
-
-  function setLang(lang,updateUrl){
-    if(!allowed.includes(lang)) lang='fr';
-    page.dataset.lang=lang;
-    document.documentElement.lang=lang;
-    setManifest(lang);
-
-    if(updateUrl){
-      const u=new URL(location.href);
-      u.searchParams.set('lang',lang);
-      history.replaceState({},'',u.toString());
-      showToast(names[lang]);
-    }
-  }
-
-  document.querySelectorAll('.lang-hot[data-lang]').forEach(btn=>{
-    btn.addEventListener('click',()=>setLang(btn.dataset.lang,true));
+  document.querySelectorAll('.langbar a').forEach(a=>{
+    const l=a.dataset.lang;
+    const u=new URL(location.href);
+    u.searchParams.set('lang',l);
+    u.searchParams.set('ui','20260910-0021');
+    u.hash='';
+    a.href=u.toString();
+    a.classList.toggle('active',l===lang);
   });
-
-  const initial=new URLSearchParams(location.search).get('lang');
-  setLang(allowed.includes(initial)?initial:'fr',false);
 })();
 </script>
 </body>
