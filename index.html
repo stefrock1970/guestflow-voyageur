@@ -1902,6 +1902,12 @@
       .pwa-install-wrap { display: none !important; }
     }
 
+    /* Une application installée est liée à une seule langue.
+       Le sélecteur reste disponible uniquement sur la page d'installation. */
+    body.guestflow-app-mode .gf-languages {
+      display: none !important;
+    }
+
 </style>
 <!-- GUESTFLOW — ACCUEIL INSTALLATION FRANÇAIS -->
 <style>
@@ -2817,8 +2823,17 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     // Le QR code (sans ?mode=app) affiche TOUJOURS l'écran d'accueil.
     // Seule une URL contenant ?mode=app ouvre directement le concierge.
     (function(){
-      var isAppMode = new URLSearchParams(window.location.search).get('mode') === 'app';
-      if (isAppMode) document.body.classList.add('guestflow-app-mode');
+      var params = new URLSearchParams(window.location.search);
+      var isAppMode = params.get('mode') === 'app';
+      var requestedLang = String(params.get('lang') || '').toLowerCase();
+      if (isAppMode) {
+        document.body.classList.add('guestflow-app-mode');
+        window.GUESTFLOW_LOCKED_LANG = ['fr','en','es','de'].includes(requestedLang)
+          ? requestedLang
+          : 'fr';
+      } else {
+        window.GUESTFLOW_LOCKED_LANG = '';
+      }
     })();
   </script>
 <section aria-label="Installer Guestflow" class="guestflow-landing" id="guestflowLanding"><div class="gfp-page" data-lang="fr" id="guestflowPremiumPage">
@@ -5141,25 +5156,33 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     function initialiserLanguesGuestflow_() {
       const p = new URLSearchParams(window.location.search);
       const langUrl = String(p.get('lang') || '').toLowerCase();
+      const langueVerrouillee = String(window.GUESTFLOW_LOCKED_LANG || '').toLowerCase();
       let langSauvee = '';
       try { langSauvee = String(localStorage.getItem('guestflow_langue') || '').toLowerCase(); } catch (e) {}
 
-      const initiale = ['fr','en','es','de'].includes(langUrl)
+      const initiale = ['fr','en','es','de'].includes(langueVerrouillee)
+        ? langueVerrouillee
+        : ['fr','en','es','de'].includes(langUrl)
         ? langUrl
         : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
 
       langueSelectionnee = initiale;
       try { localStorage.setItem('guestflow_langue', initiale); } catch (e) {}
 
-      document.querySelectorAll('.lang-btn[data-lang]').forEach(function(btn) {
-        btn.addEventListener('click', function(event) {
-          event.preventDefault();
-          const lang = String(btn.dataset.lang || 'fr').toLowerCase();
-          if (!['fr','en','es','de'].includes(lang)) return;
-          choisirLangue(lang);
-          try { localStorage.setItem('guestflow_langue', lang); } catch (e) {}
+      if (langueVerrouillee) {
+        const selecteur = document.querySelector('.gf-languages');
+        if (selecteur) selecteur.remove();
+      } else {
+        document.querySelectorAll('.lang-btn[data-lang]').forEach(function(btn) {
+          btn.addEventListener('click', function(event) {
+            event.preventDefault();
+            const lang = String(btn.dataset.lang || 'fr').toLowerCase();
+            if (!['fr','en','es','de'].includes(lang)) return;
+            choisirLangue(lang);
+            try { localStorage.setItem('guestflow_langue', lang); } catch (e) {}
+          });
         });
-      });
+      }
 
       choisirLangue(initiale);
     }
