@@ -3144,6 +3144,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 </main>
 <script>
   const GUESTFLOW_BUILD = "GF-FR-ACCUEIL-1";
+  const GUESTFLOW_API_URL = 'https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec';
 
     let langueSelectionnee = 'fr';
     let voixActive = true;
@@ -4620,7 +4621,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         : '';
 
       script.src =
-        'https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec' +
+        GUESTFLOW_API_URL +
         '?api=ask' +
         paramIdLegacy +
         '&token=' + encodeURIComponent(tokenVoyageur) +
@@ -4649,8 +4650,84 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 
 
 
+    function appliquerNomGiteGuestflow_(nom) {
+      const nomAffiche = String(nom || '')
+        .replace(/-+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (!nomAffiche) return;
+
+      nomGiteVoyageur = nomAffiche;
+
+      const giteName = document.getElementById('giteName');
+      const landingGiteName = document.getElementById('guestflowPropertyName');
+
+      if (giteName) {
+        giteName.textContent = nomAffiche;
+        giteName.hidden = false;
+      }
+      if (landingGiteName) {
+        landingGiteName.textContent = nomAffiche;
+        landingGiteName.setAttribute('aria-label', 'Établissement : ' + nomAffiche);
+      }
+
+      document.title = nomAffiche + ' — Guestflow';
+
+      try {
+        localStorage.setItem('guestflow_gite', nomAffiche);
+      } catch (e) {}
+    }
+
+    function chargerNomGiteDepuisAdministration_() {
+      if (!tokenVoyageur) return;
+
+      const callbackName = 'guestflowGiteCallback_' +
+        Date.now() + '_' + Math.floor(Math.random() * 1000000);
+      const script = document.createElement('script');
+      let termine = false;
+
+      const nettoyer = function() {
+        try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+        if (script.parentNode) script.parentNode.removeChild(script);
+      };
+
+      const timeout = setTimeout(function() {
+        if (termine) return;
+        termine = true;
+        nettoyer();
+      }, 8000);
+
+      window[callbackName] = function(payload) {
+        if (termine) return;
+        termine = true;
+        clearTimeout(timeout);
+
+        if (payload && payload.ok && payload.nomGite) {
+          appliquerNomGiteGuestflow_(payload.nomGite);
+        }
+
+        nettoyer();
+      };
+
+      script.onerror = function() {
+        if (termine) return;
+        termine = true;
+        clearTimeout(timeout);
+        nettoyer();
+      };
+
+      script.src = GUESTFLOW_API_URL +
+        '?api=gite' +
+        '&token=' + encodeURIComponent(tokenVoyageur) +
+        '&callback=' + encodeURIComponent(callbackName) +
+        '&t=' + Date.now();
+
+      document.body.appendChild(script);
+    }
+
     // V23.9 — Nouveau format sécurisé :
-    // ?gite=Les-Oliviers&token=TOKEN_OPAQUE
+    // ?gite=Cacouech&token=TOKEN_OPAQUE
     // L'ID GF-XXXXX-001 n'apparaît plus dans l'URL.
     function initialiserAccesVoyageur() {
       const p = new URLSearchParams(window.location.search);
@@ -4693,27 +4770,12 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         ? langUrl
         : (['fr','en','es','de'].includes(langSauvee) ? langSauvee : 'fr');
 
-      const giteName = document.getElementById('giteName');
-      const landingGiteName = document.getElementById('guestflowPropertyName');
-
       if (nomGiteVoyageur) {
-        const nomAffiche = nomGiteVoyageur
-          .replace(/-+/g, ' ')
-          .replace(/\s+/g, ' ')
-          .trim();
-
-        if (giteName) {
-          giteName.textContent = nomAffiche;
-          giteName.hidden = false;
-        }
-        if (landingGiteName) {
-          landingGiteName.textContent = nomAffiche;
-          landingGiteName.setAttribute('aria-label', 'Établissement : ' + nomAffiche);
-        }
-        document.title = nomAffiche + ' — Guestflow';
+        appliquerNomGiteGuestflow_(nomGiteVoyageur);
       }
 
       mettreAJourInterface(langueSelectionnee);
+      chargerNomGiteDepuisAdministration_();
     }
 
     const boutonMicro = document.getElementById('btnMic');
