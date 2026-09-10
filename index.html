@@ -333,7 +333,7 @@
     }
   }
 
-  document.querySelectorAll('[data-lang]').forEach(btn=>{
+  document.querySelectorAll('.lang-hot[data-lang]').forEach(btn=>{
     btn.addEventListener('click',()=>setLang(btn.dataset.lang,true));
   });
 
