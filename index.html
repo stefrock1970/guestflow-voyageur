@@ -2591,11 +2591,12 @@
   .gfp-de{left:47.7%;width:13.0%}
 
   /* Une traduction n'existe que quand sa langue est active. */
-  .gfp-translation{display:none}
+  /* Les quatre visuels définitifs contiennent déjà leurs textes traduits. */
+  .gfp-translation{display:none !important}
   .gfp-page[data-lang="fr"] .gfp-translation.gfp-fr-layer,
   .gfp-page[data-lang="en"] .gfp-translation.gfp-en-layer,
   .gfp-page[data-lang="es"] .gfp-translation.gfp-es-layer,
-  .gfp-page[data-lang="de"] .gfp-translation.gfp-de-layer{display:block}
+  .gfp-page[data-lang="de"] .gfp-translation.gfp-de-layer{display:none !important}
 
   /* Masques : opaques. Aucun français ne peut passer au travers. */
   .gfp-mask{
@@ -2801,8 +2802,8 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     })();
   </script>
 <section aria-label="Installer Guestflow" class="guestflow-landing" id="guestflowLanding"><div class="gfp-page" data-lang="fr" id="guestflowPremiumPage">
-<!-- IMAGE PREMIUM EXACTE : aucune régénération, aucune modification -->
-<img alt="Guestflow — page Premium" class="gfp-base" src="./accueil-guestflow-premium.png"/>
+<!-- VISUELS PREMIUM DÉFINITIFS FR / EN / ES / DE -->
+<img alt="Guestflow — installer votre concierge de séjour" class="gfp-base" id="guestflowPremiumImage" src="./accueil-guestflow-fr.png"/>
 <button aria-label="Français" class="gfp-lang-hot gfp-fr" data-landing-lang="fr" data-lang="fr"></button>
 <button aria-label="English" class="gfp-lang-hot gfp-en" data-landing-lang="en" data-lang="en"></button>
 <button aria-label="Español" class="gfp-lang-hot gfp-es" data-landing-lang="es" data-lang="es"></button>
@@ -5306,6 +5307,24 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     if(!['fr','en','es','de'].includes(lang)) lang='fr';
     var p=document.getElementById('guestflowPremiumPage');
     if(p) p.dataset.lang=lang;
+    var images={
+      fr:'./accueil-guestflow-fr.png',
+      en:'./accueil-guestflow-en.png',
+      es:'./accueil-guestflow-es.png',
+      de:'./accueil-guestflow-de.png'
+    };
+    var descriptions={
+      fr:'Guestflow — installer votre concierge de séjour',
+      en:'Guestflow — install your stay concierge',
+      es:'Guestflow — instala tu conserje de estancia',
+      de:'Guestflow — digitalen Aufenthaltsassistenten installieren'
+    };
+    var img=document.getElementById('guestflowPremiumImage');
+    if(img){
+      img.src=images[lang];
+      img.alt=descriptions[lang];
+    }
+    document.documentElement.lang=lang;
   }
   document.addEventListener('click', function(e){
     var b=e.target.closest && e.target.closest('[data-landing-lang]');
