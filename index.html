@@ -1,16 +1,15 @@
 <!DOCTYPE html>
+
 <!-- Guestflow — V9 FRANÇAIS NATUREL + POLITESSE ÉQUILIBRÉE + VOIX PLUS FLUIDE | base V8 validée | 2026-09-09 -->
 <html lang="fr">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-  <!-- Guestflow V23.15.11 — PWA Android + iPhone -->
-  <title>Guestflow — Votre concierge numérique</title>
-  <!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
-
-  <style>
+<base target="_top"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<!-- Guestflow V23.15.11 — PWA Android + iPhone -->
+<title>Guestflow — Votre concierge numérique</title>
+<!-- VERSION GITHUB V4.4 ACCES SECURISE PAR TOKEN 2026-09-07 -->
+<style>
     :root{
       --ink:#263026;
       --ink-soft:#657064;
@@ -1904,9 +1903,8 @@
     }
 
 </style>
-
-  <!-- GUESTFLOW — ACCUEIL INSTALLATION FRANÇAIS -->
-  <style>
+<!-- GUESTFLOW — ACCUEIL INSTALLATION FRANÇAIS -->
+<style>
     .guestflow-landing{
       display:block;
       min-height:100vh;
@@ -2235,12 +2233,11 @@
     }
 
   </style>
-
-  <meta name="theme-color" content="#596b50">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Guestflow">
-  <script>
+<meta content="#596b50" name="theme-color"/>
+<meta content="yes" name="apple-mobile-web-app-capable"/>
+<meta content="default" name="apple-mobile-web-app-status-bar-style"/>
+<meta content="Guestflow" name="apple-mobile-web-app-title"/>
+<script>
     // Guestflow — le manifest PWA doit être choisi AVANT que Chrome prépare l’installation.
     (function(){
       var p = new URLSearchParams(window.location.search);
@@ -2255,11 +2252,9 @@
       document.write('<link rel="manifest" id="guestflowManifest" href="' + manifests[lang] + '">');
     })();
   </script>
-  <link rel="apple-touch-icon" href="./icône-192.png">
-
-
-  <!-- GUESTFLOW 408000 — capture PWA très précoce -->
-  <script>
+<link href="./icône-192.png" rel="apple-touch-icon"/>
+<!-- GUESTFLOW 408000 — capture PWA très précoce -->
+<script>
     window.guestflowDeferredInstallPrompt = window.guestflowDeferredInstallPrompt || null;
 
     window.addEventListener('beforeinstallprompt', function(event) {
@@ -2284,9 +2279,7 @@
       }).catch(function(){});
     }
   </script>
-
-
-  <style id="guestflow-reference-interface">
+<style id="guestflow-reference-interface">
     /* =========================================================
        GUESTFLOW — INTERFACE CONCIERGE CALÉE SUR LA MAQUETTE VALIDÉE
        La mécanique existante reste intacte dans .gf-app-shell.
@@ -2452,9 +2445,7 @@
       .gf-ref-answer{bottom:10px;width:calc(100% - 18px)}
     }
   </style>
-
-
-  <style id="guestflow-visual-i18n">
+<style id="guestflow-visual-i18n">
     .gf-install-i18n,
     .gf-app-i18n{
       display:none;
@@ -2569,32 +2560,237 @@
       .gf-i18n-box{border-radius:9px}
     }
   </style>
+<style id="guestflow-premium-page-css">
+  *{box-sizing:border-box}
+  
+  
+  .gfp-page{
+    width:min(100vw,841px);
+    margin:0 auto;
+    position:relative;
+    container-type:inline-size;
+    background:#f7f4e9;
+    overflow:hidden;
+  }
+  .gfp-base{
+    display:block;
+    width:100%;
+    height:auto;
+    user-select:none;
+    -webkit-user-drag:none;
+  }
 
+  /* Hotspots langues : ils sont au-dessus des boutons déjà dessinés dans l'image. */
+  .gfp-lang-hot{
+    position:absolute;top:13.15%;height:3.8%;
+    border:0;background:transparent;cursor:pointer;z-index:20;
+  }
+  .gfp-fr{left:6.1%;width:14.5%}
+  .gfp-en{left:20.7%;width:13.3%}
+  .gfp-es{left:34.1%;width:13.3%}
+  .gfp-de{left:47.7%;width:13.0%}
 
-  <style id="guestflow-no-beige-fallback">
-    /* Sécurité absolue : si le PNG de référence ne charge pas,
-       on affiche l'interface HTML Guestflow complète au lieu d'un écran beige vide. */
-    body.guestflow-app-mode.guestflow-image-fallback > .gf-reference-screen{
-      display:none !important;
-    }
-    body.guestflow-app-mode.guestflow-image-fallback > .page.gf-app-shell{
-      display:block !important;
-      position:relative !important;
-      left:auto !important;
-      top:auto !important;
-      width:min(100%,760px) !important;
-      margin:0 auto !important;
-      opacity:1 !important;
-      pointer-events:auto !important;
-      min-height:100vh !important;
-      z-index:30 !important;
-    }
-  </style>
+  /* Une traduction n'existe que quand sa langue est active. */
+  .gfp-translation{display:none}
+  .gfp-page[data-lang="en"] .gfp-translation.en-layer,
+  .gfp-page[data-lang="es"] .gfp-translation.es-layer,
+  .gfp-page[data-lang="de"] .gfp-translation.de-layer{display:block}
 
-</head>
+  /* Masques : opaques. Aucun français ne peut passer au travers. */
+  .gfp-mask{
+    position:absolute;z-index:12;
+    display:flex;align-items:flex-start;justify-content:flex-start;
+    color:#18251e;
+    overflow:hidden;
+  }
 
+  /* Haut : slogan */
+  .gfp-slogan{
+    left:59.2%;top:4.5%;width:25%;height:8.7%;
+    background:linear-gradient(135deg,#fbfaf4 0%,#f7f6ef 42%,#eef5f6 100%);
+    padding:1.2cqw 1.1cqw;
+    align-items:center;justify-content:center;text-align:center;
+    font-family:"Segoe Print","Bradley Hand",cursive;
+    font-size:3.3cqw;line-height:1.08;font-weight:600;
+    transform:rotate(-4deg);
+  }
+
+  /* Grand titre */
+  .gfp-title{
+    left:6.4%;top:18.3%;width:56%;height:8.2%;
+    background:#fbfaf4;
+    padding:.4cqw 0 0;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:5.8cqw;line-height:1.02;font-weight:700;letter-spacing:-.15cqw;
+  }
+
+  /* Intro */
+  .gfp-lead{
+    left:6.4%;top:27.0%;width:45%;height:12.3%;
+    background:#fbfaf4;
+    padding:.2cqw .8cqw .2cqw 0;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:3.0cqw;line-height:1.26;
+  }
+
+  /* Phrase manuscrite milieu */
+  .gfp-mid{
+    left:6.2%;top:39.7%;width:40%;height:7.8%;
+    background:#faf8ef;
+    align-items:center;justify-content:center;text-align:center;
+    font-family:"Segoe Print","Bradley Hand",cursive;
+    font-size:3.2cqw;line-height:1.08;
+    transform:rotate(-4deg);
+  }
+
+  /* Étapes - on recouvre tout le contenu texte de la moitié droite des cartes,
+     en gardant les numéros et icônes originaux parfaitement intacts. */
+  .gfp-step{
+    left:27.8%;width:28.6%;
+    background:#fffefa;
+    padding:1.1cqw 1.0cqw;
+    align-items:center;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:2.65cqw;line-height:1.06;
+  }
+  .gfp-step1{top:48.75%;height:4.5%}
+  .gfp-step2{top:54.5%;height:5.6%}
+  .gfp-step3{top:60.6%;height:4.8%}
+
+  /* Badges : chaque badge est masqué séparément, l'icône d'origine reste visible. */
+  .gfp-badge{
+    top:66.6%;height:3.4%;
+    background:#f1f0e7;
+    align-items:center;justify-content:center;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:2.0cqw;line-height:1;text-align:center;
+    padding-left:3.0cqw;
+  }
+  .gfp-badge1{left:10.5%;width:21.0%}
+  .gfp-badge2{left:35.8%;width:20.7%}
+  .gfp-badge3{left:64.8%;width:27.0%}
+
+  /* Bouton d'installation : texte seulement, icônes/forme verte originelles conservées. */
+  .gfp-install-text{
+    left:35%;top:71.0%;width:47%;height:3.2%;
+    background:#50663e;color:white;
+    align-items:center;justify-content:center;text-align:center;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:3.2cqw;line-height:1;
+  }
+
+  /* Compatibilité */
+  .gfp-compat{
+    left:34%;top:76.4%;width:33%;height:2.0%;
+    background:#fbfaf4;
+    align-items:center;justify-content:center;text-align:center;
+    font-size:1.65cqw;line-height:1.1;
+  }
+
+  /* Bas : slogan manuscrit. */
+  .gfp-bottom-script{
+    left:73.2%;top:75.7%;width:22%;height:6.7%;
+    background:#fbfaf4;
+    align-items:center;justify-content:center;text-align:center;
+    font-family:"Segoe Print","Bradley Hand",cursive;
+    font-size:2.7cqw;line-height:1.05;
+    transform:rotate(-5deg);
+  }
+
+  /* Petit texte dans le téléphone : on couvre uniquement les zones textuelles,
+     pas le smartphone ni le décor. */
+  .gfp-phone-hello{
+    left:62.0%;top:35.2%;width:20.5%;height:2.4%;
+    background:#fdfcf7;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:2.45cqw;font-weight:700;align-items:center;
+  }
+  .gfp-phone-copy{
+    left:61.8%;top:37.5%;width:22.3%;height:4.6%;
+    background:#fdfcf7;
+    font-size:1.48cqw;line-height:1.17;padding:.2cqw .3cqw 0 0;
+  }
+  .gfp-phone-input{
+    left:61.4%;top:43.2%;width:20.2%;height:2.0%;
+    background:#fff;border-radius:999px;
+    font-size:1.25cqw;color:#777;align-items:center;padding-left:1.1cqw;
+  }
+  .gfp-phone-label{
+    background:#fbfaf5;
+    align-items:center;justify-content:center;text-align:center;
+    font-size:1.0cqw;line-height:1.1;
+  }
+  .gfp-p1{left:58.8%;top:47.8%;width:8.3%;height:1.6%}
+  .gfp-p2{left:68.0%;top:47.8%;width:9.0%;height:1.6%}
+  .gfp-p3{left:78.0%;top:47.8%;width:9.0%;height:1.6%}
+  .gfp-p4{left:58.5%;top:53.1%;width:8.6%;height:1.6%}
+  .gfp-p5{left:68.0%;top:53.1%;width:9.0%;height:1.6%}
+  .gfp-p6{left:78.0%;top:53.1%;width:9.0%;height:1.6%}
+
+  .gfp-phone-foot{
+    left:61.5%;top:57.0%;width:23%;height:1.5%;
+    background:#faf8f0;
+    align-items:center;justify-content:center;text-align:center;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:.95cqw;font-style:italic;
+  }
+
+  /* Message court de sélection */
+  .toast{
+    position:fixed;left:50%;bottom:16px;transform:translate(-50%,18px);
+    z-index:99;background:#243225;color:#fff;border-radius:13px;
+    padding:10px 14px;font-size:14px;opacity:0;pointer-events:none;
+    transition:.18s ease;box-shadow:0 8px 24px rgba(0,0,0,.22)
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* Zone transparente au-dessus du bouton d'installation DÉJÀ dessiné dans accueil-guestflow-premium.png */
+.gfp-install-hotspot{
+  position:absolute;
+  left:35%;
+  top:70.2%;
+  width:47%;
+  height:5.0%;
+  z-index:40;
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.guestflow-landing{
+  margin:0 !important;
+  padding:0 !important;
+  background:#ffffff !important;
+}
+.gfp-page{
+  width:min(100vw,841px);
+  margin:0 auto;
+}
+</style><style id="guestflow-app-no-beige">
+/* Aucun écran beige vide : blanc par défaut, interface HTML si l'image concierge échoue. */
+body.guestflow-app-mode{
+  background:#ffffff !important;
+}
+body.guestflow-app-mode.gf-reference-failed > .gf-reference-screen{
+  display:none !important;
+}
+body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
+  display:block !important;
+  position:relative !important;
+  left:auto !important;
+  top:auto !important;
+  width:min(100%,760px) !important;
+  margin:0 auto !important;
+  opacity:1 !important;
+  pointer-events:auto !important;
+  min-height:100vh !important;
+  z-index:50 !important;
+  background:#ffffff !important;
+}
+</style></head>
 <body>
-  <script>
+<script>
     // Guestflow — mode d'ouverture déterministe.
     // Le QR code (sans ?mode=app) affiche TOUJOURS l'écran d'accueil.
     // Seule une URL contenant ?mode=app ouvre directement le concierge.
@@ -2603,301 +2799,302 @@
       if (isAppMode) document.body.classList.add('guestflow-app-mode');
     })();
   </script>
-
-  <section class="guestflow-landing" id="guestflowLanding" aria-label="Installer Guestflow">
-    <div class="guestflow-landing-inner">
-      <img class="guestflow-landing-image" src="./accueil-guestflow-fr.png" alt="Guestflow Les Oliviers — installer votre concierge de séjour">
-
-      <div class="gf-install-i18n" id="gfInstallI18n" aria-hidden="true">
-        <div class="gf-i18n-box gf-i18n-script gf-install-top-script" data-gfi="topScript"></div>
-        <div class="gf-i18n-box gf-i18n-title gf-install-main-title" data-gfi="mainTitle"></div>
-        <div class="gf-i18n-box gf-install-main-text" data-gfi="mainText"></div>
-        <div class="gf-i18n-box gf-i18n-script gf-install-mid-script" data-gfi="midScript"></div>
-        <div class="gf-i18n-box gf-install-step1" data-gfi="step1"></div>
-        <div class="gf-i18n-box gf-install-step2" data-gfi="step2"></div>
-        <div class="gf-i18n-box gf-install-step3" data-gfi="step3"></div>
-        <div class="gf-i18n-box gf-install-badges"><span data-gfi="badge1"></span><span data-gfi="badge2"></span><span data-gfi="badge3"></span></div>
-        <div class="gf-i18n-box gf-install-main-button" data-gfi="install"></div>
-        <div class="gf-i18n-box gf-install-device" data-gfi="device"></div>
-        <div class="gf-i18n-box gf-i18n-script gf-install-bottom-script" data-gfi="bottomScript"></div>
-        <div class="gf-i18n-box gf-install-values" data-gfi="values"></div>
-        <div class="gf-install-phone">
-          <strong data-gfi="phoneHello"></strong>
-          <span data-gfi="phoneText"></span>
-          <span class="mini-input" data-gfi="phoneInput"></span>
-          <div class="mini-grid">
-            <b data-gfi="phoneActivities"></b><b data-gfi="phoneFood"></b>
-            <b data-gfi="phoneNearby"></b><b data-gfi="phoneEmergency"></b>
-          </div>
-        </div>
-      </div>
-
-      <div class="guestflow-language-switch" aria-label="Choix de la langue">
-        <button type="button" class="active" data-landing-lang="fr" aria-label="Français" aria-pressed="true"><span class="landing-flag" aria-hidden="true">🇫🇷</span><span>FR</span></button>
-        <button type="button" data-landing-lang="en" aria-label="English" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇬🇧</span><span>EN</span></button>
-        <button type="button" data-landing-lang="es" aria-label="Español" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇪🇸</span><span>ES</span></button>
-        <button type="button" data-landing-lang="de" aria-label="Deutsch" aria-pressed="false"><span class="landing-flag" aria-hidden="true">🇩🇪</span><span>DE</span></button>
-      </div>
-      <button class="guestflow-hotspot hot-install" id="landingInstallBtn" type="button" aria-label="Installer Guestflow">Installer Guestflow</button>
-    </div>
-  </section>
-
-  <div class="guestflow-toast" id="guestflowLandingToast" role="status" aria-live="polite"></div>
-
-  <div class="guestflow-install-help" id="guestflowInstallHelp" aria-hidden="true">
-    <div class="guestflow-install-card" role="dialog" aria-modal="true" aria-labelledby="guestflowInstallTitle">
-      <h2 id="guestflowInstallTitle">Installer Guestflow</h2>
-      <div id="guestflowInstallInstructions">
-          <p><strong>Sur Android :</strong></p>
-          <ol>
-            <li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>
-            <li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>
-            <li>Confirmez avec <strong>Installer</strong> ou <strong>Ajouter</strong>.</li>
-          </ol>
-          <p><strong>Sur iPhone :</strong></p>
-          <ol>
-            <li>Touchez <strong>Partager</strong>.</li>
-            <li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>
-            <li>Touchez <strong>Ajouter</strong>.</li>
-          </ol>
-        </div>
-      <a class="guestflow-install-close" id="guestflowInstallClose" href="#">J’ai compris</a>
-    </div>
-  </div>
-
-  
-  <!-- GUESTFLOW — interface visuelle de référence validée -->
-  <section class="gf-reference-screen" id="gfReferenceScreen" aria-label="Concierge Guestflow">
-    <div class="gf-reference-wrap">
-      <img class="gf-reference-img" id="gfReferenceImage"
-           src="./guestflow-concierge-final.png"
-           alt="Guestflow Les Oliviers — concierge numérique 24h/24"
-           onload="document.body.classList.remove('guestflow-image-fallback')"
-           onerror="document.body.classList.add('guestflow-image-fallback')">
-
-      <div class="gf-app-i18n" id="gfAppI18n" aria-hidden="true">
-        <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
-        <div class="gf-i18n-box gf-i18n-title gf-app-title" data-gfa="title"></div>
-        <div class="gf-i18n-box gf-app-intro" data-gfa="intro"></div>
-        <div class="gf-i18n-box gf-app-live" data-gfa="live"></div>
-        <div class="gf-i18n-box gf-i18n-script gf-app-side-script" data-gfa="sideScript"></div>
-        <div class="gf-i18n-box gf-app-hello"><strong data-gfa="hello"></strong><span data-gfa="helloText"></span></div>
-        <div class="gf-i18n-box gf-app-talk" data-gfa="talk"></div>
-        <div class="gf-i18n-box gf-app-hint" data-gfa="hint"></div>
-        <div class="gf-i18n-box gf-app-quick-title"><span data-gfa="quick"></span><small data-gfa="quickSub"></small></div>
-        <div class="gf-i18n-box gf-app-card gf-app-card1"><b data-gfa="q1"></b><span data-gfa="q1s"></span></div>
-        <div class="gf-i18n-box gf-app-card gf-app-card2"><b data-gfa="q2"></b><span data-gfa="q2s"></span></div>
-        <div class="gf-i18n-box gf-app-card gf-app-card3"><b data-gfa="q3"></b><span data-gfa="q3s"></span></div>
-        <div class="gf-i18n-box gf-app-card gf-app-card4"><b data-gfa="q4"></b><span data-gfa="q4s"></span></div>
-        <div class="gf-i18n-box gf-app-bottom-note" data-gfa="bottomNote"></div>
-        <div class="gf-i18n-box gf-i18n-script gf-app-bottom-script" data-gfa="bottomScript"></div>
-        <div class="gf-i18n-box gf-app-nav gf-app-nav1" data-gfa="nav1"></div>
-        <div class="gf-i18n-box gf-app-nav gf-app-nav2" data-gfa="nav2"></div>
-        <div class="gf-i18n-box gf-app-nav gf-app-nav3" data-gfa="nav3"></div>
-      </div>
-
-      <button class="gf-ref-hit gf-ref-mic" id="gfRefMic" type="button"
-              aria-label="Parler à Guestflow"></button>
-
-      <textarea class="gf-ref-input" id="gfRefQuestion"
-                placeholder=""
-                aria-label="Posez votre question"></textarea>
-
-      <button class="gf-ref-hit gf-ref-send" id="gfRefSend" type="button"
-              aria-label="Envoyer la question"></button>
-
-      <button class="gf-ref-hit gf-ref-quick-1" type="button"
-              data-gf-question="Quels sont les horaires d’arrivée et de départ ?"
-              aria-label="Arrivée et départ"></button>
-      <button class="gf-ref-hit gf-ref-quick-2" type="button"
-              data-gf-question="Quel est le mot de passe Wi-Fi ?"
-              aria-label="Wi-Fi"></button>
-      <button class="gf-ref-hit gf-ref-quick-3" type="button"
-              data-gf-question="Que dois-je faire en cas d’urgence ?"
-              aria-label="Urgence"></button>
-      <button class="gf-ref-hit gf-ref-quick-4" type="button"
-              data-gf-question="Quel est le numéro du propriétaire ?"
-              aria-label="Numéro du propriétaire"></button>
-
-      <button class="gf-ref-hit gf-ref-nav-home" type="button" aria-label="Accueil"></button>
-      <button class="gf-ref-hit gf-ref-nav-history" type="button" aria-label="Historique"></button>
-      <button class="gf-ref-hit gf-ref-nav-settings" type="button" aria-label="Paramètres"></button>
-
-      <div class="gf-ref-listening" id="gfRefListening">Je vous écoute…</div>
-    </div>
-  </section>
-
-  <aside class="gf-ref-answer" id="gfRefAnswer" aria-live="polite">
-    <div class="gf-ref-answer-head">
-      <strong>Guestflow</strong>
-      <button class="gf-ref-answer-stop" id="gfRefAnswerStop" type="button" aria-label="Arrêter la réponse vocale">■ Stop</button>
-      <button class="gf-ref-answer-close" id="gfRefAnswerClose" type="button" aria-label="Fermer">×</button>
-    </div>
-    <div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
-  </aside>
-
-
-  <main class="page gf-app-shell">
-
-    <section class="gf-app-card" aria-label="Concierge Guestflow">
-      <header class="gf-app-header">
-        <div class="gf-brand-block">
-          <div class="gf-leaf-logo" aria-hidden="true">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M23 42C22 27 28 14 42 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
-              <path d="M28 27C34 25 39 20 41 14C35 14 30 18 28 27Z" fill="currentColor" opacity=".95"/>
-              <path d="M22 33C16 31 11 26 9 20C15 20 20 24 22 33Z" fill="currentColor" opacity=".82"/>
-              <path d="M31 17C28 12 29 7 33 3C37 8 36 13 31 17Z" fill="currentColor" opacity=".72"/>
-            </svg>
-          </div>
-          <div class="gf-brand-copy">
-            <div class="gf-brand-name">Guestflow</div>
-            <div id="giteName" class="gite-name gf-property-name">Cacouech</div>
-            <div class="gf-brand-subtitle">Votre concierge de séjour</div>
-          </div>
-        </div>
-
-        <div class="gf-header-actions">
-          <button id="btnSound" class="sound-btn gf-sound-btn" type="button" onclick="basculerVoix()" aria-label="Couper la réponse vocale" title="Couper la réponse vocale">
-            <svg id="soundIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"/>
-              <path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-            </svg>
-          </button>
-        </div>
-      </header>
-
-      <section class="gf-hero-card">
-        <div class="gf-hero-kicker">Bien plus qu’un séjour</div>
-        <h1>Votre concierge<br><span>numérique 24h/24</span></h1>
-        <p id="pageSubtitle">Une question ? Posez-la naturellement, Guestflow vous répond immédiatement.</p>
-        <div class="gf-live-pill">
-          <span class="gf-live-dot"></span>
+<section aria-label="Installer Guestflow" class="guestflow-landing" id="guestflowLanding"><div class="gfp-page" data-lang="fr" id="guestflowPremiumPage">
+<!-- IMAGE PREMIUM EXACTE : aucune régénération, aucune modification -->
+<img alt="Guestflow — page Premium" class="gfp-base" src="./accueil-guestflow-premium.png"/>
+<button aria-label="Français" class="gfp-lang-hot gfp-fr" data-landing-lang="fr" data-lang="fr"></button>
+<button aria-label="English" class="gfp-lang-hot gfp-en" data-landing-lang="en" data-lang="en"></button>
+<button aria-label="Español" class="gfp-lang-hot gfp-es" data-landing-lang="es" data-lang="es"></button>
+<button aria-label="Deutsch" class="gfp-lang-hot gfp-de" data-landing-lang="de" data-lang="de"></button>
+<!-- ENGLISH -->
+<div class="gfp-translation gfp-en-layer" lang="en">
+<div class="gfp-mask gfp-slogan">More than<br/>just a stay</div>
+<div class="gfp-mask gfp-title">Add Guestflow<br/>to your phone</div>
+<div class="gfp-mask gfp-lead">Install your stay concierge in just a few seconds and enjoy personalised assistance throughout your stay.</div>
+<div class="gfp-mask gfp-mid">Your experience,<br/>made beautifully simple</div>
+<div class="gfp-mask gfp-step gfp-step1">Install<br/>Guestflow</div>
+<div class="gfp-mask gfp-step gfp-step2">Add it to your<br/>Home Screen</div>
+<div class="gfp-mask gfp-step gfp-step3">Open Guestflow<br/>and ask your questions</div>
+<div class="gfp-mask gfp-badge gfp-badge1">No account</div>
+<div class="gfp-mask gfp-badge gfp-badge2">Fast answers</div>
+<div class="gfp-mask gfp-badge gfp-badge3">Secure data</div>
+<div class="gfp-mask gfp-install-text">Install Guestflow</div>
+<div class="gfp-mask gfp-compat">Available on iPhone and Android</div>
+<div class="gfp-mask gfp-bottom-script">Enjoy<br/>every moment!</div>
+<div class="gfp-mask gfp-phone-hello">Hello!</div>
+<div class="gfp-mask gfp-phone-copy">How can we make your stay even more beautiful?</div>
+<div class="gfp-mask gfp-phone-input">Ask your question…</div>
+<div class="gfp-mask gfp-phone-label gfp-p1">Activities</div>
+<div class="gfp-mask gfp-phone-label gfp-p2">Restaurants</div>
+<div class="gfp-mask gfp-phone-label gfp-p3">Nearby</div>
+<div class="gfp-mask gfp-phone-label gfp-p4">Transport</div>
+<div class="gfp-mask gfp-phone-label gfp-p5">Pets</div>
+<div class="gfp-mask gfp-phone-label gfp-p6">Emergency</div>
+<div class="gfp-mask gfp-phone-foot">Places that truly matter</div>
+</div>
+<!-- ESPAÑOL -->
+<div class="gfp-translation gfp-es-layer" lang="es">
+<div class="gfp-mask gfp-slogan">Mucho más<br/>que una estancia</div>
+<div class="gfp-mask gfp-title">Añade Guestflow<br/>a tu teléfono</div>
+<div class="gfp-mask gfp-lead">Instala tu conserje de estancia en pocos segundos y disfruta de una asistencia personalizada durante toda tu estancia.</div>
+<div class="gfp-mask gfp-mid">Tu experiencia,<br/>con total sencillez</div>
+<div class="gfp-mask gfp-step gfp-step1">Instala<br/>Guestflow</div>
+<div class="gfp-mask gfp-step gfp-step2">Añádelo a tu<br/>pantalla de inicio</div>
+<div class="gfp-mask gfp-step gfp-step3">Abre Guestflow<br/>y haz tus preguntas</div>
+<div class="gfp-mask gfp-badge gfp-badge1">Sin cuenta</div>
+<div class="gfp-mask gfp-badge gfp-badge2">Respuesta rápida</div>
+<div class="gfp-mask gfp-badge gfp-badge3">Datos seguros</div>
+<div class="gfp-mask gfp-install-text">Instalar Guestflow</div>
+<div class="gfp-mask gfp-compat">Disponible en iPhone y Android</div>
+<div class="gfp-mask gfp-bottom-script">¡Disfruta de<br/>cada momento!</div>
+<div class="gfp-mask gfp-phone-hello">¡Hola!</div>
+<div class="gfp-mask gfp-phone-copy">¿Cómo podemos hacer que tu estancia sea aún más especial?</div>
+<div class="gfp-mask gfp-phone-input">Haz tu pregunta…</div>
+<div class="gfp-mask gfp-phone-label gfp-p1">Actividades</div>
+<div class="gfp-mask gfp-phone-label gfp-p2">Restaurantes</div>
+<div class="gfp-mask gfp-phone-label gfp-p3">Cerca</div>
+<div class="gfp-mask gfp-phone-label gfp-p4">Transporte</div>
+<div class="gfp-mask gfp-phone-label gfp-p5">Mascotas</div>
+<div class="gfp-mask gfp-phone-label gfp-p6">Urgencia</div>
+<div class="gfp-mask gfp-phone-foot">Lugares con sentido</div>
+</div>
+<!-- DEUTSCH -->
+<div class="gfp-translation gfp-de-layer" lang="de">
+<div class="gfp-mask gfp-slogan">Mehr als<br/>nur ein Aufenthalt</div>
+<div class="gfp-mask gfp-title">Guestflow auf<br/>Ihrem Smartphone</div>
+<div class="gfp-mask gfp-lead">Installieren Sie Ihren Aufenthalts-Concierge in wenigen Sekunden und genießen Sie persönliche Unterstützung während Ihres gesamten Aufenthalts.</div>
+<div class="gfp-mask gfp-mid">Ihr Aufenthalt,<br/>ganz unkompliziert</div>
+<div class="gfp-mask gfp-step gfp-step1">Guestflow<br/>installieren</div>
+<div class="gfp-mask gfp-step gfp-step2">Zum Startbildschirm<br/>hinzufügen</div>
+<div class="gfp-mask gfp-step gfp-step3">Guestflow öffnen<br/>und Fragen stellen</div>
+<div class="gfp-mask gfp-badge gfp-badge1">Ohne Konto</div>
+<div class="gfp-mask gfp-badge gfp-badge2">Schnelle Antwort</div>
+<div class="gfp-mask gfp-badge gfp-badge3">Sichere Daten</div>
+<div class="gfp-mask gfp-install-text">Guestflow installieren</div>
+<div class="gfp-mask gfp-compat">Für iPhone und Android</div>
+<div class="gfp-mask gfp-bottom-script">Genießen Sie<br/>jeden Augenblick!</div>
+<div class="gfp-mask gfp-phone-hello">Hallo!</div>
+<div class="gfp-mask gfp-phone-copy">Wie können wir Ihren Aufenthalt noch schöner machen?</div>
+<div class="gfp-mask gfp-phone-input">Stellen Sie Ihre Frage…</div>
+<div class="gfp-mask gfp-phone-label gfp-p1">Aktivitäten</div>
+<div class="gfp-mask gfp-phone-label gfp-p2">Restaurants</div>
+<div class="gfp-mask gfp-phone-label gfp-p3">In der Nähe</div>
+<div class="gfp-mask gfp-phone-label gfp-p4">Transport</div>
+<div class="gfp-mask gfp-phone-label gfp-p5">Haustiere</div>
+<div class="gfp-mask gfp-phone-label gfp-p6">Notfall</div>
+<div class="gfp-mask gfp-phone-foot">Orte mit Bedeutung</div>
+</div>
+<button aria-label="Installer Guestflow" class="gfp-install-hotspot" id="landingInstallBtn" type="button"></button></div></section>
+<div aria-live="polite" class="guestflow-toast" id="guestflowLandingToast" role="status"></div>
+<div aria-hidden="true" class="guestflow-install-help" id="guestflowInstallHelp">
+<div aria-labelledby="guestflowInstallTitle" aria-modal="true" class="guestflow-install-card" role="dialog">
+<h2 id="guestflowInstallTitle">Installer Guestflow</h2>
+<div id="guestflowInstallInstructions">
+<p><strong>Sur Android :</strong></p>
+<ol>
+<li>Ouvrez le menu <strong>⋮</strong> de votre navigateur.</li>
+<li>Choisissez <strong>Installer l’application</strong> ou <strong>Ajouter à l’écran d’accueil</strong>.</li>
+<li>Confirmez avec <strong>Installer</strong> ou <strong>Ajouter</strong>.</li>
+</ol>
+<p><strong>Sur iPhone :</strong></p>
+<ol>
+<li>Touchez <strong>Partager</strong>.</li>
+<li>Choisissez <strong>Sur l’écran d’accueil</strong>.</li>
+<li>Touchez <strong>Ajouter</strong>.</li>
+</ol>
+</div>
+<a class="guestflow-install-close" href="#" id="guestflowInstallClose">J’ai compris</a>
+</div>
+</div>
+<!-- GUESTFLOW — interface visuelle de référence validée -->
+<section aria-label="Concierge Guestflow" class="gf-reference-screen" id="gfReferenceScreen">
+<div class="gf-reference-wrap">
+<img alt="Guestflow Les Oliviers — concierge numérique 24h/24" class="gf-reference-img" id="gfReferenceImage" src="./guestflow-concierge-final.png"/>
+<div aria-hidden="true" class="gf-app-i18n" id="gfAppI18n">
+<div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
+<div class="gf-i18n-box gf-i18n-title gf-app-title" data-gfa="title"></div>
+<div class="gf-i18n-box gf-app-intro" data-gfa="intro"></div>
+<div class="gf-i18n-box gf-app-live" data-gfa="live"></div>
+<div class="gf-i18n-box gf-i18n-script gf-app-side-script" data-gfa="sideScript"></div>
+<div class="gf-i18n-box gf-app-hello"><strong data-gfa="hello"></strong><span data-gfa="helloText"></span></div>
+<div class="gf-i18n-box gf-app-talk" data-gfa="talk"></div>
+<div class="gf-i18n-box gf-app-hint" data-gfa="hint"></div>
+<div class="gf-i18n-box gf-app-quick-title"><span data-gfa="quick"></span><small data-gfa="quickSub"></small></div>
+<div class="gf-i18n-box gf-app-card gf-app-card1"><b data-gfa="q1"></b><span data-gfa="q1s"></span></div>
+<div class="gf-i18n-box gf-app-card gf-app-card2"><b data-gfa="q2"></b><span data-gfa="q2s"></span></div>
+<div class="gf-i18n-box gf-app-card gf-app-card3"><b data-gfa="q3"></b><span data-gfa="q3s"></span></div>
+<div class="gf-i18n-box gf-app-card gf-app-card4"><b data-gfa="q4"></b><span data-gfa="q4s"></span></div>
+<div class="gf-i18n-box gf-app-bottom-note" data-gfa="bottomNote"></div>
+<div class="gf-i18n-box gf-i18n-script gf-app-bottom-script" data-gfa="bottomScript"></div>
+<div class="gf-i18n-box gf-app-nav gf-app-nav1" data-gfa="nav1"></div>
+<div class="gf-i18n-box gf-app-nav gf-app-nav2" data-gfa="nav2"></div>
+<div class="gf-i18n-box gf-app-nav gf-app-nav3" data-gfa="nav3"></div>
+</div>
+<button aria-label="Parler à Guestflow" class="gf-ref-hit gf-ref-mic" id="gfRefMic" type="button"></button>
+<textarea aria-label="Posez votre question" class="gf-ref-input" id="gfRefQuestion" placeholder=""></textarea>
+<button aria-label="Envoyer la question" class="gf-ref-hit gf-ref-send" id="gfRefSend" type="button"></button>
+<button aria-label="Arrivée et départ" class="gf-ref-hit gf-ref-quick-1" data-gf-question="Quels sont les horaires d’arrivée et de départ ?" type="button"></button>
+<button aria-label="Wi-Fi" class="gf-ref-hit gf-ref-quick-2" data-gf-question="Quel est le mot de passe Wi-Fi ?" type="button"></button>
+<button aria-label="Urgence" class="gf-ref-hit gf-ref-quick-3" data-gf-question="Que dois-je faire en cas d’urgence ?" type="button"></button>
+<button aria-label="Numéro du propriétaire" class="gf-ref-hit gf-ref-quick-4" data-gf-question="Quel est le numéro du propriétaire ?" type="button"></button>
+<button aria-label="Accueil" class="gf-ref-hit gf-ref-nav-home" type="button"></button>
+<button aria-label="Historique" class="gf-ref-hit gf-ref-nav-history" type="button"></button>
+<button aria-label="Paramètres" class="gf-ref-hit gf-ref-nav-settings" type="button"></button>
+<div class="gf-ref-listening" id="gfRefListening">Je vous écoute…</div>
+</div>
+</section>
+<aside aria-live="polite" class="gf-ref-answer" id="gfRefAnswer">
+<div class="gf-ref-answer-head">
+<strong>Guestflow</strong>
+<button aria-label="Arrêter la réponse vocale" class="gf-ref-answer-stop" id="gfRefAnswerStop" type="button">■ Stop</button>
+<button aria-label="Fermer" class="gf-ref-answer-close" id="gfRefAnswerClose" type="button">×</button>
+</div>
+<div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
+</aside>
+<main class="page gf-app-shell">
+<section aria-label="Concierge Guestflow" class="gf-app-card">
+<header class="gf-app-header">
+<div class="gf-brand-block">
+<div aria-hidden="true" class="gf-leaf-logo">
+<svg fill="none" viewbox="0 0 48 48">
+<path d="M23 42C22 27 28 14 42 7" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<path d="M28 27C34 25 39 20 41 14C35 14 30 18 28 27Z" fill="currentColor" opacity=".95"></path>
+<path d="M22 33C16 31 11 26 9 20C15 20 20 24 22 33Z" fill="currentColor" opacity=".82"></path>
+<path d="M31 17C28 12 29 7 33 3C37 8 36 13 31 17Z" fill="currentColor" opacity=".72"></path>
+</svg>
+</div>
+<div class="gf-brand-copy">
+<div class="gf-brand-name">Guestflow</div>
+<div class="gite-name gf-property-name" id="giteName">Cacouech</div>
+<div class="gf-brand-subtitle">Votre concierge de séjour</div>
+</div>
+</div>
+<div class="gf-header-actions">
+<button aria-label="Couper la réponse vocale" class="sound-btn gf-sound-btn" id="btnSound" onclick="basculerVoix()" title="Couper la réponse vocale" type="button">
+<svg aria-hidden="true" fill="none" id="soundIcon" viewbox="0 0 24 24">
+<path d="M4 10v4h4l5 4V6l-5 4H4Z" fill="currentColor"></path>
+<path d="M16 9.2c1.2 1.5 1.2 4.1 0 5.6M18.6 6.7c2.8 3 2.8 7.6 0 10.6" stroke="currentColor" stroke-linecap="round" stroke-width="1.7"></path>
+</svg>
+</button>
+</div>
+</header>
+<section class="gf-hero-card">
+<div class="gf-hero-kicker">Bien plus qu’un séjour</div>
+<h1>Votre concierge<br/><span>numérique 24h/24</span></h1>
+<p id="pageSubtitle">Une question ? Posez-la naturellement, Guestflow vous répond immédiatement.</p>
+<div class="gf-live-pill">
+<span class="gf-live-dot"></span>
           Réponse immédiate · 24h/24, 7j/7
         </div>
-      </section>
-
-      <section class="gf-concierge-panel">
-        <div class="gf-panel-topline">
-          <div>
-            <div id="conciergeTitle" class="gf-panel-title">Bonjour !</div>
-            <div id="onlineNow" class="gf-panel-subtitle">Je suis Guestflow, votre concierge numérique. Posez-moi votre question par écrit ou à l’oral.</div>
-          </div>
-
-          <div class="language-row gf-languages" aria-label="Choix de la langue">
-            <span class="language-label" id="labelLangue">Langue :</span>
-            <button type="button" class="lang-btn active" data-lang="fr"><span aria-hidden="true">🇫🇷</span><span class="lang-code">FR</span></button>
-            <button type="button" class="lang-btn" data-lang="en"><span aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
-            <button type="button" class="lang-btn" data-lang="es"><span aria-hidden="true">🇪🇸</span><span class="lang-code">ES</span></button>
-            <button type="button" class="lang-btn" data-lang="de"><span aria-hidden="true">🇩🇪</span><span class="lang-code">DE</span></button>
-          </div>
-        </div>
-
-        <div id="pwaInstallWrap" class="pwa-install-wrap gf-pwa-hidden">
-          <button id="pwaInstallBtn" class="pwa-install-btn" type="button">Ajouter Guestflow à mon téléphone</button>
-          <div id="pwaInstallHint" class="pwa-install-hint"></div>
-        </div>
-
-        <div id="accessMessage" class="status"></div>
-
-        <div class="gf-mic-zone">
-          <button id="btnMic" class="mic-btn gf-main-mic" type="button" aria-label="Parler à Guestflow" title="Parler à Guestflow">
-            <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
-              <rect x="23" y="9" width="18" height="31" rx="9" stroke="currentColor" stroke-width="4"/>
-              <path d="M16 30c0 9 7 16 16 16s16-7 16-16M32 46v9M23 55h18" stroke="currentColor" stroke-width="4" stroke-linecap="round"/>
-            </svg>
-            <span class="mic-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-          </button>
-          <div class="gf-mic-title">Parlez à Guestflow</div>
-          <div id="micHelp" class="mic-help gf-mic-help">Vous pouvez parler naturellement.</div>
-        </div>
-
-        <div class="field gf-question-field">
-          <div class="question-label gf-visually-hidden">
-            <label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
-          </div>
-          <div class="voice-row gf-input-row">
-            <textarea id="question" placeholder=""></textarea>
-            <button id="btnAsk" class="primary gf-send-btn" type="button" onclick="envoyerQuestion()" aria-label="Envoyer ma question" title="Envoyer ma question">
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 12 20 4l-5 16-3-6-8-2Z" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/><path d="m12 14 8-10" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-            </button>
-          </div>
-          <div id="examplesBox" class="example gf-examples">Exemples : Wi‑Fi · horaires · restaurants · consignes du séjour</div>
-        </div>
-
-        <div class="buttons gf-clear-row">
-          <button id="btnClear" class="secondary gf-clear-btn" type="button" onclick="vider()">Effacer la question</button>
-        </div>
-        <div id="status" class="status"></div>
-
-        <section class="gf-quick-section" aria-label="Accès rapides">
-          <div class="gf-section-heading">
-            <span></span><h2>Accès rapides</h2><span></span>
-          </div>
-          <div class="gf-section-subtitle">Les informations les plus demandées</div>
-
-          <div class="gf-quick-grid">
-            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quels sont les horaires d’arrivée et de départ ?';envoyerQuestion();">
-              <span class="gf-quick-icon" aria-hidden="true">▣</span>
-              <strong>Arrivée / départ</strong>
-              <small>Horaires et consignes</small>
-            </button>
-            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le mot de passe Wi-Fi ?';envoyerQuestion();">
-              <span class="gf-quick-icon gf-wifi" aria-hidden="true">⌁</span>
-              <strong>Wi‑Fi</strong>
-              <small>Réseau et accès</small>
-            </button>
-            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Que dois-je faire en cas d’urgence ?';envoyerQuestion();">
-              <span class="gf-quick-icon gf-emergency" aria-hidden="true">+</span>
-              <strong>Urgence</strong>
-              <small>Contacts utiles</small>
-            </button>
-            <button class="gf-quick-card" type="button" onclick="document.getElementById('question').value='Quel est le numéro du propriétaire ?';envoyerQuestion();">
-              <span class="gf-quick-icon" aria-hidden="true">☎</span>
-              <strong>Numéro du propriétaire</strong>
-              <small>Contact direct</small>
-            </button>
-          </div>
-        </section>
-
-        <section class="response-box gf-response-box" aria-live="polite">
-          <div class="response-conversation">
-            <div class="response-avatar gf-response-avatar" aria-hidden="true">
-              <svg viewBox="0 0 48 48" fill="none"><path d="M24 43C23 29 28 16 41 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M28 28c6-2 10-7 12-13-6 0-11 5-12 13Z" fill="currentColor"/><path d="M22 34c-6-2-10-7-12-13 6 0 11 5 12 13Z" fill="currentColor" opacity=".75"/></svg>
-            </div>
-            <div class="response-content">
-              <div class="response-meta">
-                <span class="response-name">Guestflow</span>
-                <span class="response-dot"></span>
-                <span class="response-time" id="responseTime">À l’instant</span>
-              </div>
-              <div class="response-bubble gf-response-bubble">
-                <h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
-                <div id="reponse">La réponse de Guestflow apparaîtra ici.</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div class="hint gf-footer-hint" id="footerText">Guestflow répond à partir des informations fournies par votre hébergement.</div>
-      </section>
-
-      <nav class="gf-bottom-nav" aria-label="Navigation Guestflow">
-        <button type="button" class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-          <span aria-hidden="true">⌂</span><strong>Accueil</strong>
-        </button>
-        <button type="button" onclick="document.querySelector('.gf-response-box').scrollIntoView({behavior:'smooth',block:'center'})">
-          <span aria-hidden="true">◷</span><strong>Historique</strong>
-        </button>
-        <button type="button" onclick="document.querySelector('.gf-languages').scrollIntoView({behavior:'smooth',block:'center'})">
-          <span aria-hidden="true">⚙</span><strong>Paramètres</strong>
-        </button>
-      </nav>
-    </section>
-
-  </main>
-
-  <script>
+</section>
+<section class="gf-concierge-panel">
+<div class="gf-panel-topline">
+<div>
+<div class="gf-panel-title" id="conciergeTitle">Bonjour !</div>
+<div class="gf-panel-subtitle" id="onlineNow">Je suis Guestflow, votre concierge numérique. Posez-moi votre question par écrit ou à l’oral.</div>
+</div>
+<div aria-label="Choix de la langue" class="language-row gf-languages">
+<span class="language-label" id="labelLangue">Langue :</span>
+<button class="lang-btn active" data-lang="fr" type="button"><span aria-hidden="true">🇫🇷</span><span class="lang-code">FR</span></button>
+<button class="lang-btn" data-lang="en" type="button"><span aria-hidden="true">🇬🇧</span><span class="lang-code">EN</span></button>
+<button class="lang-btn" data-lang="es" type="button"><span aria-hidden="true">🇪🇸</span><span class="lang-code">ES</span></button>
+<button class="lang-btn" data-lang="de" type="button"><span aria-hidden="true">🇩🇪</span><span class="lang-code">DE</span></button>
+</div>
+</div>
+<div class="pwa-install-wrap gf-pwa-hidden" id="pwaInstallWrap">
+<button class="pwa-install-btn" id="pwaInstallBtn" type="button">Ajouter Guestflow à mon téléphone</button>
+<div class="pwa-install-hint" id="pwaInstallHint"></div>
+</div>
+<div class="status" id="accessMessage"></div>
+<div class="gf-mic-zone">
+<button aria-label="Parler à Guestflow" class="mic-btn gf-main-mic" id="btnMic" title="Parler à Guestflow" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 64 64">
+<rect height="31" rx="9" stroke="currentColor" stroke-width="4" width="18" x="23" y="9"></rect>
+<path d="M16 30c0 9 7 16 16 16s16-7 16-16M32 46v9M23 55h18" stroke="currentColor" stroke-linecap="round" stroke-width="4"></path>
+</svg>
+<span aria-hidden="true" class="mic-wave"><i></i><i></i><i></i><i></i><i></i></span>
+</button>
+<div class="gf-mic-title">Parlez à Guestflow</div>
+<div class="mic-help gf-mic-help" id="micHelp">Vous pouvez parler naturellement.</div>
+</div>
+<div class="field gf-question-field">
+<div class="question-label gf-visually-hidden">
+<label for="question" id="labelQuestion">Comment puis-je vous aider ?</label>
+</div>
+<div class="voice-row gf-input-row">
+<textarea id="question" placeholder=""></textarea>
+<button aria-label="Envoyer ma question" class="primary gf-send-btn" id="btnAsk" onclick="envoyerQuestion()" title="Envoyer ma question" type="button">
+<svg aria-hidden="true" fill="none" viewbox="0 0 24 24"><path d="M4 12 20 4l-5 16-3-6-8-2Z" stroke="currentColor" stroke-linejoin="round" stroke-width="1.9"></path><path d="m12 14 8-10" stroke="currentColor" stroke-linecap="round" stroke-width="1.9"></path></svg>
+</button>
+</div>
+<div class="example gf-examples" id="examplesBox">Exemples : Wi‑Fi · horaires · restaurants · consignes du séjour</div>
+</div>
+<div class="buttons gf-clear-row">
+<button class="secondary gf-clear-btn" id="btnClear" onclick="vider()" type="button">Effacer la question</button>
+</div>
+<div class="status" id="status"></div>
+<section aria-label="Accès rapides" class="gf-quick-section">
+<div class="gf-section-heading">
+<span></span><h2>Accès rapides</h2><span></span>
+</div>
+<div class="gf-section-subtitle">Les informations les plus demandées</div>
+<div class="gf-quick-grid">
+<button class="gf-quick-card" onclick="document.getElementById('question').value='Quels sont les horaires d’arrivée et de départ ?';envoyerQuestion();" type="button">
+<span aria-hidden="true" class="gf-quick-icon">▣</span>
+<strong>Arrivée / départ</strong>
+<small>Horaires et consignes</small>
+</button>
+<button class="gf-quick-card" onclick="document.getElementById('question').value='Quel est le mot de passe Wi-Fi ?';envoyerQuestion();" type="button">
+<span aria-hidden="true" class="gf-quick-icon gf-wifi">⌁</span>
+<strong>Wi‑Fi</strong>
+<small>Réseau et accès</small>
+</button>
+<button class="gf-quick-card" onclick="document.getElementById('question').value='Que dois-je faire en cas d’urgence ?';envoyerQuestion();" type="button">
+<span aria-hidden="true" class="gf-quick-icon gf-emergency">+</span>
+<strong>Urgence</strong>
+<small>Contacts utiles</small>
+</button>
+<button class="gf-quick-card" onclick="document.getElementById('question').value='Quel est le numéro du propriétaire ?';envoyerQuestion();" type="button">
+<span aria-hidden="true" class="gf-quick-icon">☎</span>
+<strong>Numéro du propriétaire</strong>
+<small>Contact direct</small>
+</button>
+</div>
+</section>
+<section aria-live="polite" class="response-box gf-response-box">
+<div class="response-conversation">
+<div aria-hidden="true" class="response-avatar gf-response-avatar">
+<svg fill="none" viewbox="0 0 48 48"><path d="M24 43C23 29 28 16 41 8" stroke="currentColor" stroke-linecap="round" stroke-width="2.4"></path><path d="M28 28c6-2 10-7 12-13-6 0-11 5-12 13Z" fill="currentColor"></path><path d="M22 34c-6-2-10-7-12-13 6 0 11 5 12 13Z" fill="currentColor" opacity=".75"></path></svg>
+</div>
+<div class="response-content">
+<div class="response-meta">
+<span class="response-name">Guestflow</span>
+<span class="response-dot"></span>
+<span class="response-time" id="responseTime">À l’instant</span>
+</div>
+<div class="response-bubble gf-response-bubble">
+<h3 class="response-title" id="responseTitle">Réponse Guestflow</h3>
+<div id="reponse">La réponse de Guestflow apparaîtra ici.</div>
+</div>
+</div>
+</div>
+</section>
+<div class="hint gf-footer-hint" id="footerText">Guestflow répond à partir des informations fournies par votre hébergement.</div>
+</section>
+<nav aria-label="Navigation Guestflow" class="gf-bottom-nav">
+<button class="active" onclick="window.scrollTo({top:0,behavior:'smooth'})" type="button">
+<span aria-hidden="true">⌂</span><strong>Accueil</strong>
+</button>
+<button onclick="document.querySelector('.gf-response-box').scrollIntoView({behavior:'smooth',block:'center'})" type="button">
+<span aria-hidden="true">◷</span><strong>Historique</strong>
+</button>
+<button onclick="document.querySelector('.gf-languages').scrollIntoView({behavior:'smooth',block:'center'})" type="button">
+<span aria-hidden="true">⚙</span><strong>Paramètres</strong>
+</button>
+</nav>
+</section>
+</main>
+<script>
   const GUESTFLOW_BUILD = "GF-FR-ACCUEIL-1";
 
     let langueSelectionnee = 'fr';
@@ -4924,8 +5121,6 @@
 
 
 </script>
-
-
 <script id="guestflow-reference-bridge">
 (function(){
   function byId(id){ return document.getElementById(id); }
@@ -5078,30 +5273,39 @@
   }
 })();
 </script>
-
-
-  <script id="guestflow-image-fallback-check">
-    (function () {
-      function verifierImageGuestflow() {
-        if (!document.body.classList.contains('guestflow-app-mode')) return;
-        var img = document.getElementById('gfReferenceImage');
-        if (!img) {
-          document.body.classList.add('guestflow-image-fallback');
-          return;
-        }
-        if (img.complete && img.naturalWidth === 0) {
-          document.body.classList.add('guestflow-image-fallback');
-        }
-      }
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', verifierImageGuestflow);
-      } else {
-        verifierImageGuestflow();
-      }
-      window.addEventListener('load', verifierImageGuestflow);
-      setTimeout(verifierImageGuestflow, 2500);
-    })();
-  </script>
-
-</body>
+<script id="guestflow-premium-lang-sync">
+(function(){
+  function syncPremiumLang(lang){
+    if(!['fr','en','es','de'].includes(lang)) lang='fr';
+    var p=document.getElementById('guestflowPremiumPage');
+    if(p) p.dataset.lang=lang;
+  }
+  document.addEventListener('click', function(e){
+    var b=e.target.closest && e.target.closest('[data-landing-lang]');
+    if(b) syncPremiumLang(String(b.dataset.landingLang||'fr').toLowerCase());
+  });
+  var q=new URLSearchParams(location.search).get('lang');
+  syncPremiumLang(['fr','en','es','de'].includes(q)?q:'fr');
+})();
+</script><script id="guestflow-reference-check">
+(function(){
+  function check(){
+    if(!document.body.classList.contains('guestflow-app-mode')) return;
+    var img=document.getElementById('gfReferenceImage');
+    if(!img || (img.complete && img.naturalWidth===0)){
+      document.body.classList.add('gf-reference-failed');
+    }
+  }
+  document.addEventListener('DOMContentLoaded', function(){
+    var img=document.getElementById('gfReferenceImage');
+    if(img){
+      img.addEventListener('error', function(){document.body.classList.add('gf-reference-failed');});
+      img.addEventListener('load', function(){document.body.classList.remove('gf-reference-failed');});
+    }
+    check();
+  });
+  window.addEventListener('load', check);
+  setTimeout(check, 2500);
+})();
+</script></body>
 </html>
