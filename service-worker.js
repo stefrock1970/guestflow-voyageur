@@ -3,7 +3,7 @@
    2026-09-09
 */
 
-const CACHE_NAME = 'guestflow-v2026-09-09-0951';
+const CACHE_NAME = 'guestflow-v2026-09-11-0200';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
