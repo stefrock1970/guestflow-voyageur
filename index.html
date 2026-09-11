@@ -2844,7 +2844,40 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
   z-index:50 !important;
   background:#ffffff !important;
 }
-</style></head>
+</style>
+<style id="guestflow-installed-english-fix">
+/* English installed app: opaque text areas aligned with the reference image. */
+body.guestflow-app-mode .gf-reference-wrap{container-type:inline-size}
+body.guestflow-app-mode:has(#gfAppI18n[data-lang="en"]) .gf-ref-input{background:#fff}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-i18n-box{
+ background:#faf7ef;box-shadow:none;border-radius:4px;min-height:0;
+ display:flex;flex-direction:column;justify-content:center;overflow:hidden;
+ font-size:2.5cqw;line-height:1.15;padding:.5% 1%;
+}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-top-script{left:57%;top:1.3%;width:26%;height:9%;font-size:3.3cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-title{left:6.7%;top:11.7%;width:49%;height:7.5%;font-size:5.6cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-intro{left:7%;top:21.2%;width:40%;height:6.1%;font-size:3.1cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-live{left:14%;top:30%;width:22%;height:4%;background:#345828;color:white;font-size:2.4cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-side-script{left:77%;top:26.3%;width:22%;height:9%;background:#394126;color:white;font-size:3cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hello{left:16%;top:36.8%;width:68%;height:6.3%;font-size:2.6cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hello strong{font-size:4.2cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-talk{left:36%;top:54.9%;width:29%;height:2%;font-size:3cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hint{left:36%;top:57.1%;width:34%;height:2.1%;font-size:2.1cqw;background:#eaf0e3}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-quick-title{left:31%;top:67%;width:39%;height:3.8%;font-size:3.3cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-quick-title small{font-size:2.1cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card{top:77.1%;width:20%;height:4.8%;background:#fffdfa;font-size:2cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card1{left:4.5%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card2{left:27%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card3{left:50%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card4{left:73%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-bottom-note{left:14%;top:84.3%;width:54%;height:3.8%;font-size:2.1cqw;background:#fffdfa}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-bottom-script{left:67%;top:84.2%;width:29%;height:5%;font-size:2.7cqw;background:#fffdfa}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav{top:96.2%;height:2.5%;width:25%;background:#fffdfa;font-size:2.8cqw}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav1{left:5%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav2{left:37.5%}
+body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
+</style>
+</head>
 <body>
 <script>
     // Guestflow — mode d'ouverture déterministe.
@@ -3538,6 +3571,22 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
       const installLayer = document.getElementById('gfInstallI18n');
       const appLayer = document.getElementById('gfAppI18n');
       const d = gfVisuelI18n[langue];
+      if (appLayer) appLayer.dataset.lang = langue;
+      if (langue === 'en') {
+        const labels = {
+          gfReferenceScreen:'Guestflow concierge', gfReferenceImage:'Guestflow — digital concierge',
+          gfRefMic:'Talk to Guestflow', gfRefSend:'Send question',
+          gfRefAnswerStop:'Stop reading aloud', gfRefAnswerClose:'Close'
+        };
+        Object.keys(labels).forEach(function(id){
+          const el = document.getElementById(id);
+          if (el) el.setAttribute(id === 'gfReferenceImage' ? 'alt' : 'aria-label', labels[id]);
+        });
+        ['home','history','settings'].forEach(function(name, i){
+          const el = document.querySelector('.gf-ref-nav-' + name);
+          if (el) el.setAttribute('aria-label', ['Home','History','Settings'][i]);
+        });
+      }
 
       if (!d || langue === 'fr') {
         if (installLayer) { installLayer.classList.remove('show'); installLayer.setAttribute('aria-hidden','true'); }
@@ -5404,7 +5453,10 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         var placeholders = [
           'la réponse de guestflow apparaîtra ici.',
           'guestflow prépare votre réponse…',
-          'guestflow prépare votre réponse...'
+          'guestflow prépare votre réponse...',
+          'guestflow’s answer will appear here.',
+          'your answer will appear here.',
+          'guestflow is preparing your answer…'
         ];
         // V23.17 : conserver le HTML sûr construit par afficherReponseGuestflow(),
         // notamment le bouton/lien Google Maps. L'ancienne copie via textContent
@@ -5435,14 +5487,14 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     var hist = document.querySelector('.gf-ref-nav-history');
     if (hist) hist.addEventListener('click', function(){
       if (answerBox && answerText) {
-        answerText.textContent = 'L’historique sera ajouté dans une prochaine étape.';
+        answerText.textContent = langueSelectionnee === 'en' ? 'Conversation history will be available in a future update.' : 'L’historique sera ajouté dans une prochaine étape.';
         answerBox.classList.add('show');
       }
     });
     var settings = document.querySelector('.gf-ref-nav-settings');
     if (settings) settings.addEventListener('click', function(){
       if (answerBox && answerText) {
-        answerText.textContent = 'Les paramètres seront ajoutés dans une prochaine étape.';
+        answerText.textContent = langueSelectionnee === 'en' ? 'Settings will be available in a future update.' : 'Les paramètres seront ajoutés dans une prochaine étape.';
         answerBox.classList.add('show');
       }
     });
@@ -5521,3 +5573,4 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 })();
 </script></body>
 </html>
+
