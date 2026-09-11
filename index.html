@@ -2845,39 +2845,16 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
   background:#ffffff !important;
 }
 </style>
-<style id="guestflow-installed-english-fix">
-/* English installed app: opaque text areas aligned with the reference image. */
-body.guestflow-app-mode .gf-reference-wrap{container-type:inline-size}
-body.guestflow-app-mode:has(#gfAppI18n[data-lang="en"]) .gf-ref-input{background:#fff}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-i18n-box{
- background:#faf7ef;box-shadow:none;border-radius:4px;min-height:0;
- display:flex;flex-direction:column;justify-content:center;overflow:hidden;
- font-size:2.5cqw;line-height:1.15;padding:.5% 1%;
-}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-top-script{left:57%;top:1.3%;width:26%;height:9%;font-size:3.3cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-title{left:6.7%;top:11.7%;width:49%;height:7.5%;font-size:5.6cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-intro{left:7%;top:21.2%;width:40%;height:6.1%;font-size:3.1cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-live{left:14%;top:30%;width:22%;height:4%;background:#345828;color:white;font-size:2.4cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-side-script{left:77%;top:26.3%;width:22%;height:9%;background:#394126;color:white;font-size:3cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hello{left:16%;top:36.8%;width:68%;height:6.3%;font-size:2.6cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hello strong{font-size:4.2cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-talk{left:36%;top:54.9%;width:29%;height:2%;font-size:3cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-hint{left:36%;top:57.1%;width:34%;height:2.1%;font-size:2.1cqw;background:#eaf0e3}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-quick-title{left:31%;top:67%;width:39%;height:3.8%;font-size:3.3cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-quick-title small{font-size:2.1cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card{top:77.1%;width:20%;height:4.8%;background:#fffdfa;font-size:2cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card1{left:4.5%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card2{left:27%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card3{left:50%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-card4{left:73%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-bottom-note{left:14%;top:84.3%;width:54%;height:3.8%;font-size:2.1cqw;background:#fffdfa}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-bottom-script{left:67%;top:84.2%;width:29%;height:5%;font-size:2.7cqw;background:#fffdfa}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav{top:96.2%;height:2.5%;width:25%;background:#fffdfa;font-size:2.8cqw}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav1{left:5%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav2{left:37.5%}
-body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
-</style>
-</head>
+
+<style id="guestflow-app-interactive">
+#gfAppI18n{display:none!important}
+.gf-ref-input{background:#fff}
+.gf-ref-hit:focus-visible{outline:3px solid #516d3d;outline-offset:2px;background:rgba(255,255,255,.2)}
+.gf-ref-hit:active{background:rgba(80,110,55,.15)}
+.gf-ref-answer{max-height:70vh;overflow:auto}
+.gf-ref-answer-text button{padding:12px;margin:8px 0;border:1px solid #66734b;border-radius:12px;background:#f8f4ec;color:#263026;cursor:pointer}
+.gf-app-property-name:empty{display:none!important}
+</style></head>
 <body>
 <script>
     // Guestflow — mode d'ouverture déterministe.
@@ -3040,7 +3017,7 @@ body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
 <!-- GUESTFLOW — interface visuelle de référence validée -->
 <section aria-label="Concierge Guestflow" class="gf-reference-screen" id="gfReferenceScreen">
 <div class="gf-reference-wrap">
-<img alt="Guestflow — concierge numérique" class="gf-reference-img" id="gfReferenceImage" src="./guestflow-concierge-final.png"/>
+<img alt="Guestflow — concierge numérique" class="gf-reference-img" id="gfReferenceImage"/>
 <div aria-live="polite" class="gf-app-property-name" id="gfAppPropertyName"></div>
 <div aria-hidden="true" class="gf-app-i18n" id="gfAppI18n">
 <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
@@ -3571,6 +3548,13 @@ body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
       const installLayer = document.getElementById('gfInstallI18n');
       const appLayer = document.getElementById('gfAppI18n');
       const d = gfVisuelI18n[langue];
+      const appImages = {fr:'guestflow-concierge-final.png', en:'guestflow-app-en.png', es:'guestflow-app-es.png', de:'guestflow-app-de.png'};
+      const appImage = document.getElementById('gfReferenceImage');
+      if (appImage && document.body.classList.contains('guestflow-app-mode')) {
+        const src = './' + (appImages[langue] || appImages.fr);
+        if (appImage.getAttribute('src') !== src) appImage.setAttribute('src', src);
+        appImage.alt = 'Guestflow';
+      }
       if (appLayer) appLayer.dataset.lang = langue;
       if (langue === 'en') {
         const labels = {
@@ -3603,8 +3587,8 @@ body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
           appLayer.querySelectorAll('[data-gfa]').forEach(function(el){
             el.textContent = d.app[el.dataset.gfa] || '';
           });
-          appLayer.classList.add('show');
-          appLayer.setAttribute('aria-hidden','false');
+          appLayer.classList.remove('show');
+          appLayer.setAttribute('aria-hidden','true');
         }
       }
 
@@ -5354,157 +5338,83 @@ body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
 </script>
 <script id="guestflow-reference-bridge">
 (function(){
-  function byId(id){ return document.getElementById(id); }
-
-  function resizeVisualQuestion(){
-    var visual = byId('gfRefQuestion');
-    var wrap = document.querySelector('.gf-reference-wrap');
-    if (!visual || !wrap) return;
-
-    // Le cadre d'origine fait 4,9 % de la hauteur de la maquette.
-    // On garde son bord inférieur fixe et on l'agrandit vers le haut
-    // afin qu'une question sur 2 ou 3 lignes ne recouvre jamais
-    // la zone « Accès rapides ».
-    var base = wrap.clientHeight * 0.049;
-    var maxH = wrap.clientHeight * 0.105;
-
-    visual.style.height = base + 'px';
-    visual.style.transform = 'translateY(0)';
-
-    var wanted = Math.max(base, Math.min(maxH, visual.scrollHeight));
-    var delta = wanted - base;
-
-    visual.style.height = wanted + 'px';
-    visual.style.transform = 'translateY(-' + delta + 'px)';
-  }
-
-  function syncToEngine(){
-    var visual = byId('gfRefQuestion');
-    var engine = byId('question');
-    if (visual && engine) engine.value = visual.value;
-  }
-
-  function sendVisualQuestion(){
-    syncToEngine();
-    var ask = byId('btnAsk');
-    if (ask) ask.click();
-  }
-
-  function initReferenceInterface(){
-    var visual = byId('gfRefQuestion');
-    var engine = byId('question');
-    var mic = byId('gfRefMic');
-    var engineMic = byId('btnMic');
-    var send = byId('gfRefSend');
-    var answerBox = byId('gfRefAnswer');
-    var answerText = byId('gfRefAnswerText');
-    var engineAnswer = byId('reponse');
-    var listening = byId('gfRefListening');
-
-    if (visual && engine) {
-      visual.addEventListener('input', function(){
-        engine.value = visual.value;
-        resizeVisualQuestion();
-      });
-      visual.addEventListener('keydown', function(e){
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          sendVisualQuestion();
-        }
-      });
+  const byId = id => document.getElementById(id);
+  const history = []; // Current session only; no cross-property persistence.
+  const words = {
+    fr:{home:'Accueil',history:'Historique',settings:'Paramètres',empty:'Aucune conversation pour le moment.',voiceOn:'Réponse vocale : activée',voiceOff:'Réponse vocale : désactivée',clear:'Effacer l’historique',send:'Envoyer la question',mic:'Parler à Guestflow',stop:'Arrêter la réponse vocale',close:'Fermer',note:'Historique conservé pendant cette ouverture de l’application.'},
+    en:{home:'Home',history:'History',settings:'Settings',empty:'No conversations yet.',voiceOn:'Spoken answers: on',voiceOff:'Spoken answers: off',clear:'Clear history',send:'Send question',mic:'Talk to Guestflow',stop:'Stop reading aloud',close:'Close',note:'History is kept for this app session only.'},
+    es:{home:'Inicio',history:'Historial',settings:'Ajustes',empty:'Todavía no hay conversaciones.',voiceOn:'Respuestas por voz: activadas',voiceOff:'Respuestas por voz: desactivadas',clear:'Borrar el historial',send:'Enviar pregunta',mic:'Hablar con Guestflow',stop:'Detener la respuesta de voz',close:'Cerrar',note:'El historial se conserva solo durante esta sesión.'},
+    de:{home:'Start',history:'Verlauf',settings:'Einstellungen',empty:'Noch keine Gespräche.',voiceOn:'Sprachausgabe: an',voiceOff:'Sprachausgabe: aus',clear:'Verlauf löschen',send:'Frage senden',mic:'Mit Guestflow sprechen',stop:'Sprachausgabe stoppen',close:'Schließen',note:'Der Verlauf bleibt nur während dieser Sitzung erhalten.'}
+  };
+  const t = () => words[langueSelectionnee] || words.fr;
+  function stopVoice(){arreterReponseVocale();}
+  function init(){
+    const input=byId('gfRefQuestion'), engine=byId('question'), panel=byId('gfRefAnswer'), answer=byId('gfRefAnswerText'), engineAnswer=byId('reponse');
+    const mic=byId('gfRefMic'), engineMic=byId('btnMic'), ask=byId('btnAsk');
+    let pendingQuestion='', lastAnswer='';
+    ask.addEventListener('click',()=>{pendingQuestion=engine.value.trim();lastAnswer='';},true);
+    function resize(){
+      const wrap=document.querySelector('.gf-reference-wrap');
+      const base=wrap.clientHeight*.049, max=wrap.clientHeight*.105;
+      input.style.height=base+'px';
+      const height=Math.max(base,Math.min(max,input.scrollHeight));
+      input.style.height=height+'px';input.style.transform='translateY(-'+(height-base)+'px)';
     }
-
-    if (send) send.addEventListener('click', sendVisualQuestion);
-
-    if (mic && engineMic) {
-      mic.addEventListener('click', function(){ engineMic.click(); });
+    function send(){
+      if(ask.disabled)return;
+      engine.value=input.value;pendingQuestion=input.value.trim();lastAnswer='';
+      ask.click();
     }
-
-    document.querySelectorAll('[data-gf-question]').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var q = btn.getAttribute('data-gf-question') || '';
-        if (visual) visual.value = q;
-        if (engine) engine.value = q;
-        resizeVisualQuestion();
-        sendVisualQuestion();
-      });
+    function showText(text){stopVoice();answer.textContent=text;panel.classList.add('show');}
+    input.addEventListener('input',()=>{engine.value=input.value;resize();});
+    input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+    byId('gfRefSend').addEventListener('click',send);
+    mic.addEventListener('click',()=>engineMic.click());
+    document.querySelectorAll('[data-gf-question]').forEach(btn=>btn.addEventListener('click',()=>{
+      if(ask.disabled)return;
+      input.value=btn.dataset.gfQuestion;resize();send();
+    }));
+    byId('gfRefAnswerStop').addEventListener('click',stopVoice);
+    byId('gfRefAnswerClose').addEventListener('click',()=>{stopVoice();panel.classList.remove('show');});
+    document.querySelector('.gf-ref-nav-home').addEventListener('click',()=>{
+      stopVoice();panel.classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});
     });
-
-    var stop = byId('gfRefAnswerStop');
-    if (stop) stop.addEventListener('click', function(){
-      try { arreterReponseVocale(); } catch (e) {
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    document.querySelector('.gf-ref-nav-history').addEventListener('click',()=>{
+      showText(t().history+'\n\n'+(history.length?history.map(x=>x.question+'\n'+x.answer).join('\n\n'):t().empty)+'\n\n'+t().note);
+    });
+    document.querySelector('.gf-ref-nav-settings').addEventListener('click',()=>{
+      showText(t().settings);answer.appendChild(document.createElement('br'));
+      const voice=document.createElement('button');voice.type='button';
+      function label(){voice.textContent=voixActive?t().voiceOn:t().voiceOff;voice.setAttribute('aria-pressed',String(voixActive));}
+      label();voice.addEventListener('click',()=>{basculerVoix();label();});answer.appendChild(voice);
+      answer.appendChild(document.createElement('br'));
+      const clear=document.createElement('button');clear.type='button';clear.textContent=t().clear;
+      clear.addEventListener('click',()=>{history.length=0;showText(t().empty);});answer.appendChild(clear);
+    });
+    new MutationObserver(()=>{
+      const text=(engineAnswer.textContent||'').trim();if(!text)return;
+      const dict=traductionsInterface[langueSelectionnee]||traductionsInterface.fr;
+      if([dict.empty,dict.loading,dict.answerPlaceholder].includes(text))return;
+      answer.innerHTML=engineAnswer.innerHTML;panel.classList.add('show');
+      if(pendingQuestion && text!==lastAnswer){
+        history.push({question:pendingQuestion,answer:text});
+        if(history.length>50)history.shift();lastAnswer=text;pendingQuestion='';
       }
-    });
-
-    var close = byId('gfRefAnswerClose');
-    if (close && answerBox) close.addEventListener('click', function(){
-      try { arreterReponseVocale(); } catch (e) {
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-      }
-      answerBox.classList.remove('show');
-    });
-
-    if (engineAnswer && answerText && answerBox) {
-      var updateAnswer = function(){
-        var txt = (engineAnswer.textContent || '').trim();
-        if (!txt) return;
-        var low = txt.toLowerCase();
-        var placeholders = [
-          'la réponse de guestflow apparaîtra ici.',
-          'guestflow prépare votre réponse…',
-          'guestflow prépare votre réponse...',
-          'guestflow’s answer will appear here.',
-          'your answer will appear here.',
-          'guestflow is preparing your answer…'
-        ];
-        // V23.17 : conserver le HTML sûr construit par afficherReponseGuestflow(),
-        // notamment le bouton/lien Google Maps. L'ancienne copie via textContent
-        // transformait le lien en simple texte dans l'interface visible.
-        answerText.innerHTML = engineAnswer.innerHTML;
-        if (!placeholders.includes(low)) answerBox.classList.add('show');
-      };
-      new MutationObserver(updateAnswer).observe(engineAnswer, {
-        subtree:true, childList:true, characterData:true
-      });
+    }).observe(engineAnswer,{subtree:true,childList:true,characterData:true});
+    new MutationObserver(()=>{
+      const active=engineMic.classList.contains('listening')||engineMic.getAttribute('aria-pressed')==='true';
+      byId('gfRefListening').classList.toggle('show',active);mic.setAttribute('aria-pressed',String(active));
+      if(engine.value!==input.value){input.value=engine.value;resize();}
+    }).observe(engineMic,{attributes:true,attributeFilter:['class','aria-pressed']});
+    function labels(){
+      const d=t();
+      [['gfRefSend','send'],['gfRefMic','mic'],['gfRefAnswerStop','stop'],['gfRefAnswerClose','close']].forEach(([id,key])=>byId(id).setAttribute('aria-label',d[key]));
+      ['home','history','settings'].forEach(key=>document.querySelector('.gf-ref-nav-'+key).setAttribute('aria-label',d[key]));
     }
-
-    if (engineMic && listening) {
-      var updateMic = function(){
-        var active = engineMic.classList.contains('listening') ||
-                     engineMic.classList.contains('active') ||
-                     engineMic.getAttribute('aria-pressed') === 'true';
-        listening.classList.toggle('show', active);
-      };
-      new MutationObserver(updateMic).observe(engineMic, {
-        attributes:true, attributeFilter:['class','aria-pressed']
-      });
-    }
-
-    resizeVisualQuestion();
-    window.addEventListener('resize', resizeVisualQuestion);
-
-    var hist = document.querySelector('.gf-ref-nav-history');
-    if (hist) hist.addEventListener('click', function(){
-      if (answerBox && answerText) {
-        answerText.textContent = langueSelectionnee === 'en' ? 'Conversation history will be available in a future update.' : 'L’historique sera ajouté dans une prochaine étape.';
-        answerBox.classList.add('show');
-      }
-    });
-    var settings = document.querySelector('.gf-ref-nav-settings');
-    if (settings) settings.addEventListener('click', function(){
-      if (answerBox && answerText) {
-        answerText.textContent = langueSelectionnee === 'en' ? 'Settings will be available in a future update.' : 'Les paramètres seront ajoutés dans une prochaine étape.';
-        answerBox.classList.add('show');
-      }
-    });
+    labels();new MutationObserver(labels).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+    byId('gfReferenceImage').addEventListener('load',resize);window.addEventListener('resize',resize);resize();
   }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initReferenceInterface);
-  } else {
-    initReferenceInterface();
-  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>
 <script id="guestflow-premium-lang-sync">
@@ -5573,4 +5483,5 @@ body.guestflow-app-mode #gfAppI18n[data-lang="en"] .gf-app-nav3{left:70%}
 })();
 </script></body>
 </html>
+
 
