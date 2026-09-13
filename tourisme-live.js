@@ -5,7 +5,7 @@
 (function(){
   'use strict';
 
-  var API_URL='https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0tgoGsTNb5LX/exec';
+  var API_URL='https://script.google.com/macros/s/AKfycbxEaAAR7dv3Lw5MqGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0tgoGsTNb5LX/exec';
   var PAGE_SIZE=8;
 
   function getLang(){
@@ -150,6 +150,7 @@
   });
 
   function install(){
+    if(typeof window.fetchTourism==='function' || typeof window.questionLooksTouristic==='function') return;
     if(typeof window.envoyerQuestion!=='function') return;
     if(window.__gfTourismeBridgeInstalled) return;
     var original=window.envoyerQuestion;
