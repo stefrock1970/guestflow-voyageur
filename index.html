@@ -3017,6 +3017,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 <!-- GUESTFLOW — interface visuelle de référence validée -->
 <section aria-label="Concierge Guestflow" class="gf-reference-screen" id="gfReferenceScreen">
 <div class="gf-reference-wrap">
+<img alt="Guestflow — application concierge premium" class="gf-reference-img" id="gfReferenceImage" src="./guestflow-app-fr.png"/>
 <div aria-hidden="true" class="gf-app-i18n" id="gfAppI18n">
 <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
 <div class="gf-i18n-box gf-i18n-title gf-app-title" data-gfa="title"></div>
@@ -5601,6 +5602,38 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-gf-question]');if(b){var q=b.getAttribute('data-gf-question')||'';if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},180);}});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',hook);else hook();
+})();
+</script>
+<script id="guestflow-app-premium-lang-sync">
+(function(){
+  function syncAppLang(lang){
+    if(!['fr','en','es','de'].includes(lang)) lang='fr';
+    var img=document.getElementById('gfReferenceImage');
+    if(!img) return;
+    var images={
+      fr:'./guestflow-app-fr.png',
+      en:'./guestflow-app-en.png',
+      es:'./guestflow-app-es.png',
+      de:'./guestflow-app-de.png'
+    };
+    var descriptions={
+      fr:'Guestflow — application concierge premium en français',
+      en:'Guestflow — premium concierge app in English',
+      es:'Guestflow — aplicación de conserjería premium en español',
+      de:'Guestflow — Premium-Concierge-App auf Deutsch'
+    };
+    img.src=images[lang];
+    img.alt=descriptions[lang];
+  }
+  function init(){
+    var lang=String(window.GUESTFLOW_LOCKED_LANG||'').toLowerCase();
+    if(!lang){
+      try{lang=String(localStorage.getItem('guestflow_langue')||'fr').toLowerCase();}catch(e){lang='fr';}
+    }
+    syncAppLang(lang);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+  else init();
 })();
 </script>
 
