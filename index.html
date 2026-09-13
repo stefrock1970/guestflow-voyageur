@@ -2862,6 +2862,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 
 </head>
 <body>
+<!-- Guestflow V23.17 — routage direct des questions touristiques vers DATAtourisme -->
 <script>
     // Guestflow — mode d'ouverture déterministe.
     // Le QR code (sans ?mode=app) affiche TOUJOURS l'écran d'accueil.
@@ -4589,6 +4590,17 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         return;
       }
 
+      // V23.17 : une question touristique est prise en charge directement
+      // par DATAtourisme. On quitte ici le circuit /api=ask afin que la
+      // réponse générique « contactez le propriétaire » ne puisse pas
+      // prendre la main avant l'affichage de la sélection touristique.
+      if (typeof questionLooksTouristic === 'function' && questionLooksTouristic(question)) {
+        afficherEtatReflexion();
+        reponse.textContent = '';
+        fetchTourism(question);
+        return;
+      }
+
       // V23.13 mobile : ferme le clavier virtuel après l'envoi pour
       // rendre immédiatement la réponse visible sur Android et iPhone.
       const champQuestionMobile = document.getElementById('question');
@@ -5550,7 +5562,10 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
   function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
   function isUrl(v){return /^https?:\/\//i.test(String(v||''));}
   function isEvent(p){var t=String(p&&p.type||'').toLowerCase();return /event|entertainment|festival|spectacle|manifestation/.test(t);}
-  function questionLooksTouristic(q){return /\b(visit|visiter|visite|tourisme|touristique|faire|voir|sortir|restaurant|restaurants|manger|musée|musee|château|chateau|abbaye|marché|marche|cinéma|cinema|activité|activités|activite|activites|balade|randonnée|randonnee|plage|lac|monument|patrimoine|fête|fete|événement|evenement|bar|café|caf[eé]|spectacle|concert)\b/i.test(String(q||''));}
+  function questionLooksTouristic(q){
+  var text=String(q||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  return /\b(visit|visiter|visite|tourisme|touristique|touristiques|faire|voir|quoi voir|que voir|que peut[- ]on voir|qu[’']est[- ]ce qu[’']on peut voir|sortir|restaurant|restaurants|manger|musee|chateau|abbaye|marche|cinema|activite|activites|balade|randonnee|plage|lac|monument|patrimoine|fete|evenement|bar|cafe|spectacle|concert|aux alentours|alentours|a proximite|proximite|pres d'ici|pres dici|pres de moi|autour de moi|autour d'ici|autour dici|autour du logement|autour de l'hebergement|autour de l'immeuble|dans le coin|dans les environs|a proximite du logement)\b/i.test(text);
+}
   function render(){
     var l=lang(), t=texts[l], list=byId('gfTourismeList'), more=byId('gfTourismeMore'), meta=byId('gfTourismeMeta');
     if(!list)return;
