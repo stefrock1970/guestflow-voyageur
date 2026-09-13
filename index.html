@@ -2075,14 +2075,6 @@
     body.guestflow-app-mode > .guestflow-landing{display:none !important}
     body.guestflow-app-mode > .page{display:flex !important}
 
-    /* Filet de sécurité PWA : une application réellement installée doit
-       toujours afficher le concierge, même si Android restaure une URL
-       sans le paramètre mode=app. */
-    @media (display-mode: standalone), (display-mode: fullscreen) {
-      body > .guestflow-landing{display:none !important}
-      body > .gf-reference-screen{display:block !important}
-    }
-
 
     /* =========================================================
        GUESTFLOW — CONCIERGE V3 / INTERFACE MOBILE PREMIUM
@@ -2320,26 +2312,6 @@
       height:auto;
       user-select:none;
       -webkit-user-drag:none;
-    }
-    body.guestflow-app-mode .gf-app-property-name{
-      position:absolute;
-      z-index:19;
-      left:18%;
-      top:7.15%;
-      width:38%;
-      min-height:3.2%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:.4% 1%;
-      background:rgba(250,247,239,.98);
-      color:#17301d;
-      font:600 clamp(11px,2.6vw,18px)/1.1 Inter,Arial,sans-serif;
-      letter-spacing:.14em;
-      text-align:center;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
 
     /* Le moteur historique reste vivant mais hors écran. */
@@ -2845,16 +2817,50 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
   background:#ffffff !important;
 }
 </style>
+<style id="guestflow-tourisme-ui">
+/* GUESTFLOW — panneau touristique premium */
+.gf-tourisme-overlay{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(35,41,32,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.gf-tourisme-overlay.show{display:flex;animation:gftFade .18s ease}
+.gf-tourisme-panel{width:min(94vw,760px);height:min(90dvh,820px);max-height:90dvh;background:#fffdf9;border:1px solid rgba(255,255,255,.82);border-radius:30px;box-shadow:0 30px 90px rgba(25,31,24,.28);display:flex;flex-direction:column;overflow:hidden;color:#263026}
+.gf-tourisme-head{padding:20px 20px 15px;background:linear-gradient(145deg,#f8f4ec,#edf0e6);border-bottom:1px solid rgba(63,73,51,.10);flex:none}
+.gf-tourisme-headline{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.gf-tourisme-kicker{font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#66734b;margin-bottom:5px}
+.gf-tourisme-title{margin:0;font:600 clamp(25px,5vw,34px)/1.05 Georgia,"Times New Roman",serif;color:#3f4933;letter-spacing:-.025em}
+.gf-tourisme-subtitle{margin:7px 0 0;color:#657064;font-size:13px;line-height:1.45}
+.gf-tourisme-close{width:42px;height:42px;border-radius:14px;border:1px solid rgba(63,73,51,.12);background:rgba(255,255,255,.78);color:#3f4933;font-size:25px;line-height:1;cursor:pointer;flex:none}
+.gf-tourisme-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.gf-tourisme-pill{padding:7px 10px;border-radius:999px;background:rgba(102,115,75,.10);color:#526044;font-size:11px;font-weight:800}
+.gf-tourisme-body{padding:14px 14px 18px;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;flex:1}
+.gf-tourisme-list{display:grid;grid-template-columns:1fr;gap:10px}
+.gf-tourisme-card{display:grid;grid-template-columns:108px minmax(0,1fr);gap:12px;padding:10px;border:1px solid rgba(63,73,51,.10);border-radius:20px;background:#fff;box-shadow:0 7px 20px rgba(54,61,45,.055);transition:transform .18s ease,box-shadow .18s ease}
+.gf-tourisme-card:hover{transform:translateY(-1px);box-shadow:0 11px 25px rgba(54,61,45,.08)}
+.gf-tourisme-photo{width:108px;height:88px;border-radius:15px;object-fit:cover;background:linear-gradient(145deg,#dfe5d5,#eee4d2);display:block}
+.gf-tourisme-content{min-width:0;display:flex;flex-direction:column}
+.gf-tourisme-type{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:#7c856f;font-weight:900;margin-bottom:3px}
+.gf-tourisme-name{margin:0;color:#35402f;font-size:15px;font-weight:850;line-height:1.2}
+.gf-tourisme-info{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px;color:#737b70;font-size:11px;font-weight:700}
+.gf-tourisme-desc{margin:5px 0 0;color:#667064;font-size:11.5px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.gf-tourisme-actions{display:flex;gap:7px;margin-top:auto;padding-top:7px}
+.gf-tourisme-map{display:inline-flex;align-items:center;justify-content:center;min-height:31px;padding:0 11px;border-radius:10px;background:#66734b;color:white;text-decoration:none;font-size:11px;font-weight:850}
+.gf-tourisme-more{width:100%;margin-top:13px;padding:12px 16px;border-radius:14px;border:1px solid rgba(102,115,75,.22);background:#f2f4ec;color:#4f5d40;font-size:13px;font-weight:900;cursor:pointer}
+.gf-tourisme-more:hover{background:#e9eee0}
+.gf-tourisme-empty{padding:35px 18px;text-align:center;color:#6b7468;line-height:1.55}
+.gf-tourisme-empty strong{display:block;color:#3f4933;font:600 22px Georgia,serif;margin-bottom:6px}
+@keyframes gftFade{from{opacity:0}to{opacity:1}}
+@media (max-width:620px){
+ .gf-tourisme-overlay{padding:0;align-items:flex-end}
+ .gf-tourisme-panel{width:100%;height:92dvh;max-height:92dvh;border-radius:28px 28px 0 0}
+ .gf-tourisme-head{padding:18px 16px 13px}
+ .gf-tourisme-body{padding:12px 11px 18px}
+ .gf-tourisme-card{grid-template-columns:92px minmax(0,1fr);gap:10px;padding:9px;border-radius:18px}
+ .gf-tourisme-photo{width:92px;height:80px;border-radius:13px}
+ .gf-tourisme-name{font-size:14px}
+ .gf-tourisme-desc{font-size:11px;-webkit-line-clamp:2}
+ .gf-tourisme-close{width:40px;height:40px}
+}
+</style>
 
-<style id="guestflow-app-interactive">
-#gfAppI18n{display:none!important}
-.gf-ref-input{background:#fff}
-.gf-ref-hit:focus-visible{outline:3px solid #516d3d;outline-offset:2px;background:rgba(255,255,255,.2)}
-.gf-ref-hit:active{background:rgba(80,110,55,.15)}
-.gf-ref-answer{max-height:70vh;overflow:auto}
-.gf-ref-answer-text button{padding:12px;margin:8px 0;border:1px solid #66734b;border-radius:12px;background:#f8f4ec;color:#263026;cursor:pointer}
-.gf-app-property-name:empty{display:none!important}
-</style></head>
+</head>
 <body>
 <script>
     // Guestflow — mode d'ouverture déterministe.
@@ -2862,13 +2868,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     // Seule une URL contenant ?mode=app ouvre directement le concierge.
     (function(){
       var params = new URLSearchParams(window.location.search);
-      var isInstalledApp = false;
-      try {
-        isInstalledApp = window.matchMedia('(display-mode: standalone)').matches ||
-          window.matchMedia('(display-mode: fullscreen)').matches ||
-          window.navigator.standalone === true;
-      } catch (e) {}
-      var isAppMode = params.get('mode') === 'app' || isInstalledApp;
+      var isAppMode = params.get('mode') === 'app';
       var requestedLang = String(params.get('lang') || '').toLowerCase();
       if (isAppMode) {
         document.body.classList.add('guestflow-app-mode');
@@ -3017,8 +3017,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 <!-- GUESTFLOW — interface visuelle de référence validée -->
 <section aria-label="Concierge Guestflow" class="gf-reference-screen" id="gfReferenceScreen">
 <div class="gf-reference-wrap">
-<img alt="Guestflow — concierge numérique" class="gf-reference-img" id="gfReferenceImage"/>
-<div aria-live="polite" class="gf-app-property-name" id="gfAppPropertyName"></div>
 <div aria-hidden="true" class="gf-app-i18n" id="gfAppI18n">
 <div class="gf-i18n-box gf-i18n-script gf-app-top-script" data-gfa="topScript"></div>
 <div class="gf-i18n-box gf-i18n-title gf-app-title" data-gfa="title"></div>
@@ -3060,6 +3058,27 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 </div>
 <div class="gf-ref-answer-text" id="gfRefAnswerText"></div>
 </aside>
+
+<div class="gf-tourisme-overlay" id="gfTourismeOverlay" aria-hidden="true">
+  <section class="gf-tourisme-panel" role="dialog" aria-modal="true" aria-labelledby="gfTourismeTitle">
+    <header class="gf-tourisme-head">
+      <div class="gf-tourisme-headline">
+        <div>
+          <div class="gf-tourisme-kicker" id="gfTourismeKicker">Suggestions autour de vous</div>
+          <h2 class="gf-tourisme-title" id="gfTourismeTitle">À découvrir</h2>
+          <p class="gf-tourisme-subtitle" id="gfTourismeSubtitle">Une sélection de lieux et d’idées à proximité.</p>
+        </div>
+        <button class="gf-tourisme-close" id="gfTourismeClose" type="button" aria-label="Fermer">×</button>
+      </div>
+      <div class="gf-tourisme-meta" id="gfTourismeMeta"></div>
+    </header>
+    <div class="gf-tourisme-body">
+      <div class="gf-tourisme-list" id="gfTourismeList"></div>
+      <button class="gf-tourisme-more" id="gfTourismeMore" type="button" hidden>＋ Voir plus de lieux</button>
+    </div>
+  </section>
+</div>
+
 <main class="page gf-app-shell">
 <section aria-label="Concierge Guestflow" class="gf-app-card">
 <header class="gf-app-header">
@@ -3548,29 +3567,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
       const installLayer = document.getElementById('gfInstallI18n');
       const appLayer = document.getElementById('gfAppI18n');
       const d = gfVisuelI18n[langue];
-      const appImages = {fr:'guestflow-app-fr.png', en:'guestflow-app-en.png', es:'guestflow-app-es.png', de:'guestflow-app-de.png'};
-      const appImage = document.getElementById('gfReferenceImage');
-      if (appImage && document.body.classList.contains('guestflow-app-mode')) {
-        const src = './' + (appImages[langue] || appImages.fr);
-        if (appImage.getAttribute('src') !== src) appImage.setAttribute('src', src);
-        appImage.alt = 'Guestflow';
-      }
-      if (appLayer) appLayer.dataset.lang = langue;
-      if (langue === 'en') {
-        const labels = {
-          gfReferenceScreen:'Guestflow concierge', gfReferenceImage:'Guestflow — digital concierge',
-          gfRefMic:'Talk to Guestflow', gfRefSend:'Send question',
-          gfRefAnswerStop:'Stop reading aloud', gfRefAnswerClose:'Close'
-        };
-        Object.keys(labels).forEach(function(id){
-          const el = document.getElementById(id);
-          if (el) el.setAttribute(id === 'gfReferenceImage' ? 'alt' : 'aria-label', labels[id]);
-        });
-        ['home','history','settings'].forEach(function(name, i){
-          const el = document.querySelector('.gf-ref-nav-' + name);
-          if (el) el.setAttribute('aria-label', ['Home','History','Settings'][i]);
-        });
-      }
 
       if (!d || langue === 'fr') {
         if (installLayer) { installLayer.classList.remove('show'); installLayer.setAttribute('aria-hidden','true'); }
@@ -3587,8 +3583,8 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
           appLayer.querySelectorAll('[data-gfa]').forEach(function(el){
             el.textContent = d.app[el.dataset.gfa] || '';
           });
-          appLayer.classList.remove('show');
-          appLayer.setAttribute('aria-hidden','true');
+          appLayer.classList.add('show');
+          appLayer.setAttribute('aria-hidden','false');
         }
       }
 
@@ -4746,7 +4742,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 
       const giteName = document.getElementById('giteName');
       const landingGiteName = document.getElementById('guestflowPropertyName');
-      const appGiteName = document.getElementById('gfAppPropertyName');
 
       if (giteName) {
         giteName.textContent = nomAffiche;
@@ -4755,10 +4750,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
       if (landingGiteName) {
         landingGiteName.textContent = nomAffiche;
         landingGiteName.setAttribute('aria-label', 'Établissement : ' + nomAffiche);
-      }
-      if (appGiteName) {
-        appGiteName.textContent = nomAffiche;
-        appGiteName.setAttribute('aria-label', 'Établissement : ' + nomAffiche);
       }
 
       document.title = nomAffiche + ' — Guestflow';
@@ -5338,83 +5329,154 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 </script>
 <script id="guestflow-reference-bridge">
 (function(){
-  const byId = id => document.getElementById(id);
-  const history = []; // Current session only; no cross-property persistence.
-  const words = {
-    fr:{home:'Accueil',history:'Historique',settings:'Paramètres',empty:'Aucune conversation pour le moment.',voiceOn:'Réponse vocale : activée',voiceOff:'Réponse vocale : désactivée',clear:'Effacer l’historique',send:'Envoyer la question',mic:'Parler à Guestflow',stop:'Arrêter la réponse vocale',close:'Fermer',note:'Historique conservé pendant cette ouverture de l’application.'},
-    en:{home:'Home',history:'History',settings:'Settings',empty:'No conversations yet.',voiceOn:'Spoken answers: on',voiceOff:'Spoken answers: off',clear:'Clear history',send:'Send question',mic:'Talk to Guestflow',stop:'Stop reading aloud',close:'Close',note:'History is kept for this app session only.'},
-    es:{home:'Inicio',history:'Historial',settings:'Ajustes',empty:'Todavía no hay conversaciones.',voiceOn:'Respuestas por voz: activadas',voiceOff:'Respuestas por voz: desactivadas',clear:'Borrar el historial',send:'Enviar pregunta',mic:'Hablar con Guestflow',stop:'Detener la respuesta de voz',close:'Cerrar',note:'El historial se conserva solo durante esta sesión.'},
-    de:{home:'Start',history:'Verlauf',settings:'Einstellungen',empty:'Noch keine Gespräche.',voiceOn:'Sprachausgabe: an',voiceOff:'Sprachausgabe: aus',clear:'Verlauf löschen',send:'Frage senden',mic:'Mit Guestflow sprechen',stop:'Sprachausgabe stoppen',close:'Schließen',note:'Der Verlauf bleibt nur während dieser Sitzung erhalten.'}
-  };
-  const t = () => words[langueSelectionnee] || words.fr;
-  function stopVoice(){arreterReponseVocale();}
-  function init(){
-    const input=byId('gfRefQuestion'), engine=byId('question'), panel=byId('gfRefAnswer'), answer=byId('gfRefAnswerText'), engineAnswer=byId('reponse');
-    const mic=byId('gfRefMic'), engineMic=byId('btnMic'), ask=byId('btnAsk');
-    let pendingQuestion='', lastAnswer='';
-    ask.addEventListener('click',()=>{pendingQuestion=engine.value.trim();lastAnswer='';},true);
-    function resize(){
-      const wrap=document.querySelector('.gf-reference-wrap');
-      const base=wrap.clientHeight*.049, max=wrap.clientHeight*.105;
-      input.style.height=base+'px';
-      const height=Math.max(base,Math.min(max,input.scrollHeight));
-      input.style.height=height+'px';input.style.transform='translateY(-'+(height-base)+'px)';
-    }
-    function send(){
-      if(ask.disabled)return;
-      engine.value=input.value;pendingQuestion=input.value.trim();lastAnswer='';
-      ask.click();
-    }
-    function showText(text){stopVoice();answer.textContent=text;panel.classList.add('show');}
-    input.addEventListener('input',()=>{engine.value=input.value;resize();});
-    input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-    byId('gfRefSend').addEventListener('click',send);
-    mic.addEventListener('click',()=>engineMic.click());
-    document.querySelectorAll('[data-gf-question]').forEach(btn=>btn.addEventListener('click',()=>{
-      if(ask.disabled)return;
-      input.value=btn.dataset.gfQuestion;resize();send();
-    }));
-    byId('gfRefAnswerStop').addEventListener('click',stopVoice);
-    byId('gfRefAnswerClose').addEventListener('click',()=>{stopVoice();panel.classList.remove('show');});
-    document.querySelector('.gf-ref-nav-home').addEventListener('click',()=>{
-      stopVoice();panel.classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});
-    });
-    document.querySelector('.gf-ref-nav-history').addEventListener('click',()=>{
-      showText(t().history+'\n\n'+(history.length?history.map(x=>x.question+'\n'+x.answer).join('\n\n'):t().empty)+'\n\n'+t().note);
-    });
-    document.querySelector('.gf-ref-nav-settings').addEventListener('click',()=>{
-      showText(t().settings);answer.appendChild(document.createElement('br'));
-      const voice=document.createElement('button');voice.type='button';
-      function label(){voice.textContent=voixActive?t().voiceOn:t().voiceOff;voice.setAttribute('aria-pressed',String(voixActive));}
-      label();voice.addEventListener('click',()=>{basculerVoix();label();});answer.appendChild(voice);
-      answer.appendChild(document.createElement('br'));
-      const clear=document.createElement('button');clear.type='button';clear.textContent=t().clear;
-      clear.addEventListener('click',()=>{history.length=0;showText(t().empty);});answer.appendChild(clear);
-    });
-    new MutationObserver(()=>{
-      const text=(engineAnswer.textContent||'').trim();if(!text)return;
-      const dict=traductionsInterface[langueSelectionnee]||traductionsInterface.fr;
-      if([dict.empty,dict.loading,dict.answerPlaceholder].includes(text))return;
-      answer.innerHTML=engineAnswer.innerHTML;panel.classList.add('show');
-      if(pendingQuestion && text!==lastAnswer){
-        history.push({question:pendingQuestion,answer:text});
-        if(history.length>50)history.shift();lastAnswer=text;pendingQuestion='';
-      }
-    }).observe(engineAnswer,{subtree:true,childList:true,characterData:true});
-    new MutationObserver(()=>{
-      const active=engineMic.classList.contains('listening')||engineMic.getAttribute('aria-pressed')==='true';
-      byId('gfRefListening').classList.toggle('show',active);mic.setAttribute('aria-pressed',String(active));
-      if(engine.value!==input.value){input.value=engine.value;resize();}
-    }).observe(engineMic,{attributes:true,attributeFilter:['class','aria-pressed']});
-    function labels(){
-      const d=t();
-      [['gfRefSend','send'],['gfRefMic','mic'],['gfRefAnswerStop','stop'],['gfRefAnswerClose','close']].forEach(([id,key])=>byId(id).setAttribute('aria-label',d[key]));
-      ['home','history','settings'].forEach(key=>document.querySelector('.gf-ref-nav-'+key).setAttribute('aria-label',d[key]));
-    }
-    labels();new MutationObserver(labels).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
-    byId('gfReferenceImage').addEventListener('load',resize);window.addEventListener('resize',resize);resize();
+  function byId(id){ return document.getElementById(id); }
+
+  function resizeVisualQuestion(){
+    var visual = byId('gfRefQuestion');
+    var wrap = document.querySelector('.gf-reference-wrap');
+    if (!visual || !wrap) return;
+
+    // Le cadre d'origine fait 4,9 % de la hauteur de la maquette.
+    // On garde son bord inférieur fixe et on l'agrandit vers le haut
+    // afin qu'une question sur 2 ou 3 lignes ne recouvre jamais
+    // la zone « Accès rapides ».
+    var base = wrap.clientHeight * 0.049;
+    var maxH = wrap.clientHeight * 0.105;
+
+    visual.style.height = base + 'px';
+    visual.style.transform = 'translateY(0)';
+
+    var wanted = Math.max(base, Math.min(maxH, visual.scrollHeight));
+    var delta = wanted - base;
+
+    visual.style.height = wanted + 'px';
+    visual.style.transform = 'translateY(-' + delta + 'px)';
   }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+
+  function syncToEngine(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    if (visual && engine) engine.value = visual.value;
+  }
+
+  function sendVisualQuestion(){
+    syncToEngine();
+    var ask = byId('btnAsk');
+    if (ask) ask.click();
+  }
+
+  function initReferenceInterface(){
+    var visual = byId('gfRefQuestion');
+    var engine = byId('question');
+    var mic = byId('gfRefMic');
+    var engineMic = byId('btnMic');
+    var send = byId('gfRefSend');
+    var answerBox = byId('gfRefAnswer');
+    var answerText = byId('gfRefAnswerText');
+    var engineAnswer = byId('reponse');
+    var listening = byId('gfRefListening');
+
+    if (visual && engine) {
+      visual.addEventListener('input', function(){
+        engine.value = visual.value;
+        resizeVisualQuestion();
+      });
+      visual.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendVisualQuestion();
+        }
+      });
+    }
+
+    if (send) send.addEventListener('click', sendVisualQuestion);
+
+    if (mic && engineMic) {
+      mic.addEventListener('click', function(){ engineMic.click(); });
+    }
+
+    document.querySelectorAll('[data-gf-question]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var q = btn.getAttribute('data-gf-question') || '';
+        if (visual) visual.value = q;
+        if (engine) engine.value = q;
+        resizeVisualQuestion();
+        sendVisualQuestion();
+      });
+    });
+
+    var stop = byId('gfRefAnswerStop');
+    if (stop) stop.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+    });
+
+    var close = byId('gfRefAnswerClose');
+    if (close && answerBox) close.addEventListener('click', function(){
+      try { arreterReponseVocale(); } catch (e) {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+      answerBox.classList.remove('show');
+    });
+
+    if (engineAnswer && answerText && answerBox) {
+      var updateAnswer = function(){
+        var txt = (engineAnswer.textContent || '').trim();
+        if (!txt) return;
+        var low = txt.toLowerCase();
+        var placeholders = [
+          'la réponse de guestflow apparaîtra ici.',
+          'guestflow prépare votre réponse…',
+          'guestflow prépare votre réponse...'
+        ];
+        // V23.17 : conserver le HTML sûr construit par afficherReponseGuestflow(),
+        // notamment le bouton/lien Google Maps. L'ancienne copie via textContent
+        // transformait le lien en simple texte dans l'interface visible.
+        answerText.innerHTML = engineAnswer.innerHTML;
+        if (!placeholders.includes(low)) answerBox.classList.add('show');
+      };
+      new MutationObserver(updateAnswer).observe(engineAnswer, {
+        subtree:true, childList:true, characterData:true
+      });
+    }
+
+    if (engineMic && listening) {
+      var updateMic = function(){
+        var active = engineMic.classList.contains('listening') ||
+                     engineMic.classList.contains('active') ||
+                     engineMic.getAttribute('aria-pressed') === 'true';
+        listening.classList.toggle('show', active);
+      };
+      new MutationObserver(updateMic).observe(engineMic, {
+        attributes:true, attributeFilter:['class','aria-pressed']
+      });
+    }
+
+    resizeVisualQuestion();
+    window.addEventListener('resize', resizeVisualQuestion);
+
+    var hist = document.querySelector('.gf-ref-nav-history');
+    if (hist) hist.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'L’historique sera ajouté dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+    var settings = document.querySelector('.gf-ref-nav-settings');
+    if (settings) settings.addEventListener('click', function(){
+      if (answerBox && answerText) {
+        answerText.textContent = 'Les paramètres seront ajoutés dans une prochaine étape.';
+        answerBox.classList.add('show');
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReferenceInterface);
+  } else {
+    initReferenceInterface();
+  }
 })();
 </script>
 <script id="guestflow-premium-lang-sync">
@@ -5451,17 +5513,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
 })();
 </script><script id="guestflow-reference-check">
 (function(){
-  function garantirAffichageApplication(){
-    var installee = false;
-    try {
-      installee = window.matchMedia('(display-mode: standalone)').matches ||
-        window.matchMedia('(display-mode: fullscreen)').matches ||
-        window.navigator.standalone === true;
-    } catch (e) {}
-    if (installee) document.body.classList.add('guestflow-app-mode');
-  }
   function check(){
-    garantirAffichageApplication();
     if(!document.body.classList.contains('guestflow-app-mode')) return;
     var img=document.getElementById('gfReferenceImage');
     if(!img || (img.complete && img.naturalWidth===0)){
@@ -5469,7 +5521,6 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     }
   }
   document.addEventListener('DOMContentLoaded', function(){
-    garantirAffichageApplication();
     var img=document.getElementById('gfReferenceImage');
     if(img){
       img.addEventListener('error', function(){document.body.classList.add('gf-reference-failed');});
@@ -5478,11 +5529,80 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     check();
   });
   window.addEventListener('load', check);
-  setTimeout(garantirAffichageApplication, 100);
   setTimeout(check, 2500);
 })();
-</script></body>
+</script>
+<script id="guestflow-tourisme-ui-script">
+(function(){
+  'use strict';
+  var API_URL = 'https://script.google.com/macros/s/AKfycbxEaAAR7dv3L1w5MqdwGbVKV_KHmFPGgTvtbQLormLi-rI2a973MTxD0TgoGsTNb5LX/exec';
+  var PAGE_SIZE = 8;
+  var state = {all:[], shown:0, open:false, busy:false};
+  var texts = {
+    fr:{kicker:'Suggestions autour de vous',title:'À découvrir',subtitle:'Une sélection de lieux et d’idées à proximité.',more:'＋ Voir plus de lieux',less:'Afficher moins',map:'Voir sur la carte',places:'lieux',events:'événements',distance:'km',loading:'Recherche de belles idées à proximité…',empty:'Aucune suggestion touristique trouvée pour cette recherche.'},
+    en:{kicker:'Suggestions near you',title:'Worth discovering',subtitle:'A selection of places and ideas nearby.',more:'＋ See more places',less:'Show less',map:'View on map',places:'places',events:'events',distance:'km',loading:'Looking for great ideas nearby…',empty:'No tourist suggestions were found for this search.'},
+    es:{kicker:'Sugerencias cerca de usted',title:'Para descubrir',subtitle:'Una selección de lugares e ideas cercanas.',more:'＋ Ver más lugares',less:'Mostrar menos',map:'Ver en el mapa',places:'lugares',events:'eventos',distance:'km',loading:'Buscando buenas ideas cerca…',empty:'No se han encontrado sugerencias turísticas para esta búsqueda.'},
+    de:{kicker:'Vorschläge in Ihrer Nähe',title:'Zu entdecken',subtitle:'Eine Auswahl an Orten und Ideen in der Umgebung.',more:'＋ Mehr Orte anzeigen',less:'Weniger anzeigen',map:'Auf der Karte',places:'Orte',events:'Veranstaltungen',distance:'km',loading:'Wir suchen schöne Ideen in der Nähe…',empty:'Für diese Suche wurden keine touristischen Vorschläge gefunden.'}
+  };
+  function lang(){var l=String(window.langueSelectionnee||document.documentElement.lang||'fr').toLowerCase();return texts[l]?l:'fr';}
+  function byId(id){return document.getElementById(id);}
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function isUrl(v){return /^https?:\/\//i.test(String(v||''));}
+  function isEvent(p){var t=String(p&&p.type||'').toLowerCase();return /event|entertainment|festival|spectacle|manifestation/.test(t);}
+  function questionLooksTouristic(q){return /\b(visit|visiter|visite|tourisme|touristique|faire|voir|sortir|restaurant|restaurants|manger|musée|musee|château|chateau|abbaye|marché|marche|cinéma|cinema|activité|activités|activite|activites|balade|randonnée|randonnee|plage|lac|monument|patrimoine|fête|fete|événement|evenement|bar|café|caf[eé]|spectacle|concert)\b/i.test(String(q||''));}
+  function render(){
+    var l=lang(), t=texts[l], list=byId('gfTourismeList'), more=byId('gfTourismeMore'), meta=byId('gfTourismeMeta');
+    if(!list)return;
+    var end=Math.min(state.shown,state.all.length);
+    list.innerHTML=state.all.slice(0,end).map(function(p){
+      var nom=esc(p.nom||'Lieu à découvrir');
+      var desc=esc(p.description||'');
+      var ville=esc(p.ville||'');
+      var dist=(p.distanceKm!=null&&isFinite(Number(p.distanceKm)))?'<span>📍 '+Number(p.distanceKm).toFixed(1)+' '+t.distance+'</span>':'';
+      var loc=ville?'<span>'+ville+'</span>':'';
+      var type=isEvent(p)?t.events.slice(0,-1):t.places;
+      var photo=isUrl(p.imageUrl)?'<img class="gf-tourisme-photo" src="'+esc(p.imageUrl)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.outerHTML=\'<div class=\\\"gf-tourisme-photo\\\" aria-hidden=\\\"true\\\"></div>\'">':'<div class="gf-tourisme-photo" aria-hidden="true"></div>';
+      var map=isUrl(p.googleMapsUrl)?'<a class="gf-tourisme-map" href="'+esc(p.googleMapsUrl)+'" target="_blank" rel="noopener">'+esc(t.map)+'</a>':'';
+      return '<article class="gf-tourisme-card">'+photo+'<div class="gf-tourisme-content"><div class="gf-tourisme-type">'+esc(type)+'</div><h3 class="gf-tourisme-name">'+nom+'</h3><div class="gf-tourisme-info">'+dist+loc+'</div>'+(desc?'<p class="gf-tourisme-desc">'+desc+'</p>':'')+'<div class="gf-tourisme-actions">'+map+'</div></div></article>';
+    }).join('');
+    var places=state.all.filter(function(p){return !isEvent(p)}).length, events=state.all.length-places;
+    meta.innerHTML='<span class="gf-tourisme-pill">'+Math.min(8,places)+' '+esc(t.places)+'</span>'+(events?'<span class="gf-tourisme-pill">'+Math.min(8,events)+' '+esc(t.events)+'</span>':'')+(state.all.length>8?'<span class="gf-tourisme-pill">'+state.all.length+' résultats</span>':'');
+    more.hidden=state.shown>=state.all.length;
+    more.textContent=more.hidden?t.more:t.more+' ('+Math.min(8,state.all.length-state.shown)+' )';
+  }
+  function openPanel(items){
+    var l=lang(),t=texts[l],ov=byId('gfTourismeOverlay'),title=byId('gfTourismeTitle'),sub=byId('gfTourismeSubtitle'),kick=byId('gfTourismeKicker');
+    state.all=Array.isArray(items)?items.filter(function(p){return p&&p.nom}):[]; state.shown=Math.min(PAGE_SIZE,state.all.length); state.open=true;
+    kick.textContent=t.kicker; title.textContent=t.title; sub.textContent=t.subtitle;
+    render(); ov.classList.add('show'); ov.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
+  }
+  function closePanel(){var ov=byId('gfTourismeOverlay'); if(!ov)return;ov.classList.remove('show');ov.setAttribute('aria-hidden','true');document.body.style.overflow='';state.open=false;}
+  function fetchTourism(q){
+    if(state.busy)return; state.busy=true;
+    var l=lang(),t=texts[l], cb='guestflowTourismeCallback_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    var script=document.createElement('script'), timer=setTimeout(function(){cleanup();state.busy=false;},15000);
+    function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){window[cb]=undefined;}if(script.parentNode)script.parentNode.removeChild(script);}
+    window[cb]=function(payload){cleanup();state.busy=false;if(!payload||payload.ok!==true){return;}var items=Array.isArray(payload.resultats)?payload.resultats:(Array.isArray(payload.places)?payload.places:[]);if(items.length)openPanel(items);};
+    script.onerror=function(){cleanup();state.busy=false;};
+    var token=''; try{token=String(new URLSearchParams(window.location.search).get('token')||localStorage.getItem('guestflow_token')||'').trim();}catch(e){} if(!token)return state.busy=false;
+    script.src=API_URL+'?api=tourisme_geo&token='+encodeURIComponent(token)+'&lang='+encodeURIComponent(l)+'&callback='+encodeURIComponent(cb)+'&t='+Date.now();
+    document.body.appendChild(script);
+  }
+  function hook(){
+    var close=byId('gfTourismeClose'), more=byId('gfTourismeMore'),ov=byId('gfTourismeOverlay');
+    if(close)close.addEventListener('click',closePanel);
+    if(more)more.addEventListener('click',function(){state.shown=Math.min(state.shown+PAGE_SIZE,state.all.length);render();});
+    if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closePanel();});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'&&state.open)closePanel();});
+    var ask=byId('btnAsk');
+    if(ask)ask.addEventListener('click',function(){var q=String((byId('question')||{}).value||'').trim();if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},80);});
+    var ref=byId('gfRefSend');
+    if(ref)ref.addEventListener('click',function(){var q=String((byId('gfRefQuestion')||{}).value||'').trim();if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},120);});
+    document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-gf-question]');if(b){var q=b.getAttribute('data-gf-question')||'';if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},180);}});
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',hook);else hook();
+})();
+</script>
+
+</body>
 </html>
-
-
-
