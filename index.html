@@ -4590,12 +4590,20 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         return;
       }
 
-      // V23.19 — Les questions touristiques quittent immédiatement le circuit /api=ask.
-      // DATAtourisme devient alors le seul circuit de réponse pour ces demandes.
-      if (typeof window.questionLooksTouristic === 'function' && window.questionLooksTouristic(question)) {
+      // V23.18 — Une question touristique passe directement par DATAtourisme.
+      if (typeof questionLooksTouristic === 'function' && questionLooksTouristic(question)) {
+        fetchTourism(question);
+        return;
+      }
+
+      // V23.17 : une question touristique est prise en charge directement
+      // par DATAtourisme. On quitte ici le circuit /api=ask afin que la
+      // réponse générique « contactez le propriétaire » ne puisse pas
+      // prendre la main avant l'affichage de la sélection touristique.
+      if (typeof questionLooksTouristic === 'function' && questionLooksTouristic(question)) {
         afficherEtatReflexion();
         reponse.textContent = '';
-        window.fetchTourism(question, tokenVoyageur);
+        fetchTourism(question);
         return;
       }
 
@@ -5562,6 +5570,7 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
   function isEvent(p){var t=String(p&&p.type||'').toLowerCase();return /event|entertainment|festival|spectacle|manifestation/.test(t);}
   function questionLooksTouristic(q){
   var text=String(q||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  if (/\bque peut[- ]on voir\b/.test(text) || /\bqu[’']est[- ]ce qu[’']on peut voir\b/.test(text)) return true;
   return /\b(visit|visiter|visite|tourisme|touristique|touristiques|faire|voir|quoi voir|que voir|que peut[- ]on voir|qu[’']est[- ]ce qu[’']on peut voir|sortir|restaurant|restaurants|manger|musee|chateau|abbaye|marche|cinema|activite|activites|balade|randonnee|plage|lac|monument|patrimoine|fete|evenement|bar|cafe|spectacle|concert|aux alentours|alentours|a proximite|proximite|pres d'ici|pres dici|pres de moi|autour de moi|autour d'ici|autour dici|autour du logement|autour de l'hebergement|autour de l'immeuble|dans le coin|dans les environs|a proximite du logement)\b/i.test(text);
 }
   function render(){
@@ -5591,54 +5600,19 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     render(); ov.classList.add('show'); ov.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden';
   }
   function closePanel(){var ov=byId('gfTourismeOverlay'); if(!ov)return;ov.classList.remove('show');ov.setAttribute('aria-hidden','true');document.body.style.overflow='';state.open=false;}
-  function fetchTourism(q, tokenOverride){
+  function fetchTourism(q){
     if(state.busy)return; state.busy=true;
     var l=lang(),t=texts[l], cb='guestflowTourismeCallback_'+Date.now()+'_'+Math.floor(Math.random()*100000);
-    var script=document.createElement('script'), timer=setTimeout(function(){cleanup();state.busy=false;},15000);
+    var script=document.createElement('script'), timer=setTimeout(function(){
+    cleanup();state.busy=false;
+    var status=byId('status'), reponse=byId('reponse');
+    if(status) status.textContent='';
+    if(reponse) reponse.textContent='Le service touristique Guestflow n’a pas répondu après 15 secondes.';
+  },15000);
     function cleanup(){clearTimeout(timer);try{delete window[cb];}catch(e){window[cb]=undefined;}if(script.parentNode)script.parentNode.removeChild(script);}
-    window[cb]=function(payload){
-      cleanup();
-      state.busy=false;
-      var status=byId('status'), reponse=byId('reponse');
-      if(!payload||payload.ok!==true){
-        if(status) status.textContent=(texts[l]||texts.fr).empty;
-        if(reponse) reponse.textContent=(payload&&payload.erreur)?String(payload.erreur):(texts[l]||texts.fr).empty;
-        return;
-      }
-      var items=Array.isArray(payload.resultats)?payload.resultats:(Array.isArray(payload.places)?payload.places:[]);
-      if(items.length){
-        if(status) status.textContent='';
-        if(reponse) reponse.textContent='';
-        openPanel(items);
-      }else{
-        if(status) status.textContent=(texts[l]||texts.fr).empty;
-        if(reponse) reponse.textContent=(texts[l]||texts.fr).empty;
-      }
-    };
-    script.onerror=function(){
-      cleanup();state.busy=false;
-      var status=byId('status'), reponse=byId('reponse');
-      if(status) status.textContent=(texts[l]||texts.fr).empty;
-      if(reponse) reponse.textContent=(texts[l]||texts.fr).empty;
-    };
-    var token=String(tokenOverride||'').trim();
-    if(!token){
-      try{
-        token=String(
-          (typeof tokenVoyageur!=='undefined' ? tokenVoyageur : '') ||
-          new URLSearchParams(window.location.search).get('token') ||
-          localStorage.getItem('guestflow_token') || ''
-        ).trim();
-      }catch(e){}
-    }
-    if(!token){
-      state.busy=false;
-      var status=byId('status');
-      var reponse=byId('reponse');
-      if(status) status.textContent=(texts[l]||texts.fr).empty;
-      if(reponse) reponse.textContent=(texts[l]||texts.fr).empty;
-      return;
-    }
+    window[cb]=function(payload){cleanup();state.busy=false;if(!payload||payload.ok!==true){return;}var items=Array.isArray(payload.resultats)?payload.resultats:(Array.isArray(payload.places)?payload.places:[]);if(items.length)openPanel(items);};
+    script.onerror=function(){cleanup();state.busy=false;};
+    var token=''; try{token=String(new URLSearchParams(window.location.search).get('token')||localStorage.getItem('guestflow_token')||'').trim();}catch(e){} if(!token)return state.busy=false;
     script.src=API_URL+'?api=tourisme_geo&token='+encodeURIComponent(token)+'&lang='+encodeURIComponent(l)+'&callback='+encodeURIComponent(cb)+'&t='+Date.now();
     document.body.appendChild(script);
   }
@@ -5648,17 +5622,12 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     if(more)more.addEventListener('click',function(){state.shown=Math.min(state.shown+PAGE_SIZE,state.all.length);render();});
     if(ov)ov.addEventListener('click',function(e){if(e.target===ov)closePanel();});
     document.addEventListener('keydown',function(e){if(e.key==='Escape'&&state.open)closePanel();});
+    var ask=byId('btnAsk');
+    if(ask)ask.addEventListener('click',function(){var q=String((byId('question')||{}).value||'').trim();if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},80);});
     var ref=byId('gfRefSend');
     if(ref)ref.addEventListener('click',function(){var q=String((byId('gfRefQuestion')||{}).value||'').trim();if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},120);});
     document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-gf-question]');if(b){var q=b.getAttribute('data-gf-question')||'';if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},180);}});
   }
-
-  // V23.19 — Pont explicite vers le moteur principal.
-  // Ces fonctions vivent dans cette IIFE : on les expose volontairement
-  // sur window pour que envoyerQuestion() puisse les appeler.
-  window.questionLooksTouristic = questionLooksTouristic;
-  window.fetchTourism = fetchTourism;
-
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',hook);else hook();
 })();
 </script>
