@@ -4590,14 +4590,12 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
         return;
       }
 
-      // V23.17 : une question touristique est prise en charge directement
-      // par DATAtourisme. On quitte ici le circuit /api=ask afin que la
-      // réponse générique « contactez le propriétaire » ne puisse pas
-      // prendre la main avant l'affichage de la sélection touristique.
-      if (typeof questionLooksTouristic === 'function' && questionLooksTouristic(question)) {
+      // V23.19 — Les questions touristiques quittent immédiatement le circuit /api=ask.
+      // DATAtourisme devient alors le seul circuit de réponse pour ces demandes.
+      if (typeof window.questionLooksTouristic === 'function' && window.questionLooksTouristic(question)) {
         afficherEtatReflexion();
         reponse.textContent = '';
-        fetchTourism(question);
+        window.fetchTourism(question);
         return;
       }
 
@@ -5616,6 +5614,13 @@ body.guestflow-app-mode.gf-reference-failed > .page.gf-app-shell{
     if(ref)ref.addEventListener('click',function(){var q=String((byId('gfRefQuestion')||{}).value||'').trim();if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},120);});
     document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-gf-question]');if(b){var q=b.getAttribute('data-gf-question')||'';if(questionLooksTouristic(q))setTimeout(function(){fetchTourism(q);},180);}});
   }
+
+  // V23.19 — Pont explicite vers le moteur principal.
+  // Ces fonctions vivent dans cette IIFE : on les expose volontairement
+  // sur window pour que envoyerQuestion() puisse les appeler.
+  window.questionLooksTouristic = questionLooksTouristic;
+  window.fetchTourism = fetchTourism;
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',hook);else hook();
 })();
 </script>
